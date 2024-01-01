@@ -5,9 +5,9 @@ const HeroSection = () => {
   return (
     <>
       {HomeDetails.map((data) => (
-        <section key={data.id} className=" bg-primary-2 ">
-          <div className="grid max-w-screen-xl  px-4 py-8 mx-auto my-auto lg:gap-4 xl:gap-10 lg:py-16 lg:grid-cols-12">
-            <div className=" my-auto sm:col-span-full  lg:col-span-7">
+        <section key={data.id} className=" bg-primary-1 ">
+          <div className=" flex  justify-between flex-wrap   px-4 py-9 mx-auto my-auto ">
+            <div className=" lg:w-1/2 w-full mt-10 my-auto">
               <p className=" mb-2 text-lg font-normal text-left w-full   text-gray-500 lg:text-xl   ">
                 {data.preview}
               </p>
@@ -23,20 +23,23 @@ const HeroSection = () => {
                 <p className="text-left ">{data.location}</p>
               </div>
             </div>
-            <div className=" md-cols-12 sm:cols-span-full  lg-cols-5">
+            <div
+              className=" lg:w-1/2 w-full flex md:justify-center justify-between
+              "
+            >
               <div
-                className=" flex  w-80 h-full relative
-               lg:px-auto md:col-span-12 sm:col-span-full sm:h-32  sm:w-80 "
+                className=" flex justify-between  flex-wrap  lg:relative
+                  h-32   w-full lg:w-80 "
               >
                 {data.image.map((image) => (
                   <>
                     <img
                       src={`${image.image1}`}
-                      className="  hover:z-10  border-4 absolute   border-gray-200 rounded-sm m-auto"
+                      className="   hover:z-10 w-80 lg:w-full  border-4 lg:absolute mb-2   border-gray-200 rounded-sm m-auto"
                     />
                     <img
                       src={`${image.image2}`}
-                      className="  border-4 absolute   top-28 left-32  border-gray-200 rounded-sm m-auto"
+                      className=" hidden md:inline-block border-4   lg:absolute w-80 lg:w-full    top-28 lg:left-32 mt-2   border-gray-200 rounded-sm m-auto"
                     />
                   </>
                 ))}

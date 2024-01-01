@@ -5,7 +5,7 @@ import Button from "../reusuable/button";
 const Activities = () => {
   return (
     <div>
-      <div className="mb-9">
+      <div className="mb-9 ">
         <h1 className="font-bold mt-16 text-2xl text-gray-500 flex justify-center text-center ">
           We Feature
         </h1>

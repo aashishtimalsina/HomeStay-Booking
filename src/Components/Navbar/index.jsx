@@ -33,29 +33,29 @@ const Navbar = () => {
               </Link>
             ))}
           </div>
-          <div>
+          <div className="flex justify-center align-center text-center">
             <button
               type="button"
               className="inline-flex items-center px-3 py-2 mt-4 text-sm font-medium text-white bg-gray-700 rounded-lg  hover:bg-white hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 lg:mt-0 lg:ml-4"
             >
               Log In
             </button>
+            <button
+              onClick={handleToggle}
+              className="flex items-center m-auto  px-3 py-2 text-black md:hidden lg:hidden"
+            >
+              <svg
+                className="w-3 h-3 fill-current"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <title>Menu</title>
+                <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
-      <button
-        onClick={handleToggle}
-        className="flex items-center px-3 py-2 text-black md:hidden lg:hidden"
-      >
-        <svg
-          className="w-3 h-3 fill-current"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <title>Menu</title>
-          <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-        </svg>
-      </button>
 
       <div className={navbarOpen === true ? "w-full lg:w-auto " : "hidden"}>
         {navbar.map((text) => (
