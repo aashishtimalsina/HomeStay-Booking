@@ -10,7 +10,7 @@ const Activities = () => {
           We Feature
         </h1>
       </div>
-      <div className="flex justify-between flex-wrap mt-10">
+      <div className="flex lg:justify-between  justify-center  flex-wrap mt-10">
         {activities.map((activity) => (
           <div
             key={activity.id}
