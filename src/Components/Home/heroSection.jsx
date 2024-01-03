@@ -10,9 +10,6 @@ const HeroSection = () => {
           key={data.id}
           className=" bg-primary-6 lg:h-screen sm:h-full   "
         >
-          {/* <div>
-            <Navbar />
-          </div> */}
           <div className=" flex  justify-center items-center h-full   flex-wrap   px-4 py-5 mx-auto ">
             <div className=" flex justify-center h-full items-center  m-auto  lg:w-1/2 mt-10 w-full ">
               <div>

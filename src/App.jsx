@@ -11,9 +11,8 @@ function App() {
   console.log(pathnames);
   return (
     <>
-      <div className={`${pathnames}== /? "hidden":"inline-block"`}>
-        <Navbar />
-      </div>
+      <Navbar />
+
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route path="/contact" element={<Contact />} />

@@ -26,8 +26,8 @@ const Navbar = () => {
                 key={text.id}
                 className={
                   text.url === pathnames
-                    ? "  mr-4  text-white font-medium text-lg underline underline-offset-2"
-                    : "block   lg:inline-block lg:mt-0 text-white hover:text-lg   mr-4 font-normal "
+                    ? "  mr-4  text-black font-medium text-lg underline underline-offset-2"
+                    : "block   lg:inline-block lg:mt-0 text-black hover:text-lg   mr-4 font-normal "
                 }
               >
                 {text.label}
