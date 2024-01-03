@@ -1,14 +1,19 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Home from "./Components/Home";
 import Contact from "./Components/Contact";
 import About from "./Components/About";
 
 function App() {
+  const location = useLocation();
+  const pathnames = location.pathname;
+  console.log(pathnames);
   return (
     <>
-      <Navbar />
+      <div className={`${pathnames}== /? "hidden":"inline-block"`}>
+        <Navbar />
+      </div>
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route path="/contact" element={<Contact />} />

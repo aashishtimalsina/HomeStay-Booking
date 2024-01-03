@@ -13,20 +13,21 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex flex-wrap items-center justify-between p-4 bg-transparent">
+    <nav className="flex flex-wrap items-center w-full justify-between p-2 z-10 bg-transparent    ">
       <div className="flex flex-wrap items-center w-full justify-between">
         <div className="flex items-center flex-shrink-0 mr-6">
-          <img src={logo} alt="logo" className=" w-8  h-10" />
+          <img src={logo} alt="logo" className=" w-12 h-12" />
         </div>
         <div className="flex  items-center ">
           <div className="hidden lg:inline-block md:flex md:justify-center md:items-center ">
             {navbar.map((text) => (
               <Link
                 to={`${text.url}`}
+                key={text.id}
                 className={
                   text.url === pathnames
-                    ? " font-bold  mr-4  text-black"
-                    : "block   lg:inline-block lg:mt-0 text-gray-500 hover:text-black mr-4 font-medium "
+                    ? "  mr-4  text-white font-medium text-lg underline underline-offset-2"
+                    : "block   lg:inline-block lg:mt-0 text-white hover:text-lg   mr-4 font-normal "
                 }
               >
                 {text.label}
@@ -42,7 +43,7 @@ const Navbar = () => {
             </button>
             <button
               onClick={handleToggle}
-              className="flex items-center m-auto  px-3 py-2 text-black md:hidden lg:hidden"
+              className="flex items-center m-auto  px-3 py-2 text-white md:hidden lg:hidden"
             >
               <svg
                 className="w-3 h-3 fill-current"
@@ -57,14 +58,18 @@ const Navbar = () => {
         </div>
       </div>
 
-      <div className={navbarOpen === true ? "w-full lg:w-auto " : "hidden"}>
+      <div
+        className={
+          navbarOpen === true ? "w-full lg:w-auto bg-white p-5" : "hidden"
+        }
+      >
         {navbar.map((text) => (
           <Link
             to={`${text.url}`}
             className={
               text.url === pathnames
-                ? " font-bold mt-2 w-full  block   text-black bg-gray-200 "
-                : "mt-2  w-full  block lg: text-gray-500 hover:text-black font-medium hover:font-bold hover:bg-gray-200"
+                ? " z-10 font-bold mt-2 w-full  block text-black underline"
+                : "mt-2 z-20  w-full  block lg:text-black text-black hover:underline font-medium hover:font-bold"
             }
           >
             {text.label}
