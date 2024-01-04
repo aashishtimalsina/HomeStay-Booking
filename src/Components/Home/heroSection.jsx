@@ -8,7 +8,7 @@ const HeroSection = () => {
       {HomeDetails.map((data) => (
         <section
           key={data.id}
-          className=" bg-primary-6 lg:h-screen sm:h-full   "
+          className=" bg-primary-1 lg:h-screen sm:h-full   "
         >
           <div className=" flex  justify-center items-center h-full   flex-wrap   px-4 py-5 mx-auto ">
             <div className=" flex justify-center h-full items-center  m-auto  lg:w-1/2 mt-10 w-full ">
@@ -19,12 +19,12 @@ const HeroSection = () => {
                 <h1 className="mb-5 text-4xl  lg:w-auto font-semibold tracking-tight sm:leading-none md:leading-loose leading-loose  my-3  text-white line-clamp-5  md:text-5xl lg:text-6xl dark:text-white">
                   {data.label}
                 </h1>
-                <div className=" flex flex-col mt-2 mb-10 lg:mb-16 text-gray-300 space-y-4 sm:flex-row  sm:space-y-0 sm:space-x-4">
-                  {/* <img
-                  src={data.locationIcon}
-                  alt="Location Icon"
-                  className="w-6 h-6 mr-2 text-gray-300  text-left"
-                /> */}
+                <div className=" flex flex-col mt-2 mb-10 lg:mb-16 text-black space-y-4 sm:flex-row  sm:space-y-0 sm:space-x-4">
+                  <img
+                    src={data.locationIcon}
+                    alt="Location Icon"
+                    className="w-6 h-6 mr-2 text-gray-300  text-left"
+                  />
                   <p className="text-left ">{data.location}</p>
                 </div>
               </div>

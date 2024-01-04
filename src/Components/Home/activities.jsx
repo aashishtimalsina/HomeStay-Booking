@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const Activities = () => {
   return (
-    <div className="bg-gray-300 p-10">
+    <div className=" p-10">
       <div className="mb-9 ">
         <h1 className="font-bold mt-16 text-2xl text-gray-500 flex justify-center text-center ">
           We Feature
@@ -22,7 +22,7 @@ const Activities = () => {
             <div className="relative h-full   hover:scale-110  overflow-hidden border-none  transition-transform  ">
               <img src={activity.photo} className=" h-full " />
               <div className=" flex justify-center  absolute inset-0 bg-black bg-opacity-30  border-none     w-full h-full">
-                <div className="w-custom h-custom border border-white m-auto p-3 my-auto">
+                <div className="w-custom h-custom border-t border-r rounded-md border-white m-auto p-3 my-auto">
                   <p className="z-10 font-sans text-xs bg-white bg-opacity-100 w-28 p-2 text-center ">
                     ${activity.price} / PERSON
                   </p>
