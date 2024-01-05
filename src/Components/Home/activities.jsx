@@ -15,18 +15,16 @@ const Activities = () => {
         {activities.map((activity) => (
           <div
             key={activity.id}
-            className={`  m-2 ${
-              activity.id % 2 === 0 ? "md:mt-0" : "md:mt-10"
-            }  max-w-sm w-72 h-96  shadow-custom overflow-hidden   border-none bg-white shadow rounded-md `}
+            className={`  m-2 max-w-sm w-72 h-80 shadow-custom overflow-hidden   border-none bg-white shadow rounded-md `}
           >
             <div className="relative h-full   hover:scale-110  overflow-hidden border-none  transition-transform  ">
               <img src={activity.photo} className=" h-full " />
-              <div className=" flex justify-center  absolute inset-0 bg-black bg-opacity-30  border-none     w-full h-full">
+              <div className=" flex justify-center  absolute inset-0 bg-black bg-opacity-10  border-none     w-full h-full">
                 <div className="w-custom h-custom border-t border-r rounded-md border-white m-auto p-3 my-auto">
                   <p className="z-10 font-sans text-xs bg-white bg-opacity-100 w-28 p-2 text-center ">
                     ${activity.price} / PERSON
                   </p>
-                  <div className=" text-base mt-52   ">
+                  <div className=" text-base mt-40   ">
                     <p className="text-white text-xs font-bold">
                       {activity.catagory}
                     </p>
