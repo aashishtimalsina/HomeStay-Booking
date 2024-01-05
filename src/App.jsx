@@ -4,6 +4,7 @@ import Navbar from "./Components/Navbar";
 import Home from "./Components/Home";
 import Contact from "./Components/Contact";
 import About from "./Components/About";
+import Footer from "./Components/Footers";
 
 function App() {
   const location = useLocation();
@@ -18,6 +19,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
       </Routes>
+      <Footer />
     </>
   );
 }

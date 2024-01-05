@@ -21,7 +21,10 @@ import luxury from "./luxury room.jpg";
 import bed from "./bed.png";
 import guest from "./guests.png";
 import bathroom from "./bathroom.png";
-
+import facebook from "./facebook.svg";
+import instagram from "./instagram.svg";
+import linkedin from "./linkedin.svg";
+import twitter from "./twitter.svg";
 export {
   home1,
   home2,
@@ -45,4 +48,8 @@ export {
   guest,
   bed,
   bathroom,
+  facebook,
+  instagram,
+  linkedin,
+  twitter,
 };

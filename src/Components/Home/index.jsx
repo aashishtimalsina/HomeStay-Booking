@@ -3,6 +3,7 @@ import HeroSection from "./heroSection";
 import Activities from "./activities";
 import Service from "./service";
 import Room from "./room";
+import Footer from "../Footers";
 
 const Home = () => {
   return (
@@ -11,6 +12,7 @@ const Home = () => {
       <Activities />
       <Service />
       <Room />
+      
     </div>
   );
 };
