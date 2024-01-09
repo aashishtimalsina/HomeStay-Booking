@@ -12,7 +12,7 @@ export const navbar = [
   {
     id: 3,
     label: "Services",
-    url: "/services",
+    url: "/service",
   },
   {
     id: 4,

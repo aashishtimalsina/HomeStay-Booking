@@ -1,6 +1,7 @@
 import React from "react";
 import { room } from "./constant";
 import { Link } from "react-router-dom";
+import Button from "../reusuable/button";
 
 const Room = () => {
   return (
@@ -18,9 +19,9 @@ const Room = () => {
               data.id % 2 === 0 ? "lg:p-0" : "lg:p-5"
             } hover:scale-105 transition-transform`}
           >
-            <div className=" relative ">
+            <div className=" relative  group ">
               <img src={data.image} alt="img" className=" z-0" />
-              <div className="absolute hover:z-10 hover:bg-primary-5 bg-black flex flex-wrap justify-center items-center bg-opacity-20 hover:bg-opacity-30 inset-1">
+              <div className="absolute  bg-black flex flex-wrap justify-center items-end bg-opacity-20  inset-1">
                 <Link to="#">
                   <button
                     type="button"
@@ -29,9 +30,16 @@ const Room = () => {
                     ${data.price} / NIGHT
                   </button>
                 </Link>
-                <h1 className=" font-mono font-bold   text-3xl  text-white">
-                  {data.label}
-                </h1>
+                <div className="w-full p-3 group-hover:h-1/2  transition-opacity duration-3000 group-hover:bg-black group-hover:bg-opacity-20 ">
+                  <h1 className=" font-mono font-bold text-center  text-3xl  text-white">
+                    {data.label}
+                  </h1>
+                  <div className=" group-hover:flex  group-hover:justify-center mt-3 hidden ">
+                    <button className=" p-2 rounded-md bg-opacity-60 border-gray-50 border-2 border-opacity-50 w-3/4  hover:inline-block text-white bg-primary-4 z-50 ">
+                      Book Now
+                    </button>
+                  </div>
+                </div>
                 {/* {data.discription.map((detail) => ({
                   /* <div className="flex z-20 w-24 justify-between flex-wrap">
                     <img

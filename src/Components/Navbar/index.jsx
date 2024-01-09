@@ -13,7 +13,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex flex-wrap items-center w-full justify-between p-2 z-10 bg-transparent    ">
+    <nav className="flex flex-wrap items-center w-full justify-between p-2 z-10  ">
       <div className="flex flex-wrap items-center w-full justify-between">
         <div className="flex items-center flex-shrink-0 mr-6">
           <img src={logo} alt="logo" className=" w-14 h-14" />

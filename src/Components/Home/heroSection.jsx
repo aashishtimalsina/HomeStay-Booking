@@ -2,15 +2,37 @@ import React from "react";
 import { HomeDetails } from "./constant";
 import "../../index.css";
 import Navbar from "../Navbar";
+import { background, luxury } from "../Constants";
+import { nature } from "../Constants";
+
 const HeroSection = () => {
   return (
     <>
       {HomeDetails.map((data) => (
-        <section
+        <div
           key={data.id}
-          className=" bg-primary-1 lg:h-screen sm:h-full   "
+          className="lg:h-screen bg-cover h-full   bg-center  w-full overflow-hidden "
+          style={{
+            backgroundImage: `url(${background})`,
+          }}
         >
-          <div className=" flex  justify-center items-center h-full   flex-wrap   px-4 py-5 mx-auto ">
+          <div className=" w-full h-full bg-black  bg-opacity-45 ">
+            <Navbar />
+            <div className=" lg:w-3/5 w-custom  flex justify-center h-full items-center  m-auto  ">
+              <div>
+                <p className=" mb-2 text-md font-normal text-center w-full   text-white lg:text-xl   ">
+                  {data.preview}
+                </p>
+                <h1 className="mb-5  lg:text-4xl  text-center lg:w-auto font-semibold tracking-tight sm:leading-none md:leading-loose leading-loose  my-3  text-white line-clamp-5  md:text-5xl text-xl dark:text-white">
+                  {data.label}
+                </h1>
+
+                <p className="text-center mb-10 text-sm lg:text-lg text-white ">
+                  {data.location}
+                </p>
+              </div>
+
+              {/* <div className=" flex  justify-center items-center h-full   flex-wrap   px-4 py-5 mx-auto ">
             <div className=" flex justify-center h-full items-center  m-auto  lg:w-1/2 mt-10 w-full ">
               <div>
                 <p className=" mb-2 text-lg font-normal text-left w-full   text-gray-500 lg:text-xl   ">
@@ -49,8 +71,10 @@ const HeroSection = () => {
                 ))}
               </div>
             </div>
+          </div> */}
+            </div>
           </div>
-        </section>
+        </div>
       ))}
     </>
   );

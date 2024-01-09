@@ -5,6 +5,7 @@ import Home from "./Components/Home";
 import Contact from "./Components/Contact";
 import About from "./Components/About";
 import Footer from "./Components/Footers";
+import Services from "./Components/Services";
 
 function App() {
   const location = useLocation();
@@ -12,12 +13,13 @@ function App() {
   console.log(pathnames);
   return (
     <>
-      <Navbar />
-
+      {/* <Navbar /> */}
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
+
+        <Route path="/service" element={<Services />} />
       </Routes>
       <Footer />
     </>

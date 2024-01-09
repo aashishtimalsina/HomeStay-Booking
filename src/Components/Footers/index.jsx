@@ -10,11 +10,11 @@ const Footer = () => {
       <div
         className={` flex justify-between w-full md:flex-row flex-col mb-8w-full`}
       >
-        <div className=" flex  w-1/2 h-full items-center justify-center ">
+        <div className=" flex w-full  lg:w-1/2 h-full items-center justify-center ">
           <img src={logo} alt="logo" className="w-64  my-auto h-64  " />
         </div>
-        <div className="w-1/2 flex item-center justify-around">
-          <div className=" w-full flex flex-row justify-between flex-wrap md:mt-0 mt-10 ">
+        <div className="w-full lg:w-1/2 flex item-center justify-around">
+          <div className=" hidden lg:w-full lg:flex lg:flex-row lg:justify-between lg:flex-wrap md:mt-0 mt-10 ">
             {footerLinks.map((footerLink) => (
               <div key={footerLink.key} className="flex flex-col mt-5 ">
                 <h4 className="font-poppins font-medium text-[16px] leading-[27px] text-white  ">

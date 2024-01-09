@@ -6,7 +6,7 @@ import activityimage from "./featuredphoto1.jpeg";
 import activityimage2 from "./featuredphoto2.jpeg";
 import activityimage3 from "./featuredphoto3.jpeg";
 import activityimage4 from "./featuredphoto4.jpeg";
-
+import nature from "./Welcome to Topas Ecolodge - Mountaintop Resort in Sapa Vietnam.jpg";
 import car from "./car.jpg";
 import laundry from "./loundryy.png";
 import wifi from "./internet.png";
@@ -25,6 +25,13 @@ import facebook from "./facebook.svg";
 import instagram from "./instagram.svg";
 import linkedin from "./linkedin.svg";
 import twitter from "./twitter.svg";
+import dolor from "./dolor.svg";
+import balance from "./balanve.svg";
+import watch from "./watch.svg";
+import shield from "./shield.svg";
+import trek from "./treck.avif";
+import background from "./desktop-wallpaper-natural-house-nature-home.jpg";
+
 export {
   home1,
   home2,
@@ -52,4 +59,11 @@ export {
   instagram,
   linkedin,
   twitter,
+  nature,
+  dolor,
+  shield,
+  watch,
+  balance,
+  trek,
+  background,
 };

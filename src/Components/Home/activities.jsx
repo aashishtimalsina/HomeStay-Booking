@@ -11,28 +11,35 @@ const Activities = () => {
           We Feature
         </h1>
       </div>
-      <div className="flex   justify-center  flex-wrap mt-10">
+      <div className="flex   lg:justify-between justify-center flex-wrap mt-10">
         {activities.map((activity) => (
           <div
             key={activity.id}
-            className={`  m-2 max-w-sm w-72 h-80 shadow-custom overflow-hidden   border-none bg-white shadow rounded-md `}
+            className={`  m-2 max-w-sm w-72 h-80 shadow-custom  hover:scale-110    transition-transform duration-700     border-none bg-white shadow rounded-md `}
           >
-            <div className="relative h-full   hover:scale-110  overflow-hidden border-none  transition-transform  ">
-              <img src={activity.photo} className=" h-full " />
-              <div className=" flex justify-center  absolute inset-0 bg-black bg-opacity-10  border-none     w-full h-full">
-                <div className="w-custom h-custom border-t border-r rounded-md border-white m-auto p-3 my-auto">
-                  <p className="z-10 font-sans text-xs bg-white bg-opacity-100 w-28 p-2 text-center ">
+            <div className=" h-full    border-none  ">
+              <div className="relative w-full h-44 mb-2">
+                <img
+                  src={activity.photo}
+                  className=" absolute w-full h-full rounded-md "
+                />
+                <div className="absolute z-10  w-full h-full bg-black bg-opacity-5 ">
+                  <p className=" font-sans text-xs m-2  text-white bg-primary-6 bg-opacity-50 border-2 border-gray-300 w-28 p-2 text-center ">
                     ${activity.price} / PERSON
                   </p>
-                  <div className=" text-base mt-40   ">
-                    <p className="text-white text-xs font-bold">
+                </div>
+              </div>
+              <div className=" flex justify-center   inset-0   border-none     w-full ">
+                <div className=" border-t w-full border-r border-l  p-3 rounded-md border-black m-auto my-auto">
+                  <div className=" text-base    ">
+                    <p className="text-black text-xs font-bold">
                       {activity.catagory}
                     </p>
-                    <h3 className="text-white text-2xl font-mono font-bold">
+                    <h3 className="text-black text-2xl font-mono font-bold">
                       {activity.label}
                     </h3>
                     <Link to="#">
-                      <p className="text-white underline underline-offset-4 hover:no-underline transition-transform   text-sx font-semibold">
+                      <p className="text-black underline underline-offset-4 hover:no-underline transition-transform   text-sx font-semibold">
                         Discover More
                       </p>
                     </Link>
