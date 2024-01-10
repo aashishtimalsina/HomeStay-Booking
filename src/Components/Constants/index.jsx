@@ -30,7 +30,7 @@ import balance from "./balanve.svg";
 import watch from "./watch.svg";
 import shield from "./shield.svg";
 import trek from "./treck.avif";
-import background from "./desktop-wallpaper-natural-house-nature-home.jpg";
+import background from "./gann.jpg";
 
 export {
   home1,

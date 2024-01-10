@@ -23,7 +23,7 @@ const HeroSection = () => {
                 <p className=" mb-2 text-md font-normal text-center w-full   text-white lg:text-xl   ">
                   {data.preview}
                 </p>
-                <h1 className="mb-5  lg:text-4xl  text-center lg:w-auto font-semibold tracking-tight sm:leading-none md:leading-loose leading-loose  my-3  text-white line-clamp-5  md:text-5xl text-xl dark:text-white">
+                <h1 className="mb-5  lg:text-5xl  text-center lg:w-auto font-semibold tracking-tight lg:leading-[70px] sm:leading-none md:leading-loose leading-loose  my-3  text-white line-clamp-5  md:text-5xl text-xl dark:text-white">
                   {data.label}
                 </h1>
 

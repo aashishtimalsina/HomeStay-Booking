@@ -189,3 +189,17 @@ export const room = [
     ],
   },
 ];
+export const slides = [
+  {
+    url: delux,
+    id: 1,
+  },
+  {
+    url: luxury,
+    id: 2,
+  },
+  {
+    url: double,
+    id: 3,
+  },
+];

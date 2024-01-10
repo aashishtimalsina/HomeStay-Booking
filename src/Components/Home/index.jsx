@@ -2,8 +2,8 @@ import React from "react";
 import HeroSection from "./heroSection";
 import Activities from "./activities";
 import Service from "./service";
-import Room from "./room";
-import Footer from "../Footers";
+
+import Galary from "./Galary";
 
 const Home = () => {
   return (
@@ -11,8 +11,7 @@ const Home = () => {
       <HeroSection />
       <Activities />
       <Service />
-      <Room />
-      
+      <Galary />
     </div>
   );
 };

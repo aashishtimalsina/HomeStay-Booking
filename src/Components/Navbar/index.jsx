@@ -18,8 +18,8 @@ const Navbar = () => {
         <div className="flex items-center flex-shrink-0 mr-6">
           <img src={logo} alt="logo" className=" w-14 h-14" />
         </div>
-        <div className="flex  items-center ">
-          <div className="hidden lg:inline-block md:flex md:justify-center md:items-center ">
+        <div className="flex bg-transparent items-center ">
+          <div className="hidden lg:inline-block bg-transparent md:flex md:justify-center md:items-center ">
             {navbar.map((text) => (
               <Link
                 to={`${text.url}`}
@@ -37,13 +37,13 @@ const Navbar = () => {
           <div className="flex justify-center align-center text-center">
             <button
               type="button"
-              className="inline-flex items-center px-3 py-2 mt-4 text-sm font-medium text-white bg-gray-700 rounded-lg  hover:bg-white hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 lg:mt-0 lg:ml-4"
+              className="inline-flex items-center px-3 py-2 mt-4 text-sm font-medium text-white bg-black  rounded-lg  hover:bg-white hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 lg:mt-0 lg:ml-4"
             >
               Log In
             </button>
             <button
               onClick={handleToggle}
-              className="flex items-center m-auto  px-3 py-2 text-white md:hidden lg:hidden"
+              className="flex items-center m-auto ml-2 mt-5  px-3 py-2 text-white bg-black bg-opacity-15 rounded-full md:hidden lg:hidden"
             >
               <svg
                 className="w-3 h-3 fill-current"
@@ -60,7 +60,9 @@ const Navbar = () => {
 
       <div
         className={
-          navbarOpen === true ? "w-full lg:w-auto bg-white p-5" : "hidden"
+          navbarOpen === true
+            ? "w-full lg:w-auto bg-white  bg-opacity-45 p-5"
+            : "hidden"
         }
       >
         {navbar.map((text) => (
