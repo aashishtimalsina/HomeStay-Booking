@@ -1,5 +1,6 @@
 import React from "react";
 import { services, servicePhotos } from "./constant";
+import styles from "../../style";
 
 const Service = () => {
   return (
@@ -10,9 +11,7 @@ const Service = () => {
             <p className="text-gray-500 font-semibold text-sm mb-2">
               DISCOVER THE SERVICE WE OFFERED
             </p>
-            <h2 className="font-serif font-bold text-4xl mb-7 text-black">
-              THE ESSENTIALS
-            </h2>
+            <h2 className={` ${styles.heading2}text-black`}>THE ESSENTIALS</h2>
           </div>
         </div>
 

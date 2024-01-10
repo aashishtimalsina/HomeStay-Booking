@@ -2,14 +2,16 @@ import React from "react";
 import { activities } from "./constant";
 import Button from "../reusuable/button";
 import { Link } from "react-router-dom";
+import styles from "../../style";
 
 const Activities = () => {
   return (
     <div className=" p-10">
       <div className="mb-9 ">
-        <h1 className="font-bold mt-16 text-2xl text-gray-500 flex justify-center text-center ">
-          We Feature
-        </h1>
+        <p className="text-gray-500 font-semibold text-center text-sm mb-1 ">
+          WE FEATURE
+        </p>
+        <h1 className={`${styles.heading2}`}>THINGS TO DO WITH US</h1>
       </div>
       <div className="flex   lg:justify-between justify-center flex-wrap mt-10">
         {activities.map((activity) => (
