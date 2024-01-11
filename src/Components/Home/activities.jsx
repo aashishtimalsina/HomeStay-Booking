@@ -13,26 +13,26 @@ const Activities = () => {
         </p>
         <h1 className={`${styles.heading2}`}>THINGS TO DO WITH US</h1>
       </div>
-      <div className="flex   lg:justify-between justify-center flex-wrap mt-10">
+      <div className="flex gap-8 justify-center flex-wrap mt-10">
         {activities.map((activity) => (
           <div
             key={activity.id}
-            className={`  m-2 max-w-sm w-72 h-80 shadow-custom  hover:scale-110    transition-transform duration-700     border-none bg-white shadow rounded-md `}
+            className={`  m-2 max-w-sm p-2 w-64 h-80 shadow-xl group hover:scale-110    transition-transform duration-700     border-none bg-white  rounded-md `}
           >
             <div className=" h-full    border-none  ">
-              <div className="relative w-full h-44 mb-2">
+              <div className="relative w-full h-44  mb-2">
                 <img
                   src={activity.photo}
-                  className=" absolute w-full h-full rounded-md "
+                  className=" absolute w-full h-full group-hover:animate-rotate rounded-md "
                 />
-                <div className="absolute z-10  w-full h-full bg-black bg-opacity-5 ">
+                <div className="absolute z-10  w-full h-full bg-black group-hover:animate-rotate bg-opacity-5 ">
                   <p className=" font-sans text-xs m-2  text-white bg-primary-6 bg-opacity-50 border-2 border-gray-300 w-28 p-2 text-center ">
                     ${activity.price} / PERSON
                   </p>
                 </div>
               </div>
               <div className=" flex justify-center   inset-0   border-none     w-full ">
-                <div className=" border-t w-full border-r border-l  p-3 rounded-md border-black m-auto my-auto">
+                <div className="  w-full  border p-3 rounded-md border-black m-auto my-auto">
                   <div className=" text-base    ">
                     <p className="text-black text-xs font-bold">
                       {activity.catagory}

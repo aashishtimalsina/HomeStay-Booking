@@ -28,9 +28,13 @@ export default {
       },
     },
     keyframes: {
-      translate: {
+      translateX: {
         "0%": { transform: "translateX(-100%)" },
         "100%": { transform: "translateX(0%)" },
+      },
+      rotate: {
+        "0%": { transform: "rotate(10deg)" },
+        "100%": { transform: "rotate(0deg)" },
       },
 
       fadeIn: {
@@ -41,6 +45,7 @@ export default {
     animation: {
       translateX: "translateX 1s ease-in-out",
       fadeIn: "fadeIn 1s ease-in-out",
+      rotate: "rotate 1s linear ",
     },
   },
   plugins: [],

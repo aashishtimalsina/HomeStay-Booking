@@ -12,7 +12,7 @@ const Card = () => {
         {ourMoto.map((data) => (
           <div
             key={data.id}
-            className="w-72 h-96 m-5 border-2 overflow-hidden rounded-md border-black p-5 hover:bg-black hover:bg-opacity-10 hover:scale-105 transition-transform duration-1000 "
+            className="w-72 h-96 m-5 border-2 overflow-hidden rounded-md border-black p-5 hover:bg-primary-1  fadeIn duration-1000  hover:bg-opacity-50 hover:border-gray-300 hover:scale-105 transition-all  "
           >
             <div className="w-full p-2">
               <img src={data.icon} alt="image" className=" w-24  h-24 m-auto" />

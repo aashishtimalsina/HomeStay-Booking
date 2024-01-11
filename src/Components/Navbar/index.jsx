@@ -26,8 +26,8 @@ const Navbar = () => {
                 key={text.id}
                 className={
                   text.url === pathnames
-                    ? "  mr-4  text-black font-medium text-lg underline underline-offset-2"
-                    : "block   lg:inline-block lg:mt-0 text-black hover:text-lg   mr-4 font-normal "
+                    ? "  mr-4  text-primary-1 font-medium text-lg underline underline-offset-2"
+                    : "block   lg:inline-block lg:mt-0 text-primary-4 hover:text-lg   mr-4 font-normal "
                 }
               >
                 {text.label}
@@ -38,7 +38,7 @@ const Navbar = () => {
             <Link to="/login">
               <button
                 type="button"
-                className="inline-flex items-center px-3 py-2 mt-4 text-sm font-medium text-primary-1 bg-transparent  rounded-lg  hover:bg-white hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all  duration-700 lg:mt-0 lg:ml-4"
+                className="inline-flex items-center px-3 py-2 mt-4 text-sm font-medium text-primary-3 bg-transparent  rounded-lg  hover:bg-white hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all  duration-700 lg:mt-0 "
               >
                 Log In
               </button>
