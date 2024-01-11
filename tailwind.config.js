@@ -27,6 +27,21 @@ export default {
         custom: "95%",
       },
     },
+    keyframes: {
+      translate: {
+        "0%": { transform: "translateX(-100%)" },
+        "100%": { transform: "translateX(0%)" },
+      },
+
+      fadeIn: {
+        "0%": { opacity: "0" },
+        "100%": { opacity: "1" },
+      },
+    },
+    animation: {
+      translateX: "translateX 1s ease-in-out",
+      fadeIn: "fadeIn 1s ease-in-out",
+    },
   },
   plugins: [],
 };
