@@ -8,7 +8,7 @@ const Service = () => {
       <div className="w-full">
         <div className="w-full  mt-5 flex justify-center items-center  sm:w-1/2">
           <div>
-            <p className="text-gray-500 font-semibold text-sm mb-2">
+            <p className="text-gray-500 text-center md:text-left font-semibold text-sm mb-2">
               DISCOVER THE SERVICE WE OFFERED
             </p>
             <h2 className={` ${styles.heading2}text-black`}>THE ESSENTIALS</h2>

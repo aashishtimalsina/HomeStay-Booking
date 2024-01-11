@@ -6,7 +6,7 @@ import styles from "../../style";
 
 const Activities = () => {
   return (
-    <div className=" p-10 mt-20">
+    <div className=" p-20 pt-28  bg-primary-2">
       <div className="mb-9 ">
         <p className="text-gray-500 font-semibold text-center text-sm mb-1 ">
           WE FEATURE
