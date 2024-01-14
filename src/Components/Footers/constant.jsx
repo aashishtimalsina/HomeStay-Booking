@@ -40,12 +40,12 @@ export const footerDetails = [
     label: "+41 22 345 66 77 ",
   },
   {
-    id: 1,
+    id: 3,
     name: "Fax",
     label: "+41 22 345 66 77",
   },
   {
-    id: 1,
+    id: 4,
     name: "Address",
     label: "Panauti-Kushadevi Rd, Panauti 45209, Nepa",
   },

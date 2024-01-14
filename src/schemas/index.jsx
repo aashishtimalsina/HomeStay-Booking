@@ -13,3 +13,8 @@ export const Loginschema = Yup.object({
   email: Yup.string().email().required("Please enter your email"),
   password: Yup.string().min(6).required("Please enter your password"),
 });
+export const contactschema = Yup.object({
+  name: Yup.string().min(2).max(40).required("Please enter your name"),
+  email: Yup.string().email().required("Please enter your email"),
+  message: Yup.string().min(2).max(1000),
+});
