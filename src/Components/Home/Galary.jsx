@@ -32,7 +32,7 @@ const Gallery = () => {
         <p className="text-primary-4 mt-14 font-semibold text-sm mb-2">
           DISCOVER OUR MEMORIES
         </p>
-        <h2 className={` font-serif font-bold text-4xl text-black`}>GALLERY</h2>
+        <h2 className={` font-sans font-bold text-4xl text-black`}>GALLERY</h2>
       </div>
       <div className=" m-auto py-16 px-4 relative group">
         <div className="w-full h-full rounded-2xl duration-500">

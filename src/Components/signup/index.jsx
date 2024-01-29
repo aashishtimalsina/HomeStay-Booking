@@ -4,14 +4,15 @@ import { useFormik } from "formik";
 import { signupSchema } from "../../schemas";
 import { Link } from "react-router-dom";
 import { socialMedia } from "../Footers/constant";
-
+import axios from "axios";
 const initialValues = {
-  name: "",
+  username: "",
   email: "",
   password: "",
   conform_password: "",
 };
-
+const apiUrl =
+  "https://6dcb-2400-1a00-b060-45ff-3d75-3b7e-d6f6-5739.ngrok-free.app/addNewUser?fbclid=IwAR04QXN4Tr8Oc04dnIgfD0O6gyZOKq1SPNMLvLZ8B3dGvuolLtfZkPEtZZ0";
 const Signup = () => {
   const { values, errors, handleBlur, touched, handleChange, handleSubmit } =
     useFormik({
@@ -19,6 +20,15 @@ const Signup = () => {
       validationSchema: signupSchema,
       onSubmit: (values, action) => {
         console.log(values);
+
+        axios
+          .post(apiUrl, values)
+          .then((response) => {
+            console.log("Response:", response.data);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
         action.resetForm();
       },
     });
@@ -43,8 +53,8 @@ const Signup = () => {
             id="username"
             type="text"
             placeholder="Username"
-            name="name"
-            value={values.name}
+            name="username"
+            value={values.username}
             onChange={handleChange}
             onBlur={handleBlur}
           />
@@ -84,7 +94,7 @@ const Signup = () => {
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="password"
-            type="text"
+            type="password"
             placeholder="Password"
             name="password"
             value={values.password}

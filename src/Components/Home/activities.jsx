@@ -6,12 +6,12 @@ import styles from "../../style";
 
 const Activities = () => {
   return (
-    <div className=" p-20 pt-28  bg-primary-2">
+    <div className=" p-20 pt-28  ">
       <div className="mb-9 ">
         <p className="text-gray-500 font-semibold text-center text-sm mb-1 ">
           WE FEATURE
         </p>
-        <h1 className={`${styles.heading2}`}>THINGS TO DO WITH US</h1>
+        <h1 className={`${styles.heading2} `}>THINGS TO DO WITH US</h1>
       </div>
       <div className="flex gap-8 justify-center flex-wrap mt-10">
         {activities.map((activity) => (
@@ -32,12 +32,12 @@ const Activities = () => {
                 </div>
               </div>
               <div className=" flex justify-center   inset-0   border-none     w-full ">
-                <div className="  w-full  border p-3 rounded-md border-black m-auto my-auto">
+                <div className="  w-full   p-3 k m-auto my-auto">
                   <div className=" text-base    ">
-                    <p className="text-black text-xs font-bold">
+                    <p className="text-black font-sans text-xs font-bold">
                       {activity.catagory}
                     </p>
-                    <h3 className="text-black text-2xl font-mono font-bold">
+                    <h3 className="text-black text-2xl font-sans  font-bold">
                       {activity.label}
                     </h3>
                     <Link to="#">
