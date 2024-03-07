@@ -1,33 +1,49 @@
 import React from "react";
 import styles from "../../style";
 import { useFormik } from "formik";
-import { signupSchema } from "../../schemas";
-import { Link } from "react-router-dom";
+import { Loginschema } from "../../schemas";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { socialMedia } from "../Footers/constant";
+
 import axios from "axios";
+
 const initialValues = {
   username: "",
-
   password: "",
 };
+
 const apiUrl =
-  "https://6dcb-2400-1a00-b060-45ff-3d75-3b7e-d6f6-5739.ngrok-free.app/login?fbclid=IwAR038qHKLkNYWv1ia6DYv6VisFhRbCVP1sycOmGmd811bmEwYxdoCb2QnpY";
+  "https://c23a-2400-1a00-b060-8b27-90e7-4323-28d6-9cf6.ngrok-free.app/login?fbclid=IwAR3IHPZsYPQ4hjPxz50TNtLS2an2BzS4UMJl7k6nBr-6SdMjbNgMGp4nPMA";
 const Login = () => {
+  const navigate = useNavigate();
+
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
   const { values, errors, handleBlur, touched, handleChange, handleSubmit } =
     useFormik({
       initialValues: initialValues,
-      validationSchema: signupSchema,
+      validationSchema: Loginschema,
       onSubmit: (values, action) => {
         console.log(values);
 
-        // axios
-        //   .post(apiUrl, values)
-        //   .then((response) => {
-        //     console.log("Response:", response.data);
-        //   })
-        //   .catch((error) => {
-        //     console.error("Error:", error);
-        //   });
+        axios
+          .post(apiUrl, values)
+          .then((response) => {
+            console.log("Response:", response.data);
+            console.log("role:", response.data.role);
+
+            if (response.data.role === "admin") {
+              navigate("/admin");
+              // navigate(from, { replace: true });
+            }
+            // } else {
+            //   history.push("/");
+            // }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
         action.resetForm();
       },
     });
@@ -36,7 +52,7 @@ const Login = () => {
     <div className="Container w-[350px] items-center m-auto my-10 bg-primary-5 bg-opacity-40">
       <h1 className={`${styles.heading2} text-white pt-8`}>login</h1>
       <form
-        action="POST"
+        method="POST"
         onSubmit={handleSubmit}
         className="bg-transparent shadow-md rounded px-8 pt-6 pb-8 mb-4"
       >
@@ -57,8 +73,8 @@ const Login = () => {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          {errors.name && touched.name && (
-            <p className="text-red-600">{errors.name}</p>
+          {errors.username && touched.username && (
+            <p className="text-red-600">{errors.username}</p>
           )}
         </div>
 
@@ -84,7 +100,7 @@ const Login = () => {
           )}
         </div>
 
-        <div className="flex items-center  justify-center mb-5">
+        <div className="flex items-center justify-center mb-5">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold  py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
@@ -94,7 +110,7 @@ const Login = () => {
         </div>
         <div>
           <p className={`${styles.paragraph} text-center  `}>or login with</p>
-          <div className=" flex flex-row mt-5   justify-center group ">
+          <div className=" flex flex-row mt-5 justify-center group ">
             {socialMedia.map((social, index) => (
               <img
                 key={social.id}
@@ -107,10 +123,12 @@ const Login = () => {
             ))}
           </div>
         </div>
-        <Link to="/login">
+        <Link to="/forgot-password">
           <p className={`${styles.paragraph} mt-5 text-center`}>
-            Forget password??{" "}
-            <span className={`${styles.paragraph} text-blue-700`}>Log In</span>{" "}
+            Forgot password?{" "}
+            <span className={`${styles.paragraph} text-blue-700`}>
+              Reset Password
+            </span>{" "}
           </p>
         </Link>
       </form>

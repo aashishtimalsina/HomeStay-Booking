@@ -11,7 +11,7 @@ const Activities = () => {
         <p className="text-gray-500 font-semibold text-center text-sm mb-1 ">
           WE FEATURE
         </p>
-        <h1 className={`${styles.heading2} `}>THINGS TO DO WITH US</h1>
+        <h1 className={`${styles.heading2} `}>Itinerary During Stay</h1>
       </div>
       <div className="flex gap-8 justify-center flex-wrap mt-10">
         {activities.map((activity) => (

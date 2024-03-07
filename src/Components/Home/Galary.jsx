@@ -34,8 +34,8 @@ const Gallery = () => {
         </p>
         <h2 className={` font-sans font-bold text-4xl text-black`}>GALLERY</h2>
       </div>
-      <div className=" m-auto py-16 px-4 relative group">
-        <div className="w-full h-full rounded-2xl duration-500">
+      <div className=" m-auto py-16 relative group px-4 ">
+        <div className="w-full h-full md:w-1/5 md:h-1/2     rounded-2xl duration-500">
           <img
             src={slides[currentIndex].url}
             alt="photo"

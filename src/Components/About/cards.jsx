@@ -15,11 +15,13 @@ const Card = () => {
             className="w-72 h-96 m-5 border-2 overflow-hidden rounded-md border-black p-5 hover:bg-primary-1  fadeIn duration-1000  hover:bg-opacity-50 hover:border-gray-300 hover:scale-105 transition-all  "
           >
             <div className="w-full p-2">
-              <img src={data.icon} alt="image" className=" w-24  h-24 m-auto" />
+              <img src={data.icon} alt="image" className=" w-20  h-20 m-auto" />
             </div>
             <div>
               <h5 className={`${styles.heading5} p-4`}>{data.lable}</h5>
-              <p className={`${styles.paragraph}`}>{data.discription}</p>
+              <p className={`${styles.paragraph} text-center`}>
+                {data.discription}
+              </p>
             </div>
           </div>
         ))}
