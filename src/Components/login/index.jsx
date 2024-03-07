@@ -4,7 +4,6 @@ import { useFormik } from "formik";
 import { Loginschema } from "../../schemas";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { socialMedia } from "../Footers/constant";
-
 import axios from "axios";
 
 const initialValues = {

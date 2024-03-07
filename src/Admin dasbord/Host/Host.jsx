@@ -36,13 +36,13 @@ function HostHead(props) {
 export default function Host() {
   const [hosts, setHosts] = React.useState([]);
   const apiUrl =
-    "https://30ee-2400-1a00-b060-9f96-d021-5e8-2d6-bd63.ngrok-free.app/getHostDetails?fbclid=IwAR1G2fY1CnBBwxbfNGyeyaMBL8MVM7VnPFDcNctINPMJRLRC-37fHbZvgUo";
+    "https://c23a-2400-1a00-b060-8b27-90e7-4323-28d6-9cf6.ngrok-free.app/getHostDetails?fbclid=IwAR1QA9Ts83ygcAGyO1kO-yb8ghPBycpxrFnfpYmbtKOoi_SiCK6xGCxy8S8";
   React.useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(apiUrl);
         setHosts(response.list || []); // Assuming the response data is an array of hosts
-        console.log("Response data:", response.data);
+        console.log("Response data:", response);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
