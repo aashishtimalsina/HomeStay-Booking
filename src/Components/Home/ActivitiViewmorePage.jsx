@@ -1,36 +1,40 @@
 import React from "react";
 
 import { locationIcon, activityimage4 } from "../Constants";
+// import ActivitiesBookingForm from "./ActivityBookingForm";
 import styles from "../../style";
 import Navbar from "../Navbar";
+import ActivityBookingForm from "./ActivityBookingForm";
 
 const ActivitesViewmorePage = () => {
   return (
-    <div
-      className=" bg-cover h-full mb-10 bg-center  w-full overflow-hidden "
-      style={{
-        backgroundImage: `url(${activityimage4})`,
-      }}
-    >
-      <div className=" w-full  h-full bg-black  bg-opacity-45 ">
-        <Navbar />
-        <div className="p-10 py-20  w-custom  flex justify-left h-full items-end  m-auto  ">
-          <div>
-            <h1 className="mb-5  lg:text-4xl  text-left lg:w-auto font-semibold tracking-tight lg:leading-[70px] sm:leading-none md:leading-loose leading-loose  text-white line-clamp-5  md:text-5xl text-xl dark:text-white">
-              Panauti Community Homestay <br /> Panauti Nature, lifestyle and
-              Culture
-            </h1>
+    <>
+      <div
+        className=" bg-cover h-full mb-10 bg-center  w-full overflow-hidden "
+        style={{
+          backgroundImage: `url(${activityimage4})`,
+        }}
+      >
+        <div className=" w-full  h-full bg-black  bg-opacity-45 ">
+          <Navbar />
+          <div className="p-10 py-20  w-custom  flex justify-left h-full items-end  m-auto  ">
+            <div>
+              <h1 className="mb-5  lg:text-4xl  text-left lg:w-auto font-semibold tracking-tight lg:leading-[70px] sm:leading-none md:leading-loose leading-loose  text-white line-clamp-5  md:text-5xl text-xl dark:text-white">
+                Panauti Community Homestay <br /> Panauti Nature, lifestyle and
+                Culture
+              </h1>
 
-            <p className="text-left  text-lg lg:text-md text-white ">
-              {/* <img src={locationIcon} alt="location" className=" w-10 h-10" /> */}
-              <span className=" text-primary-1 text-4xl">Rs 200 </span> per
-              guest
-            </p>
+              <p className="text-left  text-lg lg:text-md text-white ">
+                {/* <img src={locationIcon} alt="location" className=" w-10 h-10" /> */}
+                <span className=" text-primary-1 text-4xl">Rs 200 </span> per
+                guest
+              </p>
+            </div>
           </div>
         </div>
       </div>
-      <div>
-        <div>
+      <div className="flex w-full p-10 ">
+        <div className=" w-2/3">
           <p className={`${styles.paragraph}`}>
             Embark on an unforgettable hiking adventure from the enchanting town
             of Panauti to the sacred destination of Namobuddha. Our Panauti to
@@ -62,9 +66,11 @@ const ActivitesViewmorePage = () => {
             landscapes and ancient traditions.
           </p>
         </div>
-        <div></div>
+        <div className="w-1/3 items-center m-auto">
+          {<ActivityBookingForm />}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
