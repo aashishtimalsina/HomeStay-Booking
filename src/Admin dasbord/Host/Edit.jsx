@@ -6,53 +6,39 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import { Typography } from "@mui/material";
+import { useParams } from "react-router";
 
-const EditDetailForm = ({ hostId }) => {
-  const [token, setToken] = useState(null); // State to store the token
-  const [initialValues, setInitialValues] = useState({
-    email: "",
-    hostName: "",
-    address: "",
-    about: "",
-    image: "",
-    phone: "",
-  });
+const EditDetailForm = () => {
+  const { id } = useParams();
+  console.log("detail id", id);
+  const [detail, setDetail] = useState(null);
 
-  const tokenUrl =
-    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdW5pdGEiLCJpYXQiOjE3MDk2NjQ0MTIsImV4cCI6MTcwOTY2NjIxMn0.9ArS6K-I3rtzpau_b_hG2Kvs_NfImsS_CHnijTgqw7g"; // URL to fetch token
-
-  // Function to fetch token
-  const fetchToken = async () => {
-    try {
-      const response = await axios.post(tokenUrl, {
-        /* Include any data needed to fetch the token */
-      });
-      setToken(response.data.token); // Assuming the token is returned in the response
-    } catch (error) {
-      console.error("Error fetching token:", error);
-    }
-  };
-
-  // Fetch data for the specified hostId
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(
-        `https://your-api.com/getHost/${hostId}`
-      );
-      setInitialValues(response.data); // Assuming response.data contains host details
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  // Call fetchToken and fetchData when component mounts
   useEffect(() => {
-    fetchToken();
-    fetchData();
-  }, [hostId]);
+    const fetchDetail = async () => {
+      try {
+        const response = await axios.get(
+          `https://moved-readily-chimp.ngrok-free.app/hostDetails/${id}`,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": true,
+            },
+          }
+        );
+        if (response.data) {
+          setHosts(response.data.list || []);
+          setDetail(response.data.list || []);
+          console.log("Response data:", response.data);
+        } else {
+          console.error("Empty response data");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchDetail();
+  }, [id]);
 
-  // Validation schema using Yup
-  const Loginschema = Yup.object().shape({
+  const EditSchema = Yup.object().shape({
     email: Yup.string()
       .email("Invalid email address")
       .required("Email is required"),
@@ -61,39 +47,51 @@ const EditDetailForm = ({ hostId }) => {
     about: Yup.string().required("About is required"),
     image: Yup.string().required("Image URL is required"),
     phone: Yup.string().required("Phone number is required"),
-    // Add more validation rules for other fields if needed
   });
 
-  // Formik hook
+  const apiUrl = " https://moved-readily-chimp.ngrok-free.app/getHostDetails}";
+
   const { values, errors, touched, handleChange, handleSubmit } = useFormik({
-    initialValues: initialValues,
-    validationSchema: Loginschema,
+    initialValues: {
+      email: "",
+      hostName: "",
+      address: "",
+      about: "",
+      image: "",
+      phone: "",
+    },
+    validationSchema: EditSchema,
     onSubmit: async (values, action) => {
       try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const response = await axios.put(
-          `https://your-api.com/updateHost/${hostId}`,
-          values,
-          config
-        );
+        const response = await axios.put(`${apiUrl}/${id}`, values);
         console.log("Response:", response.data);
-        console.log("role:", response.data.role);
-
-        // Handle response accordingly, e.g., redirect or show success message
       } catch (error) {
         console.error("Error:", error);
       }
     },
   });
 
+  useEffect(() => {
+    if (detail) {
+      const { email, hostName, address, about, image, phone } = detail;
+      // Set form values when detail is fetched
+      values.email = email;
+      values.hostName = hostName;
+      values.address = address;
+      values.about = about;
+      values.image = image;
+      values.phone = phone;
+    }
+  }, [detail, values]);
+
+  if (!detail) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="p-10">
       <Typography variant="h5" sx={{ marginBottom: "20px" }}>
-        Edit Details
+        Edit Detail
       </Typography>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>

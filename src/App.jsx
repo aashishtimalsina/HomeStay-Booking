@@ -64,7 +64,15 @@ import BarGraph from "./Admin dasbord/components/reuseable/BarGraph.jsx";
 import Host from "./Admin dasbord/Host/Host.jsx";
 import AddDetailForm from "./Admin dasbord/Host/Add.jsx";
 import ActivitesViewmorePage from "./Components/Home/activitiViewmorePage.jsx";
+import Activity from "./Admin dasbord/components/Activity/Activity.jsx";
+import GuestAsign from "./Admin dasbord/components/GuestAssign/GuestAsign.jsx";
 
+import DetailPage from "./Admin dasbord/Host/Detail.jsx";
+import GuestAsignForm from "./Components/Form/GuestAsignForm.jsx";
+import EditDetailForm from "./Admin dasbord/Host/Edit.jsx";
+import ActivityForm from "./Admin dasbord/components/Activity/AddActivityForm.jsx";
+import EditActivity from "./Admin dasbord/components/Activity/EditActivity.jsx";
+import ActivityDetail from "./Admin dasbord/components/Activity/ActivityDetail.jsx";
 
 const App = () => {
   const location = useLocation();
@@ -85,12 +93,22 @@ const App = () => {
         {isAdminPage && (
           <Route path="/admin" element={<Admin />}>
             <Route path="dashboard" element={<Dashboard />} />
-            <Route path="add" element={<BarGraph />} />
+
             <Route path="host" element={<Host />} />
             <Route path="host/add" element={<AddDetailForm />} />
-            {/* <Route path="host/update/:id" element={<HostUpdate />} />
-            <Route path="host/delete/:id" element={<Hostdelete />} />
-            <Route path="host/detail/:id" element={<Hostdelete />} /> */}
+
+            <Route path="host/update/:id" element={<EditDetailForm />} />
+            {/* {/* <Route path="host/delete/:id" element={<Hostdelete />} /> */}
+            <Route path="host/detail/:id" element={<DetailPage />} />
+            <Route path="activity" element={<Activity />} />
+            <Route path="activity/add" element={<ActivityForm />} />
+            <Route path="activity/detail/:id" element={<ActivityDetail />} />
+            <Route path="activity/edit/:id" element={<EditActivity />} />
+            <Route path="guestAssign" element={<GuestAsign />} />
+            <Route
+              path="guestAssign/guestAsignForm"
+              element={<GuestAsignForm />}
+            />
           </Route>
         )}
       </Routes>
