@@ -65,6 +65,7 @@ import Host from "./Admin dasbord/Host/Host.jsx";
 import AddDetailForm from "./Admin dasbord/Host/Add.jsx";
 import ActivitesViewmorePage from "./Components/Home/activitiViewmorePage.jsx";
 
+
 const App = () => {
   const location = useLocation();
   const isAdminPage = location.pathname.startsWith("/admin");

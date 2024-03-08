@@ -35,21 +35,31 @@ function HostHead(props) {
 
 export default function Host() {
   const [hosts, setHosts] = React.useState([]);
-  const apiUrl =
-    "https://c23a-2400-1a00-b060-8b27-90e7-4323-28d6-9cf6.ngrok-free.app/getHostDetails?fbclid=IwAR1QA9Ts83ygcAGyO1kO-yb8ghPBycpxrFnfpYmbtKOoi_SiCK6xGCxy8S8";
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(apiUrl);
-        setHosts(response.list || []); // Assuming the response data is an array of hosts
-        console.log("Response data:", response);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
 
-    fetchData();
-  }, []);
+const apiUrl = "https://c23a-2400-1a00-b060-8b27-90e7-4323-28d6-9cf6.ngrok-free.app/getHostDetails";
+
+React.useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(apiUrl, {
+        headers: {
+          "ngrok-skip-browser-warning": true
+        }
+      });
+      if (response.data) {
+        setHosts(response.data.list || []);
+        console.log("Response data:", response.data);
+      } else {
+        console.error("Empty response data");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  fetchData();
+}, []);
+
 
   const headCells = [
     {
