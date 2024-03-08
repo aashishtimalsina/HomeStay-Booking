@@ -40,7 +40,7 @@ const Activities = () => {
                     <h3 className="text-black text-2xl font-sans  font-bold">
                       {activity.label}
                     </h3>
-                    <Link to="#">
+                    <Link to="/viewMore">
                       <p className="text-black underline underline-offset-4 hover:no-underline transition-transform   text-sx font-semibold">
                         Discover More
                       </p>

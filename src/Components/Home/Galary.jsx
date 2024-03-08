@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
-import { RxDotFilled } from "react-icons/rx";
 import { slides } from "./constant";
-import { Link } from "react-router-dom";
 
 const Gallery = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -19,13 +17,6 @@ const Gallery = () => {
     );
   };
 
-  const goToSlide = (slideIndex) => {
-    setCurrentIndex(slideIndex);
-  };
-
-  console.log("state", currentIndex);
-  console.log("slide index", slides[currentIndex].url);
-
   return (
     <section className="p-5 mt-16 bg-primary-2">
       <div className="p-3">
@@ -34,41 +25,40 @@ const Gallery = () => {
         </p>
         <h2 className={` font-sans font-bold text-4xl text-black`}>GALLERY</h2>
       </div>
-      <div className=" m-auto py-16 relative group px-4 ">
-        <div className="w-full h-full md:w-1/5 md:h-1/2     rounded-2xl duration-500">
-          <img
-            src={slides[currentIndex].url}
-            alt="photo"
-            className="w-full h-full rounded-2xl bg-center bg-cover duration-500"
-          />
-        </div>
-        {/* Left Arrow */}
+      <div className="relative flex justify-center items-center">
+        <img
+          src={
+            slides[currentIndex === 0 ? slides.length - 1 : currentIndex - 1]
+              .url
+          }
+          alt={`slide-${currentIndex - 1}`}
+          className="w-36 h-36 md:w-48 md:h-48 object-cover absolute left-80 transform -translate-x-full rounded-lg"
+        />
+        <img
+          src={slides[currentIndex].url}
+          alt={`slide-${currentIndex}`}
+          className="w-72 h-72 md:w-96 md:h-96 object-cover rounded-lg z-10"
+        />
+        <img
+          src={
+            slides[currentIndex === slides.length - 1 ? 0 : currentIndex + 1]
+              .url
+          }
+          alt={`slide-${currentIndex + 1}`}
+          className="w-36 h-36 md:w-48 md:h-48 object-cover absolute right-80 transform translate-x-full rounded-lg"
+        />
         <button
           onClick={prevSlide}
-          className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer"
+          className="absolute top-1/2 -translate-y-1/2 left-0 z-10 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer"
         >
           <BsChevronCompactLeft size={30} />
         </button>
-        {/* Right Arrow */}
         <button
           onClick={nextSlide}
-          className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer"
+          className="absolute top-1/2 -translate-y-1/2 right-0 z-10 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer"
         >
           <BsChevronCompactRight size={30} />
         </button>
-        <div className="flex top-4 justify-center py-2">
-          {slides.map((_, slideIndex) => (
-            <div
-              key={slideIndex}
-              onClick={() => goToSlide(slideIndex)}
-              className={`text-2xl cursor-pointer ${
-                slideIndex === currentIndex ? "text-blue-500" : ""
-              }`}
-            >
-              <RxDotFilled />
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );

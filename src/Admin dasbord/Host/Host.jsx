@@ -35,6 +35,7 @@ function HostHead(props) {
 
 export default function Host() {
   const [hosts, setHosts] = React.useState([]);
+
 const apiUrl = "https://c23a-2400-1a00-b060-8b27-90e7-4323-28d6-9cf6.ngrok-free.app/getHostDetails";
 
 React.useEffect(() => {

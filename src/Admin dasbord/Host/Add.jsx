@@ -9,25 +9,25 @@ import { Typography } from "@mui/material";
 
 const AddDetailForm = () => {
   const [token, setToken] = useState(null); // State to store the token
-  const tokenUrl =
-    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdW5pdGEiLCJpYXQiOjE3MDk2NjQ0MTIsImV4cCI6MTcwOTY2NjIxMn0.9ArS6K-I3rtzpau_b_hG2Kvs_NfImsS_CHnijTgqw7g"; // URL to fetch token
+  // const tokenUrl =
+  //   "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdW5pdGEiLCJpYXQiOjE3MDk2NjQ0MTIsImV4cCI6MTcwOTY2NjIxMn0.9ArS6K-I3rtzpau_b_hG2Kvs_NfImsS_CHnijTgqw7g"; // URL to fetch token
 
-  // Function to fetch token
-  const fetchToken = async () => {
-    try {
-      const response = await axios.post(tokenUrl, {
-        /* Include any data needed to fetch the token */
-      });
-      setToken(response.data.token); // Assuming the token is returned in the response
-    } catch (error) {
-      console.error("Error fetching token:", error);
-    }
-  };
+  // // Function to fetch token
+  // const fetchToken = async () => {
+  //   try {
+  //     const response = await axios.post(tokenUrl, {
+  //       /* Include any data needed to fetch the token */
+  //     });
+  //     setToken(response.data.token); // Assuming the token is returned in the response
+  //   } catch (error) {
+  //     console.error("Error fetching token:", error);
+  //   }
+  // };
 
   // Call fetchToken when component mounts to get the token
-  useEffect(() => {
-    fetchToken();
-  }, []);
+  // useEffect(() => {
+  //   fetchToken();
+  // }, []);
   // Validation schema using Yup
   const Loginschema = Yup.object().shape({
     email: Yup.string()
@@ -53,20 +53,19 @@ const AddDetailForm = () => {
   };
 
   const apiUrl =
-    "https://30ee-2400-1a00-b060-9f96-d021-5e8-2d6-bd63.ngrok-free.app/saveHost?fbclid=IwAR3GKRHph62UTQwgQSDnnq-V37XiU1EP6PU-5Muy51DY4t1baqWbn2c70Ys";
-
+    "https://c23a-2400-1a00-b060-8b27-90e7-4323-28d6-9cf6.ngrok-free.app/saveHost?fbclid=IwAR2f5RLP2dIfcE-AAf8GGXfwu1f_g-vV-aW8WCx4UHaYmul0cLvzU4vQrrA";
   // Formik hook
   const { values, errors, touched, handleChange, handleSubmit } = useFormik({
     initialValues: initialValues,
     validationSchema: Loginschema,
     onSubmit: async (values, action) => {
       try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const response = await axios.post(apiUrl, values, config);
+        // const config = {
+        //   headers: {
+        //     Authorization: `Bearer ${token}`,
+        //   },
+        // };
+        const response = await axios.post(apiUrl, values);
         console.log("Response:", response.data);
         console.log("role:", response.data.role);
 
