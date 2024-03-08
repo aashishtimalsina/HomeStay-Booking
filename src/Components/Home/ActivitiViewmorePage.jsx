@@ -1,7 +1,7 @@
 import React from "react";
 
 import { locationIcon, activityimage4 } from "../Constants";
-// import ActivitiesBookingForm from "./ActivityBookingForm";
+
 import styles from "../../style";
 import Navbar from "../Navbar";
 import ActivityBookingForm from "./ActivityBookingForm";
