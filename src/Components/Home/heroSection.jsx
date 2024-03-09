@@ -2,8 +2,8 @@ import React, { useContext } from "react";
 import { HomeDetails } from "./constant";
 import "../../index.css";
 import Navbar from "../Navbar";
-import { background, luxury } from "../Constants";
-import { nature } from "../Constants";
+import { background, temple } from "../Constants";
+
 import { Addbutton } from "../../Admin dasbord/components/Button/Addbutton";
 import { Link } from "react-router-dom";
 import LoginContex from "../../context/logincontext/CreateLoginContex";
@@ -12,31 +12,28 @@ const HeroSection = () => {
   const status = useContext(LoginContex);
   return (
     <>
+      {/* <Navbar /> */}
       {HomeDetails.map((data) => (
         <div
           key={data.id}
-          className="lg:h-screen bg-cover h-full   bg-center  w-full overflow-hidden "
-          style={{
-            backgroundImage: `url(${background})`,
-          }}
+          className="lg:h-screen h-full flex items-center justify-center"
         >
-          <div className=" w-full h-full bg-black  bg-opacity-45 ">
-            <Navbar />
-            <div className=" lg:w-3/5 w-custom  flex justify-center h-full items-center  m-auto  ">
-              <div>
-                <p className=" mb-2 text-md font-normal text-center w-full   text-white lg:text-xl   ">
+          <div className="container mx-auto flex lg:flex-row flex-col-reverse items-center">
+            <div className="lg:w-1/2 w-full lg:order-2 order-1">
+              <img src={temple} alt="Background" className="w-full h-auto" />
+            </div>
+            <div className="lg:w-1/2 w-full lg:order-1 order-2">
+              <div className="p-6">
+                <p className="mb-2 text-sm lg:text-md text-gray-500">
                   {data.preview}
                 </p>
-                <h1 className="mb-5  lg:text-4xl  text-center lg:w-auto font-semibold tracking-tight lg:leading-[70px] sm:leading-none md:leading-loose leading-loose  my-3  text-white line-clamp-5  md:text-5xl text-xl dark:text-white">
+                <h1 className="mb-5 text-3xl lg:text-5xl font-bold text-gray-800">
                   {data.label}
                 </h1>
-
-                <p className="text-center mb-10 text-sm lg:text-md text-white ">
-                  {data.location}
-                </p>
-                <div className="flex  z-20 w-full item-center justify-center">
+                <p className="mb-5 text-gray-600">{data.location}</p>
+                <div className="">
                   <Link to={status.loginstate ? "/bookingForm" : "/login"}>
-                    <button className="bg-blue-500 w-44 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                       Book Now
                     </button>
                   </Link>

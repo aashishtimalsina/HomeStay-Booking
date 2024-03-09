@@ -4,6 +4,7 @@ import { navbar } from "./constants";
 import { logo } from "../Constants";
 import LoginContex from "../../context/logincontext/CreateLoginContex";
 import { Avatar } from "@mui/material";
+import { LogoutOutlined } from "@mui/icons-material";
 
 const Navbar = () => {
   const location = useLocation();
@@ -60,7 +61,7 @@ const Navbar = () => {
                     className="inline-flex items-center px-3 py-2 text-sm font-medium text-primary-3 bg-transparent rounded-lg hover:bg-white hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-700"
                     onClick={() => status.setLoginState(false)}
                   >
-                    Log out
+                    <LogoutOutlined />
                   </button>
                 </Link>
               </div>

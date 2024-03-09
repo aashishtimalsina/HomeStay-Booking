@@ -25,6 +25,7 @@ const Gallery = () => {
         </p>
         <h2 className={` font-sans font-bold text-4xl text-black`}>GALLERY</h2>
       </div>
+
       <div className="relative flex justify-center items-center">
         <img
           src={

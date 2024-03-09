@@ -1,18 +1,19 @@
 import React from "react";
 import styles from "../../style";
 import { useFormik } from "formik";
-import { signupSchema } from "../../schemas";
 import { Link } from "react-router-dom";
-import { socialMedia } from "../Footers/constant";
 import axios from "axios";
+import { signupSchema } from "../../schemas";
+
 const initialValues = {
   username: "",
   email: "",
   password: "",
   conform_password: "",
 };
-const apiUrl =
-  "https://6dcb-2400-1a00-b060-45ff-3d75-3b7e-d6f6-5739.ngrok-free.app/addNewUser?fbclid=IwAR04QXN4Tr8Oc04dnIgfD0O6gyZOKq1SPNMLvLZ8B3dGvuolLtfZkPEtZZ0";
+
+const apiUrl = "https://moved-readily-chimp.ngrok-free.app/signup";
+
 const Signup = () => {
   const { values, errors, handleBlur, touched, handleChange, handleSubmit } =
     useFormik({
@@ -34,22 +35,19 @@ const Signup = () => {
     });
 
   return (
-    <div className="Container w-[350px] items-center m-auto my-10 bg-primary-5 bg-opacity-40">
-      <h1 className={`${styles.heading2} text-white pt-8`}>Signup</h1>
-      <form
-        action="POST"
-        onSubmit={handleSubmit}
-        className="bg-transparent shadow-md rounded px-8 pt-6 pb-8 mb-4"
-      >
+    <div className="container mx-auto px-4 py-8 max-w-md">
+      <h1 className={`${styles.heading2} text-white text-center mb-8`}>
+        Signup
+      </h1>
+      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded p-6">
         <div className="mb-4">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="username"
+            className="block text-gray-700 text-sm font-bold mb-2"
           >
             Username
           </label>
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="username"
             type="text"
             placeholder="Username"
@@ -57,42 +55,43 @@ const Signup = () => {
             value={values.username}
             onChange={handleChange}
             onBlur={handleBlur}
+            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
-          {errors.name && touched.name && (
-            <p className="text-red-600">{errors.name}</p>
+          {errors.username && touched.username && (
+            <p className="text-red-600">{errors.username}</p>
           )}
         </div>
 
         <div className="mb-4">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="email"
+            className="block text-gray-700 text-sm font-bold mb-2"
           >
             Email
           </label>
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="email"
-            type="text"
+            type="email"
             placeholder="Email"
             name="email"
             value={values.email}
             onChange={handleChange}
             onBlur={handleBlur}
+            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
           {errors.email && touched.email && (
             <p className="text-red-600">{errors.email}</p>
           )}
         </div>
+
         <div className="mb-4">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="password"
+            className="block text-gray-700 text-sm font-bold mb-2"
           >
             Password
           </label>
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="password"
             type="password"
             placeholder="Password"
@@ -100,6 +99,7 @@ const Signup = () => {
             value={values.password}
             onChange={handleChange}
             onBlur={handleBlur}
+            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
           {errors.password && touched.password && (
             <p className="text-red-600">{errors.password}</p>
@@ -108,55 +108,41 @@ const Signup = () => {
 
         <div className="mb-4">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="confirm_password"
+            className="block text-gray-700 text-sm font-bold mb-2"
           >
             Confirm Password
           </label>
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-            id="confirm_password"
-            name="conform_password"
+            id="conform_password"
             type="password"
-            placeholder="******************"
+            placeholder="Confirm Password"
+            name="conform_password"
             value={values.conform_password}
             onChange={handleChange}
             onBlur={handleBlur}
+            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
           {errors.conform_password && touched.conform_password && (
             <p className="text-red-600">{errors.conform_password}</p>
           )}
         </div>
-        <div className="flex items-center  justify-center mb-5">
+
+        <div className="flex items-center justify-center mb-4">
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold  py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
             Sign Up
           </button>
         </div>
-        <div>
-          <p className={`${styles.paragraph} text-center  `}>or Signup with</p>
-          <div className=" flex flex-row mt-5   justify-center group ">
-            {socialMedia.map((social, index) => (
-              <img
-                key={social.id}
-                src={social.icon}
-                alt={social.id}
-                className={`w-[21px] h-[21] object-contain  group-hover:animate-translate cursor-pointer ${
-                  index !== socialMedia.length - 1 ? "mr-6" : "mr-0"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-        <Link to="/login">
-          <p className={`${styles.paragraph} mt-5 text-center`}>
-            Already Signup??{" "}
-            <span className={`${styles.paragraph} text-blue-700`}>Log In</span>{" "}
-          </p>
-        </Link>
       </form>
+      <p className="text-center mt-4">
+        Already have an account?{" "}
+        <Link to="/login" className="text-blue-700 font-semibold">
+          Log In
+        </Link>
+      </p>
     </div>
   );
 };

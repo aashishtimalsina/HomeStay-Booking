@@ -1,5 +1,13 @@
 import React from "react";
-import { activityimage4 } from "../Constants";
+import {
+  image1,
+  image2,
+  image3,
+  image4,
+  image5,
+  image6,
+  image7,
+} from "../Constants";
 
 const HomeStaySection = () => {
   const data = {
@@ -20,41 +28,57 @@ const HomeStaySection = () => {
       description:
         "By choosing Panauti Community Homestay, you contribute to sustainable tourism, supporting the local community's women empowerment, education, healthcare, and overall development.",
     },
-    closing: {
-      message:
-        "Embark on a journey of cultural discovery and create lasting memories at Panauti Community Homestay. Your Nepali home awaits, nestled in the heart of the historically rich and enchanting town of Panauti. Where every visit is not just a stay but an unforgettable experience woven with the threads of genuine hospitality and cultural immersion.",
-    },
   };
 
+  const images = [image1, image2, image3, image4, image5, image6, image7];
+
   return (
-    <div className="bg-gray-100 py-16 px-4 sm:px-6 lg:px-8">
+    <div className="bg-gray-100 py-10 px-4 sm:px-6 lg:px-8">
+      <h2 className="text-xl font-extrabold tracking-tight text-gray-900 sm:text-4xl w-full text-center m-4 mb-16">
+        Welcome to {data.homestay.name}
+      </h2>
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="text-center">
-            <h2 className="text-xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-              Welcome to {data.homestay.name}
-            </h2>
-            <p className="mt-3 max-w-5xl mx-auto text-sm text-gray-500 sm:mt-4">
-              {data.homestay.description}
-            </p>
-          </div>
-          <div className="text-center">
-            {/* Replace 'image-url' with the URL of your image */}
-            <img
-              src={activityimage4}
-              alt="Homestay Image"
-              className="w-full h-auto md:w-auto md:h-full"
-            />
-          </div>
-          {Object.entries(data).map(([key, value]) => (
-            <div key={key}>
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
-                {key.replace(/([A-Z])/g, " $1").trim()}
-              </h3>
-              <p className="mt-2 text-base text-gray-500">
-                {value.description}
-              </p>
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          {Object.entries(data).map(([key, value], index) => (
+            <React.Fragment key={key}>
+              {index % 2 === 0 ? (
+                <>
+                  <div className="text-center md:text-left">
+                    <h3 className="text-lg uppercase leading-6 font-medium text-gray-900 mb-2">
+                      {key.replace(/([A-Z])/g, " $1").trim()}
+                    </h3>
+                    <p className="text-base text-gray-500">
+                      {value.description}
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <img
+                      src={images[index % images.length]}
+                      alt={`Homestay Image ${index + 1}`}
+                      className="w-60 h-60 md:w-auto inline-block mb-4 mx-auto"
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="text-center">
+                    <img
+                      src={images[index % images.length]}
+                      alt={`Homestay Image ${index + 1}`}
+                      className="w-60 h-60 md:w-auto inline-block mb-4 mx-auto"
+                    />
+                  </div>
+                  <div className="text-center md:text-right">
+                    <h3 className="text-lg uppercase leading-6 font-medium text-gray-900 mb-2">
+                      {key.replace(/([A-Z])/g, " $1").trim()}
+                    </h3>
+                    <p className="text-base text-gray-500">
+                      {value.description}
+                    </p>
+                  </div>
+                </>
+              )}
+            </React.Fragment>
           ))}
         </div>
       </div>

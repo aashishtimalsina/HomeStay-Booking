@@ -20,6 +20,13 @@ import {
   guest,
   bed,
   bathroom,
+  image1,
+  image2,
+  image3,
+  image4,
+  image5,
+  image6,
+  image7,
 } from "../Constants";
 
 export const HomeDetails = [
@@ -190,15 +197,31 @@ export const room = [
 ];
 export const slides = [
   {
-    url: delux,
+    url: image1,
     id: 1,
   },
   {
-    url: luxury,
+    url: image2,
     id: 2,
   },
   {
-    url: double,
+    url: image3,
     id: 3,
+  },
+  {
+    url: image4,
+    id: 4,
+  },
+  {
+    url: image5,
+    id: 5,
+  },
+  {
+    url: image6,
+    id: 6,
+  },
+  {
+    url: image7,
+    id: 7,
   },
 ];

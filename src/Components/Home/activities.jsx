@@ -53,7 +53,7 @@ const Activities = () => {
                 />
                 <div className="absolute z-10  w-full h-full bg-black group-hover:animate-rotate bg-opacity-5 ">
                   <p className=" font-sans text-xs m-2  text-white bg-primary-6 bg-opacity-50 border-2 border-gray-300 w-28 p-2 text-center ">
-                    ${activity.price} / PERSON
+                    Rs{activity.price} / PERSON
                   </p>
                 </div>
               </div>

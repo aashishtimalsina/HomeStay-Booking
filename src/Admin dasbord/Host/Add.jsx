@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -8,27 +8,6 @@ import Grid from "@mui/material/Grid";
 import { Typography } from "@mui/material";
 
 const AddDetailForm = () => {
-  const [token, setToken] = useState(null); // State to store the token
-  // const tokenUrl =
-  //   "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdW5pdGEiLCJpYXQiOjE3MDk2NjQ0MTIsImV4cCI6MTcwOTY2NjIxMn0.9ArS6K-I3rtzpau_b_hG2Kvs_NfImsS_CHnijTgqw7g"; // URL to fetch token
-
-  // // Function to fetch token
-  // const fetchToken = async () => {
-  //   try {
-  //     const response = await axios.post(tokenUrl, {
-  //       /* Include any data needed to fetch the token */
-  //     });
-  //     setToken(response.data.token); // Assuming the token is returned in the response
-  //   } catch (error) {
-  //     console.error("Error fetching token:", error);
-  //   }
-  // };
-
-  // Call fetchToken when component mounts to get the token
-  // useEffect(() => {
-  //   fetchToken();
-  // }, []);
-  // Validation schema using Yup
   const Loginschema = Yup.object().shape({
     email: Yup.string()
       .email("Invalid email address")
@@ -41,7 +20,6 @@ const AddDetailForm = () => {
     // Add more validation rules for other fields if needed
   });
 
-  // Initial form values
   const initialValues = {
     email: "",
     hostName: "",
@@ -49,10 +27,9 @@ const AddDetailForm = () => {
     about: "",
     image: "",
     phone: "",
-    // Add more fields here
   };
 
-  const apiUrl = "https://moved-readily-chimp.ngrok-free.app/saveHost";
+  const apiUrl = "https://moved-readily-chimp.ngrok-free.app/saveHost ";
   // Formik hook
   const { values, errors, touched, handleChange, handleSubmit } = useFormik({
     initialValues: initialValues,
@@ -80,7 +57,7 @@ const AddDetailForm = () => {
       </Typography>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12}>
             <TextField
               fullWidth
               id="email"
@@ -92,7 +69,7 @@ const AddDetailForm = () => {
               helperText={touched.email && errors.email}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12}>
             <TextField
               fullWidth
               id="hostName"
@@ -142,7 +119,7 @@ const AddDetailForm = () => {
               helperText={touched.image && errors.image}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12}>
             <TextField
               fullWidth
               id="phone"

@@ -38,6 +38,7 @@ export default function Host() {
 
   const apiUrl = "https://moved-readily-chimp.ngrok-free.app/getHostDetails";
 
+
   React.useEffect(() => {
     const fetchData = async () => {
       try {

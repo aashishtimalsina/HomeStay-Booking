@@ -53,7 +53,7 @@ const ActivityBookingForm = () => {
   };
 
   return (
-    <div className="w-full bg-primary-1 p-10">
+    <div className="w-full  p-10">
       <Formik
         initialValues={{
           name: "",

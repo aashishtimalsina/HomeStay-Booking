@@ -7,7 +7,7 @@ import Navbar from "../Navbar";
 const About = () => {
   return (
     <section>
-      <Navbar />
+      {/* <Navbar /> */}
       <Aboutus />
       <Card />
       <History />

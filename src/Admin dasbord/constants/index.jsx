@@ -1,12 +1,12 @@
 import { dashboard, watch } from "../assets";
 
 export const navbar = [
-  {
-    id: 1,
-    label: "Dashboard",
-    url: "dashboard",
-    icon: dashboard,
-  },
+  // {
+  //   id: 1,
+  //   label: "Dashboard",
+  //   url: "dashboard",
+  //   icon: dashboard,
+  // },
   {
     id: 2,
     label: "Host",
