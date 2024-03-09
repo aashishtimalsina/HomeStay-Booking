@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <section className={`${styles.paddingY} p-3 w-full flex-col bg-black`}>
+
       <div className="flex justify-between w-full md:flex-row flex-col mb-8">
         <div className="flex w-full lg:w-1/2 h-full items-center justify-center">
           <img src={logo} alt="logo" className="w-64 my-auto h-64" />
