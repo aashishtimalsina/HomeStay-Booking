@@ -1,5 +1,5 @@
 import * as React from "react";
-import PropTypes from "prop-types";
+
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -13,13 +13,13 @@ import { Link } from "react-router-dom";
 import { Typography } from "@mui/material";
 import axios from "axios";
 
-import { Addbutton } from "../components/Button/Addbutton";
+import { Addbutton } from "../Button/Addbutton";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
-function HostHead(props) {
+function ActicityHead(props) {
   return (
     <TableHead>
       <TableRow>
@@ -33,11 +33,11 @@ function HostHead(props) {
   );
 }
 
-export default function Host() {
-  const [hosts, setHosts] = React.useState([]);
+export default function Activity() {
+  const [Activity, setActivity] = React.useState([]);
 
-  const apiUrl = "https://moved-readily-chimp.ngrok-free.app/getHostDetails";
-
+  const apiUrl =
+    "https://d9b6-2404-7c00-49-615-999e-18cc-f14a-a945.ngrok-free.app/getHostDetails";
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -48,7 +48,7 @@ export default function Host() {
           },
         });
         if (response.data) {
-          setHosts(response.data.list || []);
+          setActivity(response.data.list || []);
           console.log("Response data:", response.data);
         } else {
           console.error("Empty response data");
@@ -63,35 +63,30 @@ export default function Host() {
 
   const headCells = [
     {
-      id: "Image",
+      id: "Name of Activity",
       numeric: false,
       disablePadding: true,
+      label: "Name of Activity",
+    },
+    {
+      id: "Description",
+      numeric: false,
+      disablePadding: true,
+      label: "Description",
+    },
+    {
+      id: "Cost",
+      numeric: true,
+      disablePadding: false,
+      label: "Cost",
+    },
+    {
+      id: "Image",
+      numeric: true,
+      disablePadding: false,
       label: "Image",
     },
-    {
-      id: "Name",
-      numeric: false,
-      disablePadding: true,
-      label: "Name",
-    },
-    {
-      id: "About",
-      numeric: true,
-      disablePadding: false,
-      label: "About",
-    },
-    {
-      id: "Address",
-      numeric: true,
-      disablePadding: false,
-      label: "Address",
-    },
-    {
-      id: "Phone Number",
-      numeric: true,
-      disablePadding: false,
-      label: "Phone Number",
-    },
+
     {
       id: "Action",
       numeric: true,
@@ -109,7 +104,7 @@ export default function Host() {
         display="flex"
         justifyContent="space-between"
       >
-        <Typography variant="h4">Hosts</Typography>
+        <Typography variant="h4">Activity</Typography>
         <Link to="add" display="flex" justifycontent="center">
           <Addbutton Name="Add" />
         </Link>
@@ -122,10 +117,21 @@ export default function Host() {
           }}
         >
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-            <HostHead headCells={headCells} />
+            <ActicityHead headCells={headCells} />
             <TableBody>
-              {hosts.map((row) => (
+              {Activity.map((row) => (
                 <TableRow key={row.id} sx={{ cursor: "pointer" }}>
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    padding="none"
+                    align="center"
+                  >
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="center">{row.discription}</TableCell>
+                  <TableCell align="center">{row.cost}</TableCell>
+
                   <TableCell sx={{ display: "flex", justifyContent: "center" }}>
                     <img
                       src={row.image}
@@ -137,23 +143,12 @@ export default function Host() {
                       }}
                     />
                   </TableCell>
-                  <TableCell
-                    component="th"
-                    scope="row"
-                    padding="none"
-                    align="center"
-                  >
-                    {row.hostName}
-                  </TableCell>
-                  <TableCell align="center">{row.about}</TableCell>
-                  <TableCell align="center">{row.address}</TableCell>
-                  <TableCell align="center">{row.phone}</TableCell>
                   <TableCell sx={{ width: "120px" }}>
                     <Box display="flex" justifyContent="space-between">
                       <Link to={`detail/${row.id}`}>
                         <RemoveRedEyeIcon />
                       </Link>
-                      <Link to={`update/${row.id}`}>
+                      <Link to={`edit/${row.id}`}>
                         <EditOutlinedIcon />
                       </Link>
                       <DeleteForeverOutlinedIcon />

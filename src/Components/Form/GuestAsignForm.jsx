@@ -1,13 +1,14 @@
 import React from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { Select } from "@mui/material";
 
 const FormSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
   noOfPax: Yup.number().required("Number of passengers is required"),
   phoneNumber: Yup.string().required("Phone number is required"),
-  hostName: Yup.string().required("Amount to pay is required"),
+  hostName: Yup.string().required("HostName is required"),
 });
 
 const GuestAsignForm = () => {
@@ -35,8 +36,14 @@ const GuestAsignForm = () => {
     }
   };
 
+  const options = [
+    { value: "host1", label: "Host 1" },
+    { value: "host2", label: "Host 2" },
+    { value: "host3", label: "Host 3" },
+    // Add more options as needed
+  ];
   return (
-    <div className="my-10 w-full flex justify-center  items-center m-auto  ">
+    <div className="my-10 w-full flex justify-center items-center m-auto">
       <div>
         <h2 className="text-2xl font-bold mb-4">Guest Information</h2>
         <Formik
@@ -48,42 +55,96 @@ const GuestAsignForm = () => {
             hostName: "",
             amount: "",
             phone: "",
-            email: "",
           }}
           validationSchema={FormSchema}
           onSubmit={handleSubmit}
         >
           {({ errors, touched }) => (
             <Form className="">
-              <div className="flex flex-wrap w-full ">
-                <div className="mb-4 w-1/2 ">
+              <div className="mb-4 mr-4 w-1/2">
+                <label
+                  htmlFor="hostName"
+                  className="block text-gray-700 font-bold mb-2"
+                >
+                  HostName
+                </label>
+                <Field
+                  name="hostName"
+                  as={Select}
+                  size="small"
+                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                    errors.hostName && touched.hostName ? "border-red-500" : ""
+                  }`}
+                >
+                  <option value="" disabled>
+                    Select HostName
+                  </option>
+                  {options.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </Field>
+                <ErrorMessage
+                  name="hostName"
+                  component="div"
+                  className="text-red-500"
+                />
+              </div>
+
+              {/* More form fields */}
+              <div className="flex flex-wrap w-full">
+                <div className="flex flex-wrap">
+                  <div className="mb-4 mr-4 ">
+                    <label
+                      htmlFor="name"
+                      className="block text-gray-700 font-bold mb-2"
+                    >
+                      Guest Name
+                    </label>
+                    <Field
+                      name="name"
+                      type="text"
+                      className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                        errors.name && touched.name ? "border-red-500" : ""
+                      }`}
+                    />
+                    <ErrorMessage
+                      name="name"
+                      component="div"
+                      className="text-red-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-4 ">
                   <label
-                    htmlFor="name"
+                    htmlFor="amount"
                     className="block text-gray-700 font-bold mb-2"
                   >
-                    Guest Name
+                    Amount
                   </label>
                   <Field
-                    name="name"
-                    type="text"
+                    name="amount"
+                    type="number"
                     className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                      errors.name && touched.name ? "border-red-500" : ""
+                      errors.amount && touched.amount ? "border-red-500" : ""
                     }`}
                   />
                   <ErrorMessage
-                    name="name"
+                    name="amount"
                     component="div"
                     className="text-red-500"
                   />
                 </div>
               </div>
-              <div className="flex flex-wrap w-full ">
+              <div className="flex flex-wrap w-full">
                 <div className="mb-4 mr-4">
                   <label
                     htmlFor="noOfPax"
                     className="block text-gray-700 font-bold mb-2"
                   >
-                    Number of Passengers
+                    Number of Pax
                   </label>
                   <Field
                     name="noOfPax"
@@ -116,49 +177,6 @@ const GuestAsignForm = () => {
                   />
                   <ErrorMessage
                     name="phoneNumber"
-                    component="div"
-                    className="text-red-500"
-                  />
-                </div>
-              </div>
-              <div className="flex flex-wrap w-full">
-                <div className="mb-4 mr-4">
-                  <label
-                    htmlFor="hostName"
-                    className="block text-gray-700 font-bold mb-2"
-                  >
-                    HostName
-                  </label>
-                  <Field
-                    name="hostName"
-                    className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                      errors.hostName && touched.hostName
-                        ? "border-red-500"
-                        : ""
-                    }`}
-                  />
-                  <ErrorMessage
-                    name="hostName"
-                    component="div"
-                    className="text-red-500"
-                  />
-                </div>
-                <div className="mb-4 ">
-                  <label
-                    htmlFor="amount"
-                    className="block text-gray-700 font-bold mb-2"
-                  >
-                    Amount
-                  </label>
-                  <Field
-                    name="amount"
-                    type="number"
-                    className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                      errors.amount && touched.amount ? "border-red-500" : ""
-                    }`}
-                  />
-                  <ErrorMessage
-                    name="amount"
                     component="div"
                     className="text-red-500"
                   />

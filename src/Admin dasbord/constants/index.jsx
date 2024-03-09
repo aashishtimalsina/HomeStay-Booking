@@ -15,14 +15,14 @@ export const navbar = [
   },
   {
     id: 3,
-    label: "host",
-    url: "host",
+    label: "Activity",
+    url: "activity",
     icon: dashboard,
   },
   {
     id: 4,
-    label: "hello ",
-    url: "hello",
+    label: "Guest Assign ",
+    url: "guestAssign",
     icon: dashboard,
   },
 ];
