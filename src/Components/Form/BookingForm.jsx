@@ -2,11 +2,12 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import khalti from "../../assets/khalti.png";
+import Khalti from "../../Admin dasbord/components/Khalti/khalti.jsx";
+
 
 const BookingForm = () => {
-  const apiUrl = "https://your-api-endpoint.com/book-hike"; // Replace with your API URL
-
+  const apiUrl = "https://moved-readily-chimp.ngrok-free.app/bookActivities"; 
+  
   const validationSchema = Yup.object({
     name: Yup.string()
       .min(3, "Name must be at least 3 characters")
@@ -21,11 +22,11 @@ const BookingForm = () => {
       .required("Phone number is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
     checkInDate: Yup.date()
-      .min(new Date(), "Check-in date should be today or later")
+      // .min(new Date(), "Check-in date should be today or later")
       .required("Check-in date is required")
       .typeError("Check-in date is required"),
     checkOutDate: Yup.date()
-      .min(Yup.ref("checkInDate"), "Check-out date must be after check-in date")
+      // .min(Yup.ref("checkInDate"), "Check-out date must be after check-in date")
       .required("Check-out date is required")
       .typeError("Check-out date is required"),
     specialRequest: Yup.string(),
@@ -165,14 +166,8 @@ const BookingForm = () => {
               placeholder="Special request (optional)"
             />
             <div className="flex justify-between">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                id="paymentMethod"
-                name="paymentMethod"
-              >
-                <img src={khalti} alt="khalti payment" className="h-12 w-26" />
-              </button>
+            <Khalti />
+              
 
               <button
                 type="submit"

@@ -37,7 +37,7 @@ export default function Activity() {
   const [Activity, setActivity] = React.useState([]);
 
   const apiUrl =
-    "https://d9b6-2404-7c00-49-615-999e-18cc-f14a-a945.ngrok-free.app/getHostDetails";
+    "https://moved-readily-chimp.ngrok-free.app/activitiesDetails";
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -50,6 +50,7 @@ export default function Activity() {
         if (response.data) {
           setActivity(response.data.list || []);
           console.log("Response data:", response.data);
+          console.log(data);
         } else {
           console.error("Empty response data");
         }
@@ -129,8 +130,8 @@ export default function Activity() {
                   >
                     {row.name}
                   </TableCell>
-                  <TableCell align="center">{row.discription}</TableCell>
-                  <TableCell align="center">{row.cost}</TableCell>
+                  <TableCell align="center">{row.about}</TableCell>
+                  <TableCell align="center">{row.price}</TableCell>
 
                   <TableCell sx={{ display: "flex", justifyContent: "center" }}>
                     <img

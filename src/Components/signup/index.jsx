@@ -12,7 +12,7 @@ const initialValues = {
   conform_password: "",
 };
 const apiUrl =
-  "https://6dcb-2400-1a00-b060-45ff-3d75-3b7e-d6f6-5739.ngrok-free.app/addNewUser?fbclid=IwAR04QXN4Tr8Oc04dnIgfD0O6gyZOKq1SPNMLvLZ8B3dGvuolLtfZkPEtZZ0";
+  "https://moved-readily-chimp.ngrok-free.app/addNewUser?fbclid=IwAR04QXN4Tr8Oc04dnIgfD0O6gyZOKq1SPNMLvLZ8B3dGvuolLtfZkPEtZZ0";
 const Signup = () => {
   const { values, errors, handleBlur, touched, handleChange, handleSubmit } =
     useFormik({

@@ -5,7 +5,7 @@ import axios from "axios";
 import khalti from "../../assets/khalti.png";
 
 const ActivityBookingForm = () => {
-  const apiUrl = "https://your-api-endpoint.com/book-hike"; // Replace with your API URL
+  const apiUrl = "https://moved-readily-chimp.ngrok-free.app/bookActivities"; // Replace with your API URL
 
   const validationSchema = Yup.object({
     name: Yup.string()

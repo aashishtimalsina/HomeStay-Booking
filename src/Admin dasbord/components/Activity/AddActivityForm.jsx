@@ -19,7 +19,7 @@ const validationSchema = Yup.object({
 const initialValues = {
   name: "",
   description: "",
-  cost: "",
+  cost: 0,
   image: "",
 };
 
@@ -29,10 +29,28 @@ const ActivityForm = () => {
     validationSchema,
     onSubmit: async (values) => {
       try {
+        const dataToSend = {
+
+          name: values.name,
+          about: values.description,
+          price: parseFloat(values.cost),
+          image: [values.image],
+        };
+        const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdW5pdGEiLCJpYXQiOjE3MDk5OTc3MTYsImV4cCI6MTcwOTk5OTUxNn0.AgqHSXMNpwFKK1bjBVsY_-G7cCcmZ7aEvzK3xVCYk-U";
+
         const response = await axios.post(
-          "https://your-api-endpoint.com/activities", // Replace with your API endpoint
-          values
+          "https://moved-readily-chimp.ngrok-free.app/addNewActivity",
+          dataToSend,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": true,
+              Authorization: `Bearer ${token}`,
+              "Content-type": "application/x-www-form-urlencoded"
+            },
+          }
         );
+        
+
         console.log("Response:", response.data);
         // Handle success response
       } catch (error) {
@@ -52,6 +70,7 @@ const ActivityForm = () => {
           id="name"
           name="name"
           label="Name"
+          autoComplete="name"
           value={formik.values.name}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
