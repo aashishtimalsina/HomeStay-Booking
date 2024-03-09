@@ -6,7 +6,7 @@ const Card = () => {
   return (
     <div className="mt-20 mb-20 ">
       <div>
-        <h1 className={`${styles.heading2} mb-10  `}>OUR PRIMARY GOAL</h1>
+        <h1 className={`${styles.heading2} mb-10  `}>Why Choose Us</h1>
       </div>
       <div className=" flex flex-1 flex-wrap lg:justify-between justify-center ">
         {ourMoto.map((data) => (

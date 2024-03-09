@@ -20,7 +20,6 @@ import {
   guest,
   bed,
   bathroom,
-  nature,
 } from "../Constants";
 
 export const HomeDetails = [

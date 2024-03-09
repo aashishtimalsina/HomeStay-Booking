@@ -1,12 +1,40 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import { locationIcon, activityimage4 } from "../Constants";
 
 import styles from "../../style";
 import Navbar from "../Navbar";
-import ActivityBookingForm from "./ActivityBookingForm";
+import ActivityBookingForm from "../Form/BookingForm";
+import LoginContex from "../../context/logincontext/CreateLoginContex";
 
 const ActivitesViewmorePage = () => {
+  const status = useContext(LoginContex);
+  const [acticity, setActicity] = React.useState([]);
+
+  // const apiUrl = "https://moved-readily-chimp.ngrok-free.app/getHostDetails";
+
+  // React.useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(apiUrl, {
+  //         headers: {
+  //           "ngrok-skip-browser-warning": true,
+  //         },
+  //       });
+  //       if (response.data) {
+  //         setacticity(response.data.list || []);
+  //         console.log("Response data:", response.data);
+  //       } else {
+  //         console.error("Empty response data");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
   return (
     <>
       <div
@@ -67,7 +95,8 @@ const ActivitesViewmorePage = () => {
           </p>
         </div>
         <div className="w-1/3 items-center m-auto">
-          {<ActivityBookingForm />}
+          {status.loginstate ? <ActivityBookingForm /> : ""}
+          {}
         </div>
       </div>
     </>

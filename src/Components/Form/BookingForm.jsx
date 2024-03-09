@@ -16,7 +16,7 @@ const BookingForm = () => {
       .min(1, "Minimum 1 guest is required")
       .max(10, "Maximum 4 guests are allowed")
       .required("Number of guests is required"),
-    phoneNumber: Yup.string()
+    contact: Yup.string()
       .matches(/^\d{10}$/, "Phone number must be 10 digits")
       .required("Phone number is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
@@ -57,17 +57,18 @@ const BookingForm = () => {
   };
 
   return (
-    <div className="w-full bg-primary-1 p-10">
+    <div className="w-full flex justify-center">
       <Formik
         initialValues={{
           name: "",
           country: "",
-          noOfPax: "",
-
-          checkInDate: new Date(),
-          checkOutDate: new Date(),
+          noOfPGuest: "",
+          checkIn: new Date(),
+          checkOut: new Date(),
+          contact: "",
+          email: "",
           specialRequest: "",
-          paymentMethod: "Kkhalti",
+          paymentMethod: "",
         }}
         validationSchema={validationSchema}
         onSubmit={handleFormSubmit}
@@ -100,8 +101,8 @@ const BookingForm = () => {
             />
             <Field
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
-              id="noOfPax"
-              name="noOfPax"
+              id="noOfGuest"
+              name="noOfGuest"
               type="number"
               placeholder="Number of pax"
             />
@@ -109,12 +110,12 @@ const BookingForm = () => {
               <p className=" text-gray-500"> Check In Date</p>
               <Field
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
-                id="checkInDate"
-                name="checkInDate"
+                id="checkIn"
+                name="checkIn"
                 type="date"
               />
               <ErrorMessage
-                name="checkInDate"
+                name="checkIn"
                 component="div"
                 className="text-red-500 text-xs italic"
               />
@@ -123,25 +124,25 @@ const BookingForm = () => {
               <p className=" text-gray-500"> Check Out Date</p>
               <Field
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
-                id="checkOutDate"
-                name="checkOutDate"
+                id="checkOut"
+                name="checkOut"
                 type="date"
               />
               <ErrorMessage
-                name="checkOutDate"
+                name="checkOut"
                 component="div"
                 className="text-red-500 text-xs italic"
               />
             </div>
             <Field
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
-              id="phoneNumber"
-              name="phoneNumber"
+              id="contact"
+              name="contact"
               type="text"
               placeholder="Phone number"
             />
             <ErrorMessage
-              name="phoneNumber"
+              name="contact"
               component="div"
               className="text-red-500 text-xs italic"
             />
@@ -180,6 +181,11 @@ const BookingForm = () => {
                 className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               >
                 {isSubmitting ? "Submitting..." : "Pay on property"}
+              </button>
+            </div>
+            <div className="flex justify-center">
+              <button className="bg-blue-500 w-44 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Book Now
               </button>
             </div>
           </Form>

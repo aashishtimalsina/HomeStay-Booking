@@ -37,61 +37,60 @@ function GuestHead(props) {
 }
 
 export default function GuestAssign() {
-  //   const [guest, setGuest] = React.useState([]);
+  const [guest, setGuest] = React.useState([]);
 
-  //   const apiUrl =
-  //     "https://d9b6-2404-7c00-49-615-999e-18cc-f14a-a945.ngrok-free.app/getHostDetails";
+  const apiUrl = "https://moved-readily-chimp.ngrok-free.app/getAllBooking";
 
-  //   React.useEffect(() => {
-  //     const fetchData = async () => {
-  //       try {
-  //         const response = await axios.get(apiUrl, {
-  //           headers: {
-  //             "ngrok-skip-browser-warning": true,
-  //           },
-  //         });
-  //         if (response.data) {
-  //           setGuest(response.data.list || []);
-  //           console.log("Response data:", response.data);
-  //         } else {
-  //           console.error("Empty response data");
-  //         }
-  //       } catch (error) {
-  //         console.error("Error fetching data:", error);
-  //       }
-  //     };
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(apiUrl, {
+          headers: {
+            "ngrok-skip-browser-warning": true,
+          },
+        });
+        if (response.data) {
+          setGuest(response.data.list || []);
+          console.log("Response data:", response.data);
+        } else {
+          console.error("Empty response data");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-  //     fetchData();
-  //   }, []);
-  const guests = [
-    {
-      id: 1,
-      index: 1,
-      guestName: "John Doe",
-      noOfPax: 3,
-      guestList: "ram, sam, hari",
-      checkInDate: "2024-03-08",
-      checkOutDate: "2024-03-15",
-      country: "USA",
-      phoneNumber: "+1234567890",
-      specialRequest: "None",
-      amount: 1000, // Added amount
-    },
-    {
-      id: 2,
-      index: 2,
-      guestName: "Jane Smith",
-      noOfPax: 2,
-      guestList: "ram, sam, hari",
-      checkInDate: "2024-03-10",
-      checkOutDate: "2024-03-17",
-      country: "Canada",
-      phoneNumber: "+1987654321",
-      specialRequest: "Vegetarian meals",
-      amount: 1500, // Added amount
-    },
-    // Add more guests with amount as needed
-  ];
+    fetchData();
+  }, []);
+  // const guests = [
+  //   {
+  //     id: 1,
+  //     index: 1,
+  //     guestName: "John Doe",
+  //     noOfPax: 3,
+  //     guestList: "ram, sam, hari",
+  //     checkInDate: "2024-03-08",
+  //     checkOutDate: "2024-03-15",
+  //     country: "USA",
+  //     phoneNumber: "+1234567890",
+  //     specialRequest: "None",
+  //     amount: 1000, // Added amount
+  //   },
+  //   {
+  //     id: 2,
+  //     index: 2,
+  //     guestName: "Jane Smith",
+  //     noOfPax: 2,
+  //     guestList: "ram, sam, hari",
+  //     checkInDate: "2024-03-10",
+  //     checkOutDate: "2024-03-17",
+  //     country: "Canada",
+  //     phoneNumber: "+1987654321",
+  //     specialRequest: "Vegetarian meals",
+  //     amount: 1500, // Added amount
+  //   },
+  //   // Add more guests with amount as needed
+  // ];
 
   const headCells = [
     {
@@ -154,10 +153,16 @@ export default function GuestAssign() {
       disablePadding: false,
       label: "Amount",
     },
+    {
+      id: "action",
+      numeric: true,
+      disablePadding: false,
+      label: "Action",
+    },
   ];
   return (
     <Box sx={{ width: "100%", paddingTop: "50px" }}>
-      <Box
+      {/* <Box
         sx={{
           margin: "0px",
         }}
@@ -169,7 +174,8 @@ export default function GuestAssign() {
         <Link to="guestAsignForm" display="flex" justifycontent="center">
           <Addbutton Name="Asign" />
         </Link>
-      </Box>
+      </Box> */}
+      <Typography variant="h4">Guest</Typography>
 
       <Paper sx={{ width: "100%", mb: 2 }}>
         <TableContainer
@@ -180,7 +186,7 @@ export default function GuestAssign() {
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <GuestHead headCells={headCells} />
             <TableBody>
-              {guests.map((row) => (
+              {guest.map((row) => (
                 <TableRow key={row.id} sx={{ cursor: "pointer" }}>
                   <TableCell
                     component="th"
@@ -191,28 +197,34 @@ export default function GuestAssign() {
                     {row.index}
                   </TableCell>
                   <TableCell align="center">{row.guestName}</TableCell>
-                  <TableCell align="center">{row.noOfPax}</TableCell>
+                  <TableCell align="center">{row.noOfGuest}</TableCell>
                   <TableCell align="center">{row.guestList}</TableCell>
-                  <TableCell align="center">{row.checkInDate}</TableCell>
-                  <TableCell align="center">{row.checkOutDate}</TableCell>
+                  <TableCell align="center">{row.checkIn}</TableCell>
+                  <TableCell align="center">{row.checkOut}</TableCell>
                   <TableCell align="center">{row.country}</TableCell>
-                  <TableCell align="center">{row.phoneNumber}</TableCell>
+                  <TableCell align="center">{row.contact}</TableCell>
                   <TableCell align="center">{row.specialRequest}</TableCell>
                   <TableCell align="center">{row.amount}</TableCell>
 
-                  {/* <TableCell align="center">
-                    <Button
-                      variant="contained"
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                      className=" bg-primary-5 p-2 text-white rounded-md hover:bg-white hover:text-primary-5 transition-all duration-500"
+                  <TableCell align="center">
+                    <Link
+                      to="guestAsignForm"
+                      display="flex"
+                      justifycontent="center"
                     >
-                      Edit
-                    </Button>
-                  </TableCell> */}
+                      <Button
+                        variant="contained"
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                        className=" bg-primary-5 p-2 text-white rounded-md hover:bg-white hover:text-primary-5 transition-all duration-500"
+                      >
+                        Asign
+                      </Button>
+                    </Link>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

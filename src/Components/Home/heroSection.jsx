@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { HomeDetails } from "./constant";
 import "../../index.css";
 import Navbar from "../Navbar";
 import { background, luxury } from "../Constants";
 import { nature } from "../Constants";
+import { Addbutton } from "../../Admin dasbord/components/Button/Addbutton";
+import { Link } from "react-router-dom";
+import LoginContex from "../../context/logincontext/CreateLoginContex";
 
 const HeroSection = () => {
+  const status = useContext(LoginContex);
   return (
     <>
       {HomeDetails.map((data) => (
@@ -30,6 +34,13 @@ const HeroSection = () => {
                 <p className="text-center mb-10 text-sm lg:text-md text-white ">
                   {data.location}
                 </p>
+                <div className="flex  z-20 w-full item-center justify-center">
+                  <Link to={status.loginstate ? "/bookingForm" : "/login"}>
+                    <button className="bg-blue-500 w-44 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                      Book Now
+                    </button>
+                  </Link>
+                </div>
               </div>
 
               {/* <div className=" flex  justify-center items-center h-full   flex-wrap   px-4 py-5 mx-auto ">

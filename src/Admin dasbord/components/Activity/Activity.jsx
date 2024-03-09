@@ -36,9 +36,7 @@ function ActicityHead(props) {
 export default function Activity() {
   const [Activity, setActivity] = React.useState([]);
 
-  const apiUrl =
-    "https://d9b6-2404-7c00-49-615-999e-18cc-f14a-a945.ngrok-free.app/getHostDetails";
-
+  const apiUrl = "https://moved-readily-chimp.ngrok-free.app/activitiesDetails";
   React.useEffect(() => {
     const fetchData = async () => {
       try {
@@ -80,12 +78,12 @@ export default function Activity() {
       disablePadding: false,
       label: "Cost",
     },
-    {
-      id: "Image",
-      numeric: true,
-      disablePadding: false,
-      label: "Image",
-    },
+    // {
+    //   id: "Image",
+    //   numeric: true,
+    //   disablePadding: false,
+    //   label: "Image",
+    // },
 
     {
       id: "Action",
@@ -129,20 +127,26 @@ export default function Activity() {
                   >
                     {row.name}
                   </TableCell>
-                  <TableCell align="center">{row.discription}</TableCell>
-                  <TableCell align="center">{row.cost}</TableCell>
+                  <TableCell align="center">{row.about}</TableCell>
+                  <TableCell align="center">{row.price}</TableCell>
 
-                  <TableCell sx={{ display: "flex", justifyContent: "center" }}>
+                  {/* <TableCell
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
                     <img
                       src={row.image}
                       alt="host-img"
-                      height={40}
-                      width={40}
+                      height={10}
+                      width={10}
                       style={{
                         borderRadius: "50%",
                       }}
                     />
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell sx={{ width: "120px" }}>
                     <Box display="flex" justifyContent="space-between">
                       <Link to={`detail/${row.id}`}>

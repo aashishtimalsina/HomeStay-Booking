@@ -58,17 +58,17 @@ const ActivityBookingForm = () => {
         initialValues={{
           name: "",
           country: "",
-          noOfPax: "",
-          checkInDate: new Date(),
+          noOfGuest: "",
+          checkIn: new Date(),
           specialRequest: "",
           totalAmount: "",
-          paymentMethod: "Kkhalti",
+          paymentMethod: "Khalti",
         }}
         validationSchema={validationSchema}
         onSubmit={handleFormSubmit}
       >
         {({ isSubmitting }) => (
-          <Form className="flex flex-col space-y-4 w-96 justify-center m-auto my-20 bg-white p-10 rounded-md">
+          <Form className="flex flex-col space-y-4 w-96 justify-center m-auto my-20 bg-white p-4 rounded-md">
             <Field
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
               id="name"

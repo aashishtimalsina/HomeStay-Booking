@@ -21,7 +21,7 @@ export const navbar = [
   },
   {
     id: 4,
-    label: "Guest Assign ",
+    label: "Guest",
     url: "guestAssign",
     icon: dashboard,
   },

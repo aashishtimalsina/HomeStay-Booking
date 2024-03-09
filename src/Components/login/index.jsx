@@ -1,19 +1,21 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import styles from "../../style";
 import { useFormik } from "formik";
 import { Loginschema } from "../../schemas";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { socialMedia } from "../Footers/constant";
 import axios from "axios";
+import Home from "../Home";
+import LoginContex from "../../context/logincontext/CreateLoginContex";
 
 const initialValues = {
   username: "",
   password: "",
 };
 
-const apiUrl =
-  "https://c23a-2400-1a00-b060-8b27-90e7-4323-28d6-9cf6.ngrok-free.app/login?fbclid=IwAR3IHPZsYPQ4hjPxz50TNtLS2an2BzS4UMJl7k6nBr-6SdMjbNgMGp4nPMA";
+const apiUrl = "https://moved-readily-chimp.ngrok-free.app/login";
 const Login = () => {
+  const status = useContext(LoginContex);
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -34,11 +36,18 @@ const Login = () => {
 
             if (response.data.role === "admin") {
               navigate("/admin");
-              // navigate(from, { replace: true });
+            } else if (response.data.role === "user") {
+              navigate("/");
+              {
+                status.setLoginState("true");
+              }
+            } else {
+              // Handle the case where the role is not specified or there's an error
+              console.error(
+                "Role not specified or there's an error in response."
+              );
+              // You can navigate to an error page or display an error message here
             }
-            // } else {
-            //   history.push("/");
-            // }
           })
           .catch((error) => {
             console.error("Error:", error);
@@ -122,11 +131,11 @@ const Login = () => {
             ))}
           </div>
         </div>
-        <Link to="/forgot-password">
+        <Link to="/signup">
           <p className={`${styles.paragraph} mt-5 text-center`}>
-            Forgot password?{" "}
+            Haven't Signup??
             <span className={`${styles.paragraph} text-blue-700`}>
-              Reset Password
+              Sign Up
             </span>{" "}
           </p>
         </Link>

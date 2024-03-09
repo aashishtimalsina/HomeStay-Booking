@@ -52,19 +52,13 @@ const AddDetailForm = () => {
     // Add more fields here
   };
 
-  const apiUrl =
-    "https://c23a-2400-1a00-b060-8b27-90e7-4323-28d6-9cf6.ngrok-free.app/saveHost?fbclid=IwAR2f5RLP2dIfcE-AAf8GGXfwu1f_g-vV-aW8WCx4UHaYmul0cLvzU4vQrrA";
+  const apiUrl = "https://moved-readily-chimp.ngrok-free.app/saveHost";
   // Formik hook
   const { values, errors, touched, handleChange, handleSubmit } = useFormik({
     initialValues: initialValues,
     validationSchema: Loginschema,
     onSubmit: async (values, action) => {
       try {
-        // const config = {
-        //   headers: {
-        //     Authorization: `Bearer ${token}`,
-        //   },
-        // };
         const response = await axios.post(apiUrl, values);
         console.log("Response:", response.data);
         console.log("role:", response.data.role);
