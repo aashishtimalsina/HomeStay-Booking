@@ -3,6 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import khalti from "../../assets/khalti.png";
+import Khalti from "../../Admin dasbord/components/Khalti/khalti";
 
 const ActivityBookingForm = () => {
   const apiUrl = "https://your-api-endpoint.com/book-hike"; // Replace with your API URL
@@ -160,7 +161,8 @@ const ActivityBookingForm = () => {
                 id="paymentMethod"
                 name="paymentMethod"
               >
-                <img src={khalti} alt="khalti payment" className="h-12 w-26" />
+                {/* <img src={khalti} alt="khalti payment" className="h-12 w-26" /> */}
+                <Khalti />
               </button>
 
               <button
