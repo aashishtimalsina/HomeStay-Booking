@@ -63,7 +63,7 @@ import Admin from "./Admin dasbord/index.jsx";
 import BarGraph from "./Admin dasbord/components/reuseable/BarGraph.jsx";
 import Host from "./Admin dasbord/Host/Host.jsx";
 import AddDetailForm from "./Admin dasbord/Host/Add.jsx";
-import ActivitesViewmorePage from "./Components/Home/activitiViewmorePage.jsx";
+import ActivitesViewmorePage from "./Components/Home/ActivitiViewmorePage.jsx";
 
 
 const App = () => {
