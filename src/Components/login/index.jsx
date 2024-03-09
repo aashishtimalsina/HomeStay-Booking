@@ -12,7 +12,7 @@ const initialValues = {
 };
 
 const apiUrl =
-  "https://c23a-2400-1a00-b060-8b27-90e7-4323-28d6-9cf6.ngrok-free.app/login?fbclid=IwAR3IHPZsYPQ4hjPxz50TNtLS2an2BzS4UMJl7k6nBr-6SdMjbNgMGp4nPMA";
+  "https://moved-readily-chimp.ngrok-free.app/login?fbclid=IwAR3IHPZsYPQ4hjPxz50TNtLS2an2BzS4UMJl7k6nBr-6SdMjbNgMGp4nPMA";
 const Login = () => {
   const navigate = useNavigate();
 
