@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
 import { slides } from "./constant";
-import Khalti from "../../Admin dasbord/components/Khalti/khalti.jsx";
 
 const Gallery = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -63,7 +62,7 @@ const Gallery = () => {
       </div>
 
       {/* khalti vanchhau ki gojii tesko button yha cha uthyerew jaha chaina tha lagere rakha mali css aaudina  */}
-      <Khalti />
+      
 
     </section>
 

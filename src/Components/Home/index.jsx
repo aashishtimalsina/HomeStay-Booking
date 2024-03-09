@@ -5,7 +5,7 @@ import Service from "./service";
 
 import Galary from "./Galary";
 import BookingForm from "../Form/BookingForm";
-import ActivityBookingForm from "../Form/ActivityBookingForm";
+// import ActivityBookingForm from "../Form/ActivityBookingForm";
 import GuestAsignForm from "../Form/GuestAsignForm";
 
 const Home = () => {
@@ -13,7 +13,7 @@ const Home = () => {
     <div>
       <HeroSection />
       <BookingForm />
-      <ActivityBookingForm />
+      {/* <ActivityBookingForm /> */}
       <GuestAsignForm />
       <Activities />
       <Service />
