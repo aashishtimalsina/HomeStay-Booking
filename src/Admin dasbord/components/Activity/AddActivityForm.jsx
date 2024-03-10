@@ -1,4 +1,5 @@
 import * as React from "react";
+import Cookies from "js-cookie";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Box from "@mui/material/Box";
@@ -6,6 +7,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import { Typography } from "@mui/material";
+
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -16,12 +18,14 @@ const validationSchema = Yup.object({
   image: Yup.string().required("Image URL is required"),
 });
 
+
 const initialValues = {
   name: "",
   description: "",
   cost: 0,
   image: "",
 };
+
 
 const ActivityForm = () => {
   const formik = useFormik({
@@ -30,36 +34,43 @@ const ActivityForm = () => {
     onSubmit: async (values) => {
       try {
         const dataToSend = {
-
           name: values.name,
           about: values.description,
           price: parseFloat(values.cost),
           image: [values.image],
+
         };
-        const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdW5pdGEiLCJpYXQiOjE3MDk5OTc3MTYsImV4cCI6MTcwOTk5OTUxNn0.AgqHSXMNpwFKK1bjBVsY_-G7cCcmZ7aEvzK3xVCYk-U";
-
-        const response = await axios.post(
-          "https://moved-readily-chimp.ngrok-free.app/addNewActivity",
-          dataToSend,
-          {
-            headers: {
-              "ngrok-skip-browser-warning": true,
-              Authorization: `Bearer ${token}`,
-              "Content-type": "application/x-www-form-urlencoded"
-            },
-          }
-        );
-        
-
-        console.log("Response:", response.data);
-        // Handle success response
+        const token = Cookies.get("token");
+        if (token) {
+          const encodedToken = encodeURIComponent(token);
+          const response = await axios.post(
+            "https://moved-readily-chimp.ngrok-free.app/addNewActivity",
+            dataToSend,
+            {
+              headers: {
+                "ngrok-skip-browser-warning": true,
+                Authorization: `Bearer ${encodedToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          console.log("Response:", response.data);
+          alert("Activity added successfully.");
+          formik.resetForm();
+        } else {
+          console.error("Error:", "Token not found in cookies.");
+          alert("An error occurred while submitting the form. Please try again later.");
+        }
       } catch (error) {
-        console.error("Error:", error);
-        // Handle error response
+        if (error.response && error.response.status === 403) {
+          alert("Forbidden: You do not have permission to access this resource.");
+        } else {
+          console.error("Error:", error);
+          alert("An error occurred while submitting the form. Please try again later.");
+        }
       }
     },
   });
-
   return (
     <Box sx={{ maxWidth: 400, margin: "auto", marginTop: 10 }}>
       <Typography variant="h6">Add Activity</Typography>

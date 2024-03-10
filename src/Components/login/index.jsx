@@ -5,6 +5,7 @@ import { Loginschema } from "../../schemas";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { socialMedia } from "../Footers/constant";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const initialValues = {
   username: "",
@@ -33,6 +34,7 @@ const Login = () => {
             console.log("role:", response.data.role);
 
             if (response.data.role === "admin") {
+              Cookies.set("token", response.data.token, { expires: 1 }); 
               navigate("/admin");
               // navigate(from, { replace: true });
             }
