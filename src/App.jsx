@@ -65,7 +65,8 @@ import Host from "./Admin dasbord/Host/Host.jsx";
 import AddDetailForm from "./Admin dasbord/Host/Add.jsx";
 import Activity from "./Admin dasbord/components/Activity/Activity.jsx";
 import GuestAsign from "./Admin dasbord/components/GuestAssign/GuestAsign.jsx";
-import ActivitesViewmorePage from "./Components/Home/ActivitiViewmorePage.jsx";
+// import ActivitesViewmorePage from "./Components/Home/ActivitiViewmorePage.jsx";
+import ActivitesViewmorePage from "./Components/Home/activitiViewmorePage.jsx";
 
 import DetailPage from "./Admin dasbord/Host/Detail.jsx";
 import GuestAsignForm from "./Components/Form/GuestAsignForm.jsx";
