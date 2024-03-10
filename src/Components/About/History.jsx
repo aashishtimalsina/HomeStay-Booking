@@ -14,7 +14,7 @@ const History = () => {
             <h1 className={`${styles.heading2} mb-5`}>{data.lable}</h1>
             <p className={`${styles.paragraph}`}>{data.discription}</p>
           </div>
-          <div className="lg:w-1/2 mb-4 lg:mb-0">
+          <div className="  mb-4 lg:mb-0">
             <img
               src={data.image}
               className="h-custom m-auto rounded-md lg:w-4/5"

@@ -36,9 +36,7 @@ function ActicityHead(props) {
 export default function Activity() {
   const [Activity, setActivity] = React.useState([]);
 
-  const apiUrl =
-    "https://moved-readily-chimp.ngrok-free.app/activitiesDetails";
-
+  const apiUrl = "https://moved-readily-chimp.ngrok-free.app/activitiesDetails";
   React.useEffect(() => {
     const fetchData = async () => {
       try {
@@ -61,6 +59,18 @@ export default function Activity() {
 
     fetchData();
   }, []);
+  const handleDeleteHost = async (id) => {
+    try {
+      await axios.delete(
+        `https://moved-readily-chimp.ngrok-free.app/deleteActivity/${id}`
+      );
+      // After successful deletion, you may want to update the hosts state to reflect the changes
+      setActivity(hosts.filter((host) => host.id !== id));
+      alert("Host deleted successfully");
+    } catch (error) {
+      console.error("Error deleting host:", error);
+    }
+  };
 
   const headCells = [
     {
@@ -81,12 +91,12 @@ export default function Activity() {
       disablePadding: false,
       label: "Cost",
     },
-    {
-      id: "Image",
-      numeric: true,
-      disablePadding: false,
-      label: "Image",
-    },
+    // {
+    //   id: "Image",
+    //   numeric: true,
+    //   disablePadding: false,
+    //   label: "Image",
+    // },
 
     {
       id: "Action",
@@ -133,17 +143,23 @@ export default function Activity() {
                   <TableCell align="center">{row.about}</TableCell>
                   <TableCell align="center">{row.price}</TableCell>
 
-                  <TableCell sx={{ display: "flex", justifyContent: "center" }}>
+                  {/* <TableCell
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
                     <img
                       src={row.image}
                       alt="host-img"
-                      height={40}
-                      width={40}
+                      height={10}
+                      width={10}
                       style={{
                         borderRadius: "50%",
                       }}
                     />
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell sx={{ width: "120px" }}>
                     <Box display="flex" justifyContent="space-between">
                       <Link to={`detail/${row.id}`}>
@@ -152,7 +168,9 @@ export default function Activity() {
                       <Link to={`edit/${row.id}`}>
                         <EditOutlinedIcon />
                       </Link>
-                      <DeleteForeverOutlinedIcon />
+                      <DeleteForeverOutlinedIcon
+                        onClick={() => handleDeleteHost(row.id)}
+                      />
                     </Box>
                   </TableCell>
                 </TableRow>

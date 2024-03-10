@@ -241,13 +241,13 @@ const Navbardashboard = () => {
                         </Box>
                       </Box>
                     </MenuItem>
-                    <Link>
+                    {/* <Link>
                       <MenuItem marginTop="20px" onClick={handleClose}>
                         <SettingsIcon fontSize="25px" />{" "}
                         <Typography marginLeft="20px">Settings</Typography>
                       </MenuItem>{" "}
-                    </Link>
-                    <Link>
+                    </Link> */}
+                    <Link to="/">
                       <MenuItem marginTop="20px" onClick={handleClose}>
                         <LogoutIcon fontSize="25px" />{" "}
                         <Typography marginLeft="20px">Logout</Typography>

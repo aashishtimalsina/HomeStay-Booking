@@ -3,6 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import khalti from "../../assets/khalti.png";
+import Khalti from "../../Admin dasbord/components/Khalti/khalti";
 
 const ActivityBookingForm = () => {
   const apiUrl = "https://moved-readily-chimp.ngrok-free.app/bookActivities"; // Replace with your API URL
@@ -53,22 +54,22 @@ const ActivityBookingForm = () => {
   };
 
   return (
-    <div className="w-full bg-primary-1 p-10">
+    <div className="w-full  p-10">
       <Formik
         initialValues={{
           name: "",
           country: "",
-          noOfPax: "",
-          checkInDate: new Date(),
+          noOfGuest: "",
+          checkIn: new Date(),
           specialRequest: "",
           totalAmount: "",
-          paymentMethod: "Kkhalti",
+          paymentMethod: "Khalti",
         }}
         validationSchema={validationSchema}
         onSubmit={handleFormSubmit}
       >
         {({ isSubmitting }) => (
-          <Form className="flex flex-col space-y-4 w-96 justify-center m-auto my-20 bg-white p-10 rounded-md">
+          <Form className="flex flex-col space-y-4 w-96 justify-center m-auto my-20 bg-white p-4 rounded-md">
             <Field
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
               id="name"
@@ -160,7 +161,8 @@ const ActivityBookingForm = () => {
                 id="paymentMethod"
                 name="paymentMethod"
               >
-                <img src={khalti} alt="khalti payment" className="h-12 w-26" />
+                {/* <img src={khalti} alt="khalti payment" className="h-12 w-26" /> */}
+                <Khalti />
               </button>
 
               <button
