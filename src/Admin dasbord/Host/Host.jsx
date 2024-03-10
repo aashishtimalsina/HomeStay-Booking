@@ -38,7 +38,6 @@ export default function Host() {
 
   const apiUrl = "https://moved-readily-chimp.ngrok-free.app/getHostDetails";
 
-
   React.useEffect(() => {
     const fetchData = async () => {
       try {
@@ -60,6 +59,18 @@ export default function Host() {
 
     fetchData();
   }, []);
+  const handleDeleteHost = async (phone) => {
+    try {
+      await axios.delete(
+        `https://moved-readily-chimp.ngrok-free.app/deleteHost/${phone}`
+      );
+      // After successful deletion, you may want to update the hosts state to reflect the changes
+      setHosts(hosts.filter((host) => host.phone !== phone));
+      alert("Host deleted successfully");
+    } catch (error) {
+      console.error("Error deleting host:", error);
+    }
+  };
 
   const headCells = [
     {
@@ -150,13 +161,15 @@ export default function Host() {
                   <TableCell align="center">{row.phone}</TableCell>
                   <TableCell sx={{ width: "120px" }}>
                     <Box display="flex" justifyContent="space-between">
-                      <Link to={`detail/${row.id}`}>
+                      <Link to={`detail/${row.phone}`}>
                         <RemoveRedEyeIcon />
                       </Link>
-                      <Link to={`update/${row.id}`}>
+                      <Link to={`update/${row.phone}`}>
                         <EditOutlinedIcon />
                       </Link>
-                      <DeleteForeverOutlinedIcon />
+                      <DeleteForeverOutlinedIcon
+                        onClick={() => handleDeleteHost(row.phone)}
+                      />
                     </Box>
                   </TableCell>
                 </TableRow>

@@ -14,7 +14,7 @@ const Aboutus = () => {
           <div className="lg:w-1/2 mb-4 lg:mb-0">
             <img
               src={data.image}
-              className="h-custom m-auto rounded-md lg:w-4/5"
+              className="h-costum w-96 m-auto rounded-md lg:w-4/5"
             />
           </div>
           <div className="lg:w-1/2 p-3">

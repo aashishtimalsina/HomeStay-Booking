@@ -65,7 +65,8 @@ import Host from "./Admin dasbord/Host/Host.jsx";
 import AddDetailForm from "./Admin dasbord/Host/Add.jsx";
 import Activity from "./Admin dasbord/components/Activity/Activity.jsx";
 import GuestAsign from "./Admin dasbord/components/GuestAssign/GuestAsign.jsx";
-import ActivitesViewmorePage from "./Components/Home/ActivitiViewmorePage.jsx";
+// import ActivitesViewmorePage from "./Components/Home/ActivitiViewmorePage.jsx";
+import ActivitesViewmorePage from "./Components/Home/activitiViewmorePage.jsx";
 
 import DetailPage from "./Admin dasbord/Host/Detail.jsx";
 import GuestAsignForm from "./Components/Form/GuestAsignForm.jsx";
@@ -73,46 +74,53 @@ import EditDetailForm from "./Admin dasbord/Host/Edit.jsx";
 import ActivityForm from "./Admin dasbord/components/Activity/AddActivityForm.jsx";
 import EditActivity from "./Admin dasbord/components/Activity/EditActivity.jsx";
 import ActivityDetail from "./Admin dasbord/components/Activity/ActivityDetail.jsx";
+import LoginState from "./context/logincontext/loginstate.jsx";
+import BookingForm from "./Components/Form/BookingForm.jsx";
 
 const App = () => {
   const location = useLocation();
   const isAdminPage = location.pathname.startsWith("/admin");
+
   return (
     <>
-      <Routes>
-        {/* public routes */}
-        <Route exact path="/" element={<Home />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/service" element={<Services />} />
-        <Route path="/viewMore" element={<ActivitesViewmorePage />} />
+      <LoginState>
+        {isAdminPage ? "" : <Navbar />}
+        <Routes>
+          {/* public routes */}
+          <Route exact path="/" element={<Home />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/service" element={<Services />} />
+          <Route path="/viewMore/:id" element={<ActivitesViewmorePage />} />
+          <Route path="/bookingForm" element={<BookingForm />} />
 
-        {/* private routes  */}
-        {isAdminPage && (
-          <Route path="/admin" element={<Admin />}>
-            <Route path="dashboard" element={<Dashboard />} />
+          {/* private routes  */}
+          {isAdminPage && (
+            <Route path="/admin" element={<Admin />}>
+              <Route path="dashboard" element={<Dashboard />} />
 
-            <Route path="host" element={<Host />} />
-            <Route path="host/add" element={<AddDetailForm />} />
+              <Route path="host" element={<Host />} />
+              <Route path="host/add" element={<AddDetailForm />} />
 
-            <Route path="host/update/:id" element={<EditDetailForm />} />
-            {/* {/* <Route path="host/delete/:id" element={<Hostdelete />} /> */}
-            <Route path="host/detail/:id" element={<DetailPage />} />
-            <Route path="activity" element={<Activity />} />
-            <Route path="activity/add" element={<ActivityForm />} />
-            <Route path="activity/detail/:id" element={<ActivityDetail />} />
-            <Route path="activity/edit/:id" element={<EditActivity />} />
-            <Route path="guestAssign" element={<GuestAsign />} />
-            <Route
-              path="guestAssign/guestAsignForm"
-              element={<GuestAsignForm />}
-            />
-          </Route>
-        )}
-      </Routes>
-      {isAdminPage ? "" : <Footer />}
+              <Route path="host/update/:id" element={<EditDetailForm />} />
+              {/* {/* <Route path="host/delete/:id" element={<Hostdelete />} /> */}
+              <Route path="host/detail/:id" element={<DetailPage />} />
+              <Route path="activity" element={<Activity />} />
+              <Route path="activity/add" element={<ActivityForm />} />
+              <Route path="activity/detail/:id" element={<ActivityDetail />} />
+              <Route path="activity/edit/:id" element={<EditActivity />} />
+              <Route path="guestAssign" element={<GuestAsign />} />
+              <Route
+                path="guestAssign/guestAsignForm"
+                element={<GuestAsignForm />}
+              />
+            </Route>
+          )}
+        </Routes>
+        {isAdminPage ? "" : <Footer />}
+      </LoginState>
     </>
   );
 };

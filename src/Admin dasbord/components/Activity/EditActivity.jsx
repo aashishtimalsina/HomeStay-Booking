@@ -10,10 +10,10 @@ import { useParams } from "react-router-dom";
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
-  description: Yup.string().required("Description is required"),
-  cost: Yup.number()
-    .typeError("Cost must be a number")
-    .required("Cost is required"),
+  about: Yup.string().required("Description is required"),
+  price: Yup.number()
+    .typeError("Price must be a number")
+    .required("Price is required"),
   image: Yup.string().required("Image URL is required"),
 });
 
@@ -25,9 +25,9 @@ const EditActivity = () => {
     const fetchActivity = async () => {
       try {
         const response = await axios.get(
-          `https://your-api-endpoint.com/activities/${id}`
+          `https://moved-readily-chimp.ngrok-free.app/getActivityDetail/${id}`
         );
-        setActivity(response.data);
+        setActivity([response.data.activity_details]); // Update the state with activity details
       } catch (error) {
         console.error("Error fetching activity:", error);
       }
@@ -38,16 +38,16 @@ const EditActivity = () => {
 
   const formik = useFormik({
     initialValues: {
-      name: activity?.name || "",
-      description: activity?.description || "",
-      cost: activity?.cost || "",
-      image: activity?.image || "",
+      name: "",
+      about: "",
+      price: "",
+      image: "",
     },
     validationSchema,
     onSubmit: async (values) => {
       try {
         const response = await axios.put(
-          `https://your-api-endpoint.com/activities/${id}`,
+          `https://moved-readily-chimp.ngrok-free.app/updateActivity/${id}`,
           values
         );
         console.log("Response:", response.data);
@@ -58,6 +58,24 @@ const EditActivity = () => {
       }
     },
   });
+
+  React.useEffect(() => {
+    if (activity) {
+      // Set form values when detail is fetched
+      handleChange({
+        target: { name: "name", value: activity.name },
+      });
+      handleChange({
+        target: { name: "about", value: activity.about },
+      });
+      handleChange({
+        target: { name: "price", value: activity.price },
+      });
+      handleChange({
+        target: { name: "image", value: activity.image },
+      });
+    }
+  }, [activity, handleChange]);
 
   if (!activity) {
     return <div>Loading...</div>;
@@ -82,31 +100,29 @@ const EditActivity = () => {
         />
         <TextField
           fullWidth
-          id="description"
-          name="description"
+          id="about"
+          name="about"
           label="Description"
           multiline
           rows={4}
-          value={formik.values.description}
+          value={formik.values.about}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={
-            formik.touched.description && Boolean(formik.errors.description)
-          }
-          helperText={formik.touched.description && formik.errors.description}
+          error={formik.touched.about && Boolean(formik.errors.about)}
+          helperText={formik.touched.about && formik.errors.about}
           margin="normal"
         />
         <TextField
           fullWidth
-          id="cost"
-          name="cost"
-          label="Cost"
+          id="price"
+          name="price"
+          label="Price"
           type="number"
-          value={formik.values.cost}
+          value={formik.values.price}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={formik.touched.cost && Boolean(formik.errors.cost)}
-          helperText={formik.touched.cost && formik.errors.cost}
+          error={formik.touched.price && Boolean(formik.errors.price)}
+          helperText={formik.touched.price && formik.errors.price}
           margin="normal"
         />
         <TextField

@@ -21,8 +21,8 @@ const validationSchema = Yup.object({
 
 const initialValues = {
   name: "",
-  description: "",
-  cost: 0,
+  about: "",
+  price: "",
   image: "",
 };
 
@@ -61,6 +61,7 @@ const ActivityForm = () => {
           console.error("Error:", "Token not found in cookies.");
           alert("An error occurred while submitting the form. Please try again later.");
         }
+
       } catch (error) {
         if (error.response && error.response.status === 403) {
           alert("Forbidden: You do not have permission to access this resource.");
@@ -91,31 +92,29 @@ const ActivityForm = () => {
         />
         <TextField
           fullWidth
-          id="description"
-          name="description"
-          label="Description"
+          id="about"
+          name="about"
+          label="About"
           multiline
           rows={4}
-          value={formik.values.description}
+          value={formik.values.about}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={
-            formik.touched.description && Boolean(formik.errors.description)
-          }
-          helperText={formik.touched.description && formik.errors.description}
+          error={formik.touched.about && Boolean(formik.errors.about)}
+          helperText={formik.touched.about && formik.errors.about}
           margin="normal"
         />
         <TextField
           fullWidth
-          id="cost"
-          name="cost"
-          label="Cost"
+          id="price"
+          name="price"
+          label="Price"
           type="number"
-          value={formik.values.cost}
+          value={formik.values.price}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={formik.touched.cost && Boolean(formik.errors.cost)}
-          helperText={formik.touched.cost && formik.errors.cost}
+          error={formik.touched.price && Boolean(formik.errors.price)}
+          helperText={formik.touched.price && formik.errors.price}
           margin="normal"
         />
         <TextField
