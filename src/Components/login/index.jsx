@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { socialMedia } from "../Footers/constant";
 import axios from "axios";
+import Cookies from "js-cookie";
 import LoginContex from "../../context/logincontext/CreateLoginContex";
 import styles from "../../style";
 import { Loginschema } from "../../schemas";
@@ -34,6 +35,7 @@ const Login = () => {
             console.log("role:", response.data.role);
 
             if (response.data.role === "admin") {
+              Cookies.set("token", response.data.token, { expires: 1 }); 
               navigate("/admin");
             } else if (response.data.role === "user") {
               navigate("/");

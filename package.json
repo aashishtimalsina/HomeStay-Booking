@@ -20,6 +20,7 @@
     "firebase": "^10.8.1",
     "font-awesome": "^4.7.0",
     "formik": "^2.4.5",
+    "js-cookie": "^3.0.5",
     "khalti-checkout-web": "^2.2.0",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
