@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { activities } from "./constant";
+import { image2 } from "../Constants";
 import Button from "../reusuable/button";
 import { Link } from "react-router-dom";
 import styles from "../../style";
@@ -47,12 +48,16 @@ const Activities = () => {
           >
             <div className=" h-full    border-none  ">
               <div className="relative w-full h-44  mb-2">
-                <img
+                {/* <img
                   src={activity.photo}
+                  className=" absolute w-full h-full group-hover:animate-rotate rounded-md "
+                /> */}
+                <img
+                  src={image2}
                   className=" absolute w-full h-full group-hover:animate-rotate rounded-md "
                 />
                 <div className="absolute z-10  w-full h-full bg-black group-hover:animate-rotate bg-opacity-5 ">
-                  <p className=" font-sans text-xs m-2  text-white bg-primary-6 bg-opacity-50 border-2 border-gray-300 w-28 p-2 text-center ">
+                  <p className=" font-sans text-xs m-2  text-white bg-primary-6 bg-opacity-50 border-2 border-gray-300 w-32 p-2 text-center ">
                     Rs{activity.price} / PERSON
                   </p>
                 </div>

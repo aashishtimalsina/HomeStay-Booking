@@ -39,7 +39,8 @@ function GuestHead(props) {
 export default function GuestAssign() {
   const [guest, setGuest] = React.useState([]);
 
-  const apiUrl = "https://moved-readily-chimp.ngrok-free.app/getAllBooking";
+  const apiUrl =
+    "https://moved-readily-chimp.ngrok-free.app/getAllBooking?fbclid=IwAR0UhPOGXIyOI1dXaBdwZWKAblpwyx9Cpiz5rLI_8bFswqa7IkL80jyuBwQ";
 
   React.useEffect(() => {
     const fetchData = async () => {

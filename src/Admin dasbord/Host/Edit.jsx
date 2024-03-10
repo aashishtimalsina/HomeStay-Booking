@@ -25,8 +25,7 @@ const EditDetailForm = () => {
           }
         );
         if (response.data) {
-          setHosts(response.data.list || []);
-          setDetail(response.data.list || []);
+          setDetail(response.data.host_details);
           console.log("Response data:", response.data);
         } else {
           console.error("Empty response data");
@@ -49,12 +48,10 @@ const EditDetailForm = () => {
     phone: Yup.string().required("Phone number is required"),
   });
 
-  const apiUrl = " https://moved-readily-chimp.ngrok-free.app/getHostDetails}";
-
   const { values, errors, touched, handleChange, handleSubmit } = useFormik({
     initialValues: {
       email: "",
-      hostName: "",
+      host_name: "",
       address: "",
       about: "",
       image: "",
@@ -63,7 +60,10 @@ const EditDetailForm = () => {
     validationSchema: EditSchema,
     onSubmit: async (values, action) => {
       try {
-        const response = await axios.put(`${apiUrl}/${id}`, values);
+        const response = await axios.put(
+          `https://moved-readily-chimp.ngrok-free.app/hostDetails/${id}`,
+          values
+        );
         console.log("Response:", response.data);
       } catch (error) {
         console.error("Error:", error);
@@ -73,16 +73,27 @@ const EditDetailForm = () => {
 
   useEffect(() => {
     if (detail) {
-      const { email, hostName, address, about, image, phone } = detail;
       // Set form values when detail is fetched
-      values.email = email;
-      values.hostName = hostName;
-      values.address = address;
-      values.about = about;
-      values.image = image;
-      values.phone = phone;
+      handleChange({
+        target: { name: "email", value: detail.email },
+      });
+      handleChange({
+        target: { name: "host_name", value: detail.hostName },
+      });
+      handleChange({
+        target: { name: "address", value: detail.address },
+      });
+      handleChange({
+        target: { name: "about", value: detail.about },
+      });
+      handleChange({
+        target: { name: "image", value: detail.image },
+      });
+      handleChange({
+        target: { name: "phone", value: detail.phone },
+      });
     }
-  }, [detail, values]);
+  }, [detail, handleChange]);
 
   if (!detail) {
     return <div>Loading...</div>;
@@ -110,8 +121,8 @@ const EditDetailForm = () => {
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              id="hostName"
-              name="hostName"
+              id="host_name"
+              name="host_ame"
               label="Host Name"
               value={values.hostName}
               onChange={handleChange}

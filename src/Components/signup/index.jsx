@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../../style";
 import { useFormik } from "formik";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import { signupSchema } from "../../schemas";
 
@@ -12,7 +12,7 @@ const initialValues = {
   conform_password: "",
 };
 
-const apiUrl = "https://moved-readily-chimp.ngrok-free.app/signup";
+const apiUrl = "https://moved-readily-chimp.ngrok-free.app/addNewUser";
 
 const Signup = () => {
   const { values, errors, handleBlur, touched, handleChange, handleSubmit } =
@@ -26,6 +26,9 @@ const Signup = () => {
           .post(apiUrl, values)
           .then((response) => {
             console.log("Response:", response.data);
+            response.status === "success"
+              ? alert("Cannot signup")
+              : Navigate("/login");
           })
           .catch((error) => {
             console.error("Error:", error);

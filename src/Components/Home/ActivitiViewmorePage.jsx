@@ -3,8 +3,9 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import Navbar from "../Navbar";
 import { activityimage4 } from "../Constants";
-import LoginContex from "../../context/logincontext/CreateLoginContex";
+
 import ActivityBookingForm from "../Form/ActivityBookingForm";
+import LoginContex from "../../context/logincontext/CreateLoginContex";
 
 const ActivitiesViewmorePage = () => {
   const status = useContext(LoginContex);
@@ -20,8 +21,9 @@ const ActivitiesViewmorePage = () => {
             "ngrok-skip-browser-warning": true,
           },
         });
+        console.log("response", response.data);
         if (response.data) {
-          setActivity(response.data || null);
+          setActivity(response.data.activity_details || null);
         } else {
           console.error("Empty response data");
         }
@@ -36,14 +38,6 @@ const ActivitiesViewmorePage = () => {
     <>
       {/* <Navbar /> */}
       <div className="flex flex-col md:flex-row bg-white">
-        {/* Photo Section */}
-        <div className="w-full md:w-1/2">
-          <img
-            src={activityimage4}
-            alt="Activity"
-            className="w-full h-auto object-cover"
-          />
-        </div>
         {/* Description Section */}
         <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
           {activity && (
@@ -52,17 +46,25 @@ const ActivitiesViewmorePage = () => {
                 {activity.name}
               </h1>
               <p className="text-base md:text-lg text-gray-600 mb-6">
-                {activity.description}
+                {activity.about}
               </p>
               <div className="flex items-center text-base md:text-lg text-gray-600 mb-6">
                 {/* Icon here if needed */}
                 <p>{activity.location}</p>
               </div>
-              <p className="text-primary-1 text-xl md:text-2xl font-semibold">
+              <p className=" text-primary-6 text-xl md:text-2xl font-semibold">
                 {`Rs ${activity.price} per guest`}
               </p>
             </>
           )}
+        </div>
+        {/* Photo Section */}
+        <div className="w-full md:w-1/2">
+          <img
+            src={activityimage4}
+            alt="Activity"
+            className="w-full h-auto object-cover"
+          />
         </div>
       </div>
       {/* Booking Form */}

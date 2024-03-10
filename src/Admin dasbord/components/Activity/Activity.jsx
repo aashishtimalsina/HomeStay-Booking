@@ -58,6 +58,18 @@ export default function Activity() {
 
     fetchData();
   }, []);
+  const handleDeleteHost = async (id) => {
+    try {
+      await axios.delete(
+        `https://moved-readily-chimp.ngrok-free.app/deleteActivity/${id}`
+      );
+      // After successful deletion, you may want to update the hosts state to reflect the changes
+      setActivity(hosts.filter((host) => host.id !== id));
+      alert("Host deleted successfully");
+    } catch (error) {
+      console.error("Error deleting host:", error);
+    }
+  };
 
   const headCells = [
     {
@@ -155,7 +167,9 @@ export default function Activity() {
                       <Link to={`edit/${row.id}`}>
                         <EditOutlinedIcon />
                       </Link>
-                      <DeleteForeverOutlinedIcon />
+                      <DeleteForeverOutlinedIcon
+                        onClick={() => handleDeleteHost(row.id)}
+                      />
                     </Box>
                   </TableCell>
                 </TableRow>
