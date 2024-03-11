@@ -7,6 +7,22 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import { Typography } from "@mui/material";
+import { imageDb } from "../Firebase/Config";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { v4 } from "uuid";
+
+const uploadImage = async (imageFile) => {
+  return new Promise(async (resolve, reject) => {
+    const imageRef = ref(imageDb, `images/${v4()}`);  
+    try {
+      await uploadBytes(imageRef, imageFile);
+      const imageUrl = await getDownloadURL(imageRef); 
+      resolve(imageUrl);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 
 
 const validationSchema = Yup.object({
@@ -33,6 +49,12 @@ const ActivityForm = () => {
     validationSchema,
     onSubmit: async (values) => {
       try {
+        const imageFile = values.image;
+
+        if (imageFile) {
+          const imageUrl = await uploadImage(imageFile);
+          values.image = imageUrl;
+        }
         const dataToSend = {
           name: values.name,
           about: values.description,
@@ -117,18 +139,21 @@ const ActivityForm = () => {
           helperText={formik.touched.price && formik.errors.price}
           margin="normal"
         />
-        <TextField
-          fullWidth
-          id="image"
-          name="image"
-          label="Image URL"
-          value={formik.values.image}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.image && Boolean(formik.errors.image)}
-          helperText={formik.touched.image && formik.errors.image}
-          margin="normal"
-        />
+        <input
+  fullWidth
+  id="image"
+  name="image"
+  label="Image"
+  type="file"
+  accept="image/*"
+  onChange={(event) => {
+    formik.setFieldValue("image", event.currentTarget.files[0]);
+  }}
+  onBlur={formik.handleBlur}
+  error={formik.touched.image && Boolean(formik.errors.image)}
+  helperText={formik.touched.image && formik.errors.image}
+  margin="normal"
+/>
         <Button
           variant="contained"
           color="primary"
