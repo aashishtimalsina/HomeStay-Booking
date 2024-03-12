@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import { Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -18,18 +19,24 @@ const validationSchema = Yup.object({
 });
 
 const EditActivity = () => {
-  const { id } = useParams(); // Get the activity ID from URL params
+  const { id } = useParams();
   const [activity, setActivity] = React.useState(null);
 
   React.useEffect(() => {
     const fetchActivity = async () => {
       try {
-        const response = await axios.get(
-          `https://your-api-endpoint.com/activities/${id}`
-        );
-        setActivity(response.data);
+        const response = await axios.get(`https://moved-readily-chimp.ngrok-free.app/getActivityDetail/${id}`, {
+          headers: {
+            "ngrok-skip-browser-warning": true,
+          },
+        });
+        if (response.data && response.data.activity_details) {
+          setActivity(response.data.activity_details);
+        } else {
+          console.error("Empty response data or missing activity_details");
+        }
       } catch (error) {
-        console.error("Error fetching activity:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
@@ -37,6 +44,7 @@ const EditActivity = () => {
   }, [id]);
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       name: activity?.name || "",
       description: activity?.description || "",
@@ -45,16 +53,24 @@ const EditActivity = () => {
     },
     validationSchema,
     onSubmit: async (values) => {
+      const token = Cookies.get("token");
+      const encodedToken = encodeURIComponent(token);
+
       try {
         const response = await axios.put(
-          `https://your-api-endpoint.com/activities/${id}`,
-          values
+          `https://moved-readily-chimp.ngrok-free.app/updateActivity/${id}`,
+          values,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": true,
+              Authorization: `Bearer ${encodedToken}`,
+              "Content-Type": "application/json",
+            },
+          }
         );
         console.log("Response:", response.data);
-        // Handle success response
       } catch (error) {
         console.error("Error:", error);
-        // Handle error response
       }
     },
   });
