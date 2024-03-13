@@ -54,9 +54,9 @@ const ActivityForm = () => {
         }
         const dataToSend = {
           name: values.name,
-          description: values.about, // Change to 'description' to match schema
-          cost: parseFloat(values.price), // Change to 'cost' to match schema
-          image: values.image,
+          about: values.about,
+          price: parseFloat(values.cost),
+          image: [values.image],
         };
         const token = Cookies.get("token");
         if (token) {
