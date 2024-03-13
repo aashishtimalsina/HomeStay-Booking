@@ -54,9 +54,9 @@ const ActivityForm = () => {
         }
         const dataToSend = {
           name: values.name,
+          image: values.image, // Wrap image URL in an array
           about: values.about,
-          price: parseFloat(values.cost),
-          image: [values.image],
+          price: parseFloat(values.price),
         };
         const token = Cookies.get("token");
         if (token) {
@@ -95,6 +95,7 @@ const ActivityForm = () => {
       }
     },
   });
+
   return (
     <Box sx={{ maxWidth: 400, margin: "auto", marginTop: 10 }}>
       <Typography variant="h6">Add Activity</Typography>

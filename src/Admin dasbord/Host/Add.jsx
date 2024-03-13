@@ -29,7 +29,7 @@ const AddDetailForm = () => {
     hostName: "",
     address: "",
     about: "",
-    image: [],
+    image: "",
     phone: "",
   };
 
@@ -47,12 +47,12 @@ const AddDetailForm = () => {
           values.image = imageUrl;
         }
         const dataToSend = {
-          email: values.email,
           hostName: values.hostName,
           address: values.address,
           about: values.about,
           image: values.image,
-          phone: values.phone,
+          email: values.email,
+          phone: parseFloat(values.phone),
         };
         const token = Cookies.get("token");
         if (token) {

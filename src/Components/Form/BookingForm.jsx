@@ -1,60 +1,92 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-// import khalti from "../../assets/khalti.png";
 import Khalti from "../../Admin dasbord/components/Khalti/khalti";
+import Cookies from "js-cookie";
 
 const BookingForm = () => {
-  const apiUrl = "https://moved-readily-chimp.ngrok-free.app/bookActivities";
+  const apiUrl = "https://moved-readily-chimp.ngrok-free.app/bookHomestay";
+  const [paymentMethod, setPaymentMethod] = useState("");
 
   const validationSchema = Yup.object({
     name: Yup.string()
       .min(3, "Name must be at least 3 characters")
       .required("Name is required"),
     country: Yup.string().required("Country is required"),
-    noOfPax: Yup.number()
+    noOfGuest: Yup.number()
       .min(1, "Minimum 1 guest is required")
-      .max(10, "Maximum 4 guests are allowed")
+      .max(10, "Maximum 10 guests are allowed")
       .required("Number of guests is required"),
     contact: Yup.string()
       .matches(/^\d{10}$/, "Phone number must be 10 digits")
       .required("Phone number is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
     checkInDate: Yup.date()
-      // .min(new Date(), "Check-in date should be today or later")
       .required("Check-in date is required")
       .typeError("Check-in date is required"),
     checkOutDate: Yup.date()
-      // .min(Yup.ref("checkInDate"), "Check-out date must be after check-in date")
       .required("Check-out date is required")
       .typeError("Check-out date is required"),
     specialRequest: Yup.string(),
     paymentMethod: Yup.string().required("Payment method is required"),
   });
 
-  const handleFormSubmit = (values, { setSubmitting }) => {
-    axios
-      .post(apiUrl, values)
-      .then((response) => {
-        if (response.data.success) {
-          // Handle successful response
-          alert("Your hike has been booked successfully!");
-          setSubmitting(false);
-        } else {
-          // Handle unavailable date
-          alert(
-            "The selected check-in date is not available. Please choose another date."
-          );
-          setSubmitting(false);
-        }
-      })
-      .catch((error) => {
-        // Handle error response
-        alert("Error booking your hike. Please try again later.");
-        console.error(error);
-        setSubmitting(false);
+  const calculatePrice = (values) => {
+    const pricePerGuest = 2000; // Fixed price per guest
+    const { noOfGuest } = values;
+    return pricePerGuest * noOfGuest;
+  };
+
+  const handleFormSubmit = async (values) => {
+    try {
+      const token = Cookies.get("token");
+      if (!token) {
+        // Handle if token is not available
+        alert("Authentication token not found. Please log in.");
+        return;
+      }
+
+      const encodedToken = encodeURIComponent(token);
+
+      // Prepare the data to send including the payment method
+      const dataToSend = {
+        name: values.name,
+        country: values.country,
+        noOfGuest: values.noOfGuest,
+        checkIn: values.checkInDate,
+        checkOut: values.checkOutDate,
+        contact: parseInt(values.contact),
+        email: values.email,
+        noOfRooms: parseInt(values.noOfRooms),
+        specialRequest: values.specialRequest,
+        guestNames: [values.guestNames],
+        paymentMethod: paymentMethod, // Pass the payment method here
+      };
+
+      // Send the request with token authentication
+      const response = await axios.post(apiUrl, dataToSend, {
+        headers: {
+          Authorization: `Bearer ${encodedToken}`,
+        },
       });
+
+      // Handle the response
+      if (response.data.success) {
+        alert("Booked successfully!");
+      } else {
+        alert(
+          "The selected check-in date is not available. Please choose another date."
+        );
+      }
+    } catch (error) {
+      // Handle errors
+      alert("Error booking. Please try again later.");
+      console.error(error);
+    }
+
+    // Set submitting to false
+    setSubmitting(false);
   };
 
   return (
@@ -63,18 +95,20 @@ const BookingForm = () => {
         initialValues={{
           name: "",
           country: "",
-          noOfPGuest: "",
-          checkIn: new Date(),
-          checkOut: new Date(),
+          noOfGuest: "",
+          checkInDate: new Date(),
+          checkOutDate: new Date(),
+          noOfRooms: "",
           contact: "",
           email: "",
           specialRequest: "",
+          guestNames: [],
           paymentMethod: "",
         }}
         validationSchema={validationSchema}
         onSubmit={handleFormSubmit}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, values }) => (
           <Form className="flex flex-col space-y-4 w-96 justify-center m-auto my-20 bg-white p-10 rounded-md">
             <Field
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
@@ -108,29 +142,29 @@ const BookingForm = () => {
               placeholder="Number of pax"
             />
             <div>
-              <p className=" text-gray-500"> Check In Date</p>
+              <p className="text-gray-500">Check In Date</p>
               <Field
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
-                id="checkIn"
-                name="checkIn"
+                id="checkInDate"
+                name="checkInDate"
                 type="date"
               />
               <ErrorMessage
-                name="checkIn"
+                name="checkInDate"
                 component="div"
                 className="text-red-500 text-xs italic"
               />
             </div>
             <div>
-              <p className=" text-gray-500"> Check Out Date</p>
+              <p className="text-gray-500">Check Out Date</p>
               <Field
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
-                id="checkOut"
-                name="checkOut"
+                id="checkOutDate"
+                name="checkOutDate"
                 type="date"
               />
               <ErrorMessage
-                name="checkOut"
+                name="checkOutDate"
                 component="div"
                 className="text-red-500 text-xs italic"
               />
@@ -161,33 +195,59 @@ const BookingForm = () => {
             />
             <Field
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
+              id="noOfRoom"
+              name="noOfRoom"
+              type="number"
+              placeholder="No Of Room"
+            />
+            <ErrorMessage
+              name="noOfRoom"
+              component="div"
+              className="text-red-500 text-xs italic"
+            />
+            <Field
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
+              id="guestNames"
+              name="guestNames"
+              type="guestNames"
+              placeholder="guestNames"
+            />
+            <ErrorMessage
+              name="guestNames"
+              component="div"
+              className="text-red-500 text-xs italic"
+            />
+            <Field
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
               id="specialRequest"
               name="specialRequest"
               type="text"
               placeholder="Special request (optional)"
             />
             <div className="flex justify-between">
-              <div
-                type="submit"
-                disabled={isSubmitting}
-                id="paymentMethod"
-                name="paymentMethod"
-              >
-                <Khalti />
+              <div onClick={() => setPaymentMethod("Khalti")}>
+                <Khalti values={calculatePrice(values)} />
               </div>
 
               <button
-                type="submit"
-                disabled={isSubmitting}
+                type="button"
+                onClick={() => setPaymentMethod("pay on property")}
                 className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               >
-                {isSubmitting ? "Submitting..." : "Pay on property"}
+                Pay on property
               </button>
             </div>
             <div className="flex justify-center">
-              <button className="bg-blue-500 w-44 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              <button
+                type="submit"
+                onClick={handleFormSubmit}
+                className="bg-blue-500 w-44 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
                 Book Now
               </button>
+            </div>
+            <div className="text-gray-700 font-bold">
+              Total Price: NPR {calculatePrice(values)}
             </div>
           </Form>
         )}
