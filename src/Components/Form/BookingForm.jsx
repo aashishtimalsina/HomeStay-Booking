@@ -6,8 +6,8 @@ import axios from "axios";
 import Khalti from "../../Admin dasbord/components/Khalti/khalti";
 
 const BookingForm = () => {
-  const apiUrl = "https://moved-readily-chimp.ngrok-free.app/bookActivities"; 
-  
+  const apiUrl = "https://moved-readily-chimp.ngrok-free.app/bookActivities";
+
   const validationSchema = Yup.object({
     name: Yup.string()
       .min(3, "Name must be at least 3 characters")
@@ -167,14 +167,14 @@ const BookingForm = () => {
               placeholder="Special request (optional)"
             />
             <div className="flex justify-between">
-              <button
+              <div
                 type="submit"
                 disabled={isSubmitting}
                 id="paymentMethod"
                 name="paymentMethod"
               >
-                <img src={khalti} alt="khalti payment" className="h-12 w-26" />
-              </button>
+                <Khalti />
+              </div>
 
               <button
                 type="submit"

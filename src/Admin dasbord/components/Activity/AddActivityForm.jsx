@@ -13,10 +13,10 @@ import { v4 } from "uuid";
 
 const uploadImage = async (imageFile) => {
   return new Promise(async (resolve, reject) => {
-    const imageRef = ref(imageDb, `images/${v4()}`);  
+    const imageRef = ref(imageDb, `images/${v4()}`);
     try {
       await uploadBytes(imageRef, imageFile);
-      const imageUrl = await getDownloadURL(imageRef); 
+      const imageUrl = await getDownloadURL(imageRef);
       resolve(imageUrl);
     } catch (error) {
       reject(error);
@@ -24,16 +24,14 @@ const uploadImage = async (imageFile) => {
   });
 };
 
-
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
-  description: Yup.string().required("Description is required"),
-  cost: Yup.number()
-    .typeError("Cost must be a number")
-    .required("Cost is required"),
+  about: Yup.string().required("About is required"),
+  price: Yup.number()
+    .typeError("Price must be a number")
+    .required("Price is required"),
   image: Yup.string().required("Image URL is required"),
 });
-
 
 const initialValues = {
   name: "",
@@ -41,7 +39,6 @@ const initialValues = {
   price: "",
   image: "",
 };
-
 
 const ActivityForm = () => {
   const formik = useFormik({
@@ -57,10 +54,9 @@ const ActivityForm = () => {
         }
         const dataToSend = {
           name: values.name,
-          about: values.description,
-          price: parseFloat(values.cost),
-          image: [values.image],
-
+          description: values.about, // Change to 'description' to match schema
+          cost: parseFloat(values.price), // Change to 'cost' to match schema
+          image: values.image,
         };
         const token = Cookies.get("token");
         if (token) {
@@ -81,15 +77,20 @@ const ActivityForm = () => {
           formik.resetForm();
         } else {
           console.error("Error:", "Token not found in cookies.");
-          alert("An error occurred while submitting the form. Please try again later.");
+          alert(
+            "An error occurred while submitting the form. Please try again later."
+          );
         }
-
       } catch (error) {
         if (error.response && error.response.status === 403) {
-          alert("Forbidden: You do not have permission to access this resource.");
+          alert(
+            "Forbidden: You do not have permission to access this resource."
+          );
         } else {
           console.error("Error:", error);
-          alert("An error occurred while submitting the form. Please try again later.");
+          alert(
+            "An error occurred while submitting the form. Please try again later."
+          );
         }
       }
     },
@@ -140,20 +141,20 @@ const ActivityForm = () => {
           margin="normal"
         />
         <input
-  fullWidth
-  id="image"
-  name="image"
-  label="Image"
-  type="file"
-  accept="image/*"
-  onChange={(event) => {
-    formik.setFieldValue("image", event.currentTarget.files[0]);
-  }}
-  onBlur={formik.handleBlur}
-  error={formik.touched.image && Boolean(formik.errors.image)}
-  helperText={formik.touched.image && formik.errors.image}
-  margin="normal"
-/>
+          fullWidth
+          id="image"
+          name="image"
+          label="Image"
+          type="file"
+          accept="image/*"
+          onChange={(event) => {
+            formik.setFieldValue("image", event.currentTarget.files[0]);
+          }}
+          onBlur={formik.handleBlur}
+          error={formik.touched.image && Boolean(formik.errors.image)}
+          helperText={formik.touched.image && formik.errors.image}
+          margin="normal"
+        />
         <Button
           variant="contained"
           color="primary"

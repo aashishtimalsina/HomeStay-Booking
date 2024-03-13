@@ -7,6 +7,22 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import { Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
+import { v4 } from "uuid";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import Cookies from "js-cookie";
+
+const uploadImage = async (imageFile) => {
+  return new Promise(async (resolve, reject) => {
+    const imageRef = ref(imageDb, `images/${v4()}`);
+    try {
+      await uploadBytes(imageRef, imageFile);
+      const imageUrl = await getDownloadURL(imageRef);
+      resolve(imageUrl);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -18,23 +34,8 @@ const validationSchema = Yup.object({
 });
 
 const EditActivity = () => {
-  const { id } = useParams(); // Get the activity ID from URL params
-  const [activity, setActivity] = React.useState(null);
-
-  React.useEffect(() => {
-    const fetchActivity = async () => {
-      try {
-        const response = await axios.get(
-          `https://moved-readily-chimp.ngrok-free.app/getActivityDetail/${id}`
-        );
-        setActivity([response.data.activity_details]); // Update the state with activity details
-      } catch (error) {
-        console.error("Error fetching activity:", error);
-      }
-    };
-
-    fetchActivity();
-  }, [id]);
+  const { id } = useParams();
+  const [activity, setActivity] = React.useState({});
 
   const formik = useFormik({
     initialValues: {
@@ -46,36 +47,90 @@ const EditActivity = () => {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        const response = await axios.put(
-          `https://moved-readily-chimp.ngrok-free.app/updateActivity/${id}`,
-          values
-        );
-        console.log("Response:", response.data);
-        // Handle success response
+        const imageFile = values.image;
+
+        if (imageFile) {
+          const imageUrl = await uploadImage(imageFile);
+          values.image = imageUrl;
+        }
+
+        const dataToSend = {
+          name: values.name,
+          about: values.about,
+          price: parseFloat(values.price),
+          image: [values.image],
+        };
+
+        const token = Cookies.get("token");
+        if (token) {
+          const encodedToken = encodeURIComponent(token);
+          const response = await axios.post(
+            `https://moved-readily-chimp.ngrok-free.app/updateActivity/${id}`,
+            dataToSend,
+            {
+              headers: {
+                "ngrok-skip-browser-warning": true,
+                Authorization: `Bearer ${encodedToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          console.log("Response:", response.data);
+          alert("Activity updated successfully.");
+          formik.resetForm(); // Reset the form after successful submission
+        } else {
+          console.error("Error:", "Token not found in cookies.");
+          alert(
+            "An error occurred while updating the activity. Please try again later."
+          );
+        }
       } catch (error) {
-        console.error("Error:", error);
-        // Handle error response
+        if (error.response && error.response.status === 403) {
+          alert(
+            "Forbidden: You do not have permission to access this resource."
+          );
+        } else {
+          console.error("Error:", error);
+          alert(
+            "An error occurred while updating the activity. Please try again later."
+          );
+        }
       }
     },
   });
 
+  const handleChange = React.useCallback(
+    (event) => {
+      const { name, value } = event.target;
+      formik.setFieldValue(name, value);
+    },
+    [formik]
+  );
+
   React.useEffect(() => {
-    if (activity) {
-      // Set form values when detail is fetched
-      handleChange({
-        target: { name: "name", value: activity.name },
-      });
-      handleChange({
-        target: { name: "about", value: activity.about },
-      });
-      handleChange({
-        target: { name: "price", value: activity.price },
-      });
-      handleChange({
-        target: { name: "image", value: activity.image },
-      });
-    }
-  }, [activity, handleChange]);
+    const fetchActivity = async () => {
+      try {
+        const response = await axios.get(
+          `https://moved-readily-chimp.ngrok-free.app/getActivityDetail/${id}`
+        );
+        setActivity(response.data.activity_details);
+      } catch (error) {
+        console.error("Error fetching activity:", error);
+      }
+    };
+
+    fetchActivity();
+  }, [id]);
+
+  // Populate form fields with fetched activity data
+  React.useEffect(() => {
+    formik.setValues({
+      name: activity.name || "",
+      about: activity.about || "",
+      price: activity.price || "",
+      image: activity.image || "",
+    });
+  }, [activity, formik]);
 
   if (!activity) {
     return <div>Loading...</div>;

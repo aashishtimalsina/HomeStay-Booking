@@ -6,9 +6,14 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import { Typography } from "@mui/material";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { v4 } from "uuid";
+
+import { imageDb } from "../components/Firebase/Config";
+import Cookies from "js-cookie";
 
 const AddDetailForm = () => {
-  const Loginschema = Yup.object().shape({
+  const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email("Invalid email address")
       .required("Email is required"),
@@ -17,7 +22,6 @@ const AddDetailForm = () => {
     about: Yup.string().required("About is required"),
     image: Yup.string().required("Image URL is required"),
     phone: Yup.string().required("Phone number is required"),
-    // Add more validation rules for other fields if needed
   });
 
   const initialValues = {
@@ -25,37 +29,88 @@ const AddDetailForm = () => {
     hostName: "",
     address: "",
     about: "",
-    image: "",
+    image: [],
     phone: "",
   };
 
-  const apiUrl = "https://moved-readily-chimp.ngrok-free.app/saveHost ";
-  // Formik hook
-  const { values, errors, touched, handleChange, handleSubmit } = useFormik({
-    initialValues: initialValues,
-    validationSchema: Loginschema,
-    onSubmit: async (values, action) => {
-      try {
-        const response = await axios.post(apiUrl, values);
-        console.log("Response:", response.data);
-        console.log("role:", response.data.role);
+  const apiUrl = "https://moved-readily-chimp.ngrok-free.app/saveHost";
 
-        if (response.data.role === "admin") {
-          // Redirect to admin page
-          navigate("/admin");
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit: async (values) => {
+      try {
+        const imageFile = values.image;
+
+        if (imageFile) {
+          const imageUrl = await uploadImage(imageFile);
+          values.image = imageUrl;
+        }
+        const dataToSend = {
+          email: values.email,
+          hostName: values.hostName,
+          address: values.address,
+          about: values.about,
+          image: values.image,
+          phone: values.phone,
+        };
+        const token = Cookies.get("token");
+        if (token) {
+          const encodedToken = encodeURIComponent(token);
+          const response = await axios.post(
+            "https://moved-readily-chimp.ngrok-free.app/saveHost",
+            dataToSend,
+            {
+              headers: {
+                "ngrok-skip-browser-warning": true,
+                Authorization: `Bearer ${encodedToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          console.log("Response:", response.data);
+          alert("Activity added successfully.");
+          formik.resetForm();
+        } else {
+          console.error("Error:", "Token not found in cookies.");
+          alert(
+            "An error occurred while submitting the form. Please try again later."
+          );
         }
       } catch (error) {
-        console.error("Error:", error);
+        if (error.response && error.response.status === 403) {
+          alert(
+            "Forbidden: You do not have permission to access this resource."
+          );
+        } else {
+          console.error("Error:", error);
+          alert(
+            "An error occurred while submitting the form. Please try again later."
+          );
+        }
       }
     },
   });
+
+  const uploadImage = async (imageFile) => {
+    return new Promise(async (resolve, reject) => {
+      const imageRef = ref(imageDb, `images/${v4()}`);
+      try {
+        await uploadBytes(imageRef, imageFile);
+        const imageUrl = await getDownloadURL(imageRef);
+        resolve(imageUrl);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
 
   return (
     <div className="p-10">
       <Typography variant="h5" sx={{ marginBottom: "20px" }}>
         Add Details
       </Typography>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
@@ -63,10 +118,10 @@ const AddDetailForm = () => {
               id="email"
               name="email"
               label="Email"
-              value={values.email}
-              onChange={handleChange}
-              error={touched.email && Boolean(errors.email)}
-              helperText={touched.email && errors.email}
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
             />
           </Grid>
           <Grid item xs={12}>
@@ -75,10 +130,10 @@ const AddDetailForm = () => {
               id="hostName"
               name="hostName"
               label="Host Name"
-              value={values.hostName}
-              onChange={handleChange}
-              error={touched.hostName && Boolean(errors.hostName)}
-              helperText={touched.hostName && errors.hostName}
+              value={formik.values.hostName}
+              onChange={formik.handleChange}
+              error={formik.touched.hostName && Boolean(formik.errors.hostName)}
+              helperText={formik.touched.hostName && formik.errors.hostName}
             />
           </Grid>
           <Grid item xs={12}>
@@ -87,10 +142,10 @@ const AddDetailForm = () => {
               id="address"
               name="address"
               label="Address"
-              value={values.address}
-              onChange={handleChange}
-              error={touched.address && Boolean(errors.address)}
-              helperText={touched.address && errors.address}
+              value={formik.values.address}
+              onChange={formik.handleChange}
+              error={formik.touched.address && Boolean(formik.errors.address)}
+              helperText={formik.touched.address && formik.errors.address}
             />
           </Grid>
           <Grid item xs={12}>
@@ -101,22 +156,27 @@ const AddDetailForm = () => {
               label="About"
               multiline
               rows={4}
-              value={values.about}
-              onChange={handleChange}
-              error={touched.about && Boolean(errors.about)}
-              helperText={touched.about && errors.about}
+              value={formik.values.about}
+              onChange={formik.handleChange}
+              error={formik.touched.about && Boolean(formik.errors.about)}
+              helperText={formik.touched.about && formik.errors.about}
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField
+            <input
               fullWidth
               id="image"
               name="image"
-              label="Image URL"
-              value={values.image}
-              onChange={handleChange}
-              error={touched.image && Boolean(errors.image)}
-              helperText={touched.image && errors.image}
+              label="Image"
+              type="file"
+              accept="image/*"
+              onChange={(event) => {
+                formik.setFieldValue("image", event.currentTarget.files[0]);
+              }}
+              onBlur={formik.handleBlur}
+              error={formik.touched.image && Boolean(formik.errors.image)}
+              helperText={formik.touched.image && formik.errors.image}
+              margin="normal"
             />
           </Grid>
           <Grid item xs={12}>
@@ -125,10 +185,10 @@ const AddDetailForm = () => {
               id="phone"
               name="phone"
               label="Phone"
-              value={values.phone}
-              onChange={handleChange}
-              error={touched.phone && Boolean(errors.phone)}
-              helperText={touched.phone && errors.phone}
+              value={formik.values.phone}
+              onChange={formik.handleChange}
+              error={formik.touched.phone && Boolean(formik.errors.phone)}
+              helperText={formik.touched.phone && formik.errors.phone}
             />
           </Grid>
         </Grid>
