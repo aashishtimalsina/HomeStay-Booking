@@ -8,14 +8,29 @@ import axios from "axios";
 import { Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
+import { imageDb } from "../Firebase/Config";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { v4 } from "uuid";
+
+const uploadImage = async (imageFile) => {
+  return new Promise(async (resolve, reject) => {
+    const imageRef = ref(imageDb, `images/${v4()}`);
+    try {
+      await uploadBytes(imageRef, imageFile);
+      const imageUrl = await getDownloadURL(imageRef);
+      resolve(imageUrl);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
-  description: Yup.string().required("Description is required"),
-  cost: Yup.number()
-    .typeError("Cost must be a number")
-    .required("Cost is required"),
-  image: Yup.string().required("Image URL is required"),
+  about: Yup.string().required("About is required"),
+  price: Yup.number()
+    .typeError("Price must be a number")
+    .required("Price is required"),
 });
 
 const EditActivity = () => {
@@ -47,9 +62,9 @@ const EditActivity = () => {
     enableReinitialize: true,
     initialValues: {
       name: activity?.name || "",
-      description: activity?.description || "",
-      cost: activity?.cost || "",
-      image: activity?.image || "",
+      about: activity?.about || "",
+      price: activity?.price || "",
+      image: null, // Set initial image value to null
     },
     validationSchema,
     onSubmit: async (values) => {
@@ -57,9 +72,22 @@ const EditActivity = () => {
       const encodedToken = encodeURIComponent(token);
 
       try {
-        const response = await axios.put(
+        let updatedImage = values.image;
+        if (values.image && typeof values.image !== 'string') {
+          const imageUrl = await uploadImage(values.image);
+          updatedImage = imageUrl;
+        }
+
+        const dataToSend = {
+          name: values.name,
+          about: values.about,
+          price: parseFloat(values.price),
+          image: updatedImage,
+        };
+
+        await axios.put(
           `https://moved-readily-chimp.ngrok-free.app/updateActivity/${id}`,
-          values,
+          dataToSend,
           {
             headers: {
               "ngrok-skip-browser-warning": true,
@@ -68,7 +96,7 @@ const EditActivity = () => {
             },
           }
         );
-        console.log("Response:", response.data);
+        alert("Activity Edited Successfully.");
       } catch (error) {
         console.error("Error:", error);
       }
@@ -83,6 +111,8 @@ const EditActivity = () => {
     <Box sx={{ maxWidth: 400, margin: "auto", marginTop: 10 }}>
       <Typography variant="h6">Edit Activity</Typography>
 
+      {/* Display existing image */}
+   
       <form onSubmit={formik.handleSubmit}>
         <TextField
           fullWidth
@@ -98,45 +128,52 @@ const EditActivity = () => {
         />
         <TextField
           fullWidth
-          id="description"
-          name="description"
-          label="Description"
+          id="about"
+          name="about"
+          label="About"
           multiline
           rows={4}
-          value={formik.values.description}
+          value={formik.values.about}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={
-            formik.touched.description && Boolean(formik.errors.description)
-          }
-          helperText={formik.touched.description && formik.errors.description}
+          error={formik.touched.about && Boolean(formik.errors.about)}
+          helperText={formik.touched.about && formik.errors.about}
           margin="normal"
         />
         <TextField
           fullWidth
-          id="cost"
-          name="cost"
-          label="Cost"
+          id="price"
+          name="price"
+          label="Price"
           type="number"
-          value={formik.values.cost}
+          value={formik.values.price}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={formik.touched.cost && Boolean(formik.errors.cost)}
-          helperText={formik.touched.cost && formik.errors.cost}
+          error={formik.touched.price && Boolean(formik.errors.price)}
+          helperText={formik.touched.price && formik.errors.price}
           margin="normal"
         />
-        <TextField
+        <input
           fullWidth
           id="image"
           name="image"
-          label="Image URL"
-          value={formik.values.image}
-          onChange={formik.handleChange}
+          type="file"
+          accept="image/*"
+          onChange={(event) => {
+            formik.setFieldValue("image", event.currentTarget.files[0]);
+          }}
           onBlur={formik.handleBlur}
-          error={formik.touched.image && Boolean(formik.errors.image)}
-          helperText={formik.touched.image && formik.errors.image}
           margin="normal"
         />
+        
+        <hr />
+        <hr />
+        {activity.image && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+          <img src={activity.image} alt="Existing Image" style={{ maxWidth: '50%' }} />
+        </Box>
+      )}
+
         <Button
           variant="contained"
           color="primary"
