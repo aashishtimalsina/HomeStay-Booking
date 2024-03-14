@@ -1,5 +1,4 @@
-import * as React from "react";
-
+import React from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -12,14 +11,14 @@ import Paper from "@mui/material/Paper";
 import { Link } from "react-router-dom";
 import { Typography } from "@mui/material";
 import axios from "axios";
-
 import { Addbutton } from "../Button/Addbutton";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import Cookies from "js-cookie";
 
-function ActicityHead(props) {
+function ActivityHead(props) {
   return (
     <TableHead>
       <TableRow>
@@ -34,9 +33,11 @@ function ActicityHead(props) {
 }
 
 export default function Activity() {
-  const [Activity, setActivity] = React.useState([]);
+  const [activity, setActivity] = React.useState([]);
 
-  const apiUrl = "https://moved-readily-chimp.ngrok-free.app/activitiesDetails";
+  const apiUrl =
+    "https://moved-readily-chimp.ngrok-free.app/activitiesDetails";
+
   React.useEffect(() => {
     const fetchData = async () => {
       try {
@@ -47,8 +48,6 @@ export default function Activity() {
         });
         if (response.data) {
           setActivity(response.data.list || []);
-          console.log("Response data:", response.data);
-          console.log(data);
         } else {
           console.error("Empty response data");
         }
@@ -59,16 +58,26 @@ export default function Activity() {
 
     fetchData();
   }, []);
-  const handleDeleteHost = async (id) => {
+
+  const handleDelete = async (id) => {
     try {
-      await axios.delete(
-        `https://moved-readily-chimp.ngrok-free.app/deleteActivity/${id}`
-      );
-      // After successful deletion, you may want to update the hosts state to reflect the changes
-      setActivity(hosts.filter((host) => host.id !== id));
-      alert("Host deleted successfully");
+      const token = Cookies.get("token");
+      if (token) {
+        const encodedToken = encodeURIComponent(token);
+          await axios.delete(`https://moved-readily-chimp.ngrok-free.app/deleteActivity/${id}`, {
+          headers: {
+            "ngrok-skip-browser-warning": true,
+            "Authorization": `Bearer ${encodedToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+        setActivity(activity.filter(item => item.id !== id));
+        alert("Activity deleted successfully.");
+      } else {
+        console.error("Token not found");
+      }
     } catch (error) {
-      console.error("Error deleting host:", error);
+      console.error("Error deleting activity:", error);
     }
   };
 
@@ -91,12 +100,12 @@ export default function Activity() {
       disablePadding: false,
       label: "Cost",
     },
-    // {
-    //   id: "Image",
-    //   numeric: true,
-    //   disablePadding: false,
-    //   label: "Image",
-    // },
+    {
+      id: "Image",
+      numeric: true,
+      disablePadding: false,
+      label: "Image",
+    },
 
     {
       id: "Action",
@@ -128,9 +137,9 @@ export default function Activity() {
           }}
         >
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-            <ActicityHead headCells={headCells} />
+            <ActivityHead headCells={headCells} />
             <TableBody>
-              {Activity.map((row) => (
+              {activity.map((row) => (
                 <TableRow key={row.id} sx={{ cursor: "pointer" }}>
                   <TableCell
                     component="th"
@@ -143,23 +152,17 @@ export default function Activity() {
                   <TableCell align="center">{row.about}</TableCell>
                   <TableCell align="center">{row.price}</TableCell>
 
-                  {/* <TableCell
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
+                  <TableCell sx={{ display: "flex", justifyContent: "center" }}>
                     <img
                       src={row.image}
                       alt="host-img"
-                      height={10}
-                      width={10}
+                      height={40}
+                      width={40}
                       style={{
                         borderRadius: "50%",
                       }}
                     />
-                  </TableCell> */}
+                  </TableCell>
                   <TableCell sx={{ width: "120px" }}>
                     <Box display="flex" justifyContent="space-between">
                       <Link to={`detail/${row.id}`}>
@@ -168,9 +171,7 @@ export default function Activity() {
                       <Link to={`edit/${row.id}`}>
                         <EditOutlinedIcon />
                       </Link>
-                      <DeleteForeverOutlinedIcon
-                        onClick={() => handleDeleteHost(row.id)}
-                      />
+                      <DeleteForeverOutlinedIcon onClick={() => handleDelete(row.id)} />
                     </Box>
                   </TableCell>
                 </TableRow>

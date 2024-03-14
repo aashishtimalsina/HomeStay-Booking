@@ -7,9 +7,10 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import { Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { v4 } from "uuid";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Cookies from "js-cookie";
+import { imageDb } from "../Firebase/Config";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { v4 } from "uuid";
 
 const uploadImage = async (imageFile) => {
   return new Promise(async (resolve, reject) => {
@@ -26,111 +27,81 @@ const uploadImage = async (imageFile) => {
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
-  about: Yup.string().required("Description is required"),
+  about: Yup.string().required("About is required"),
   price: Yup.number()
     .typeError("Price must be a number")
     .required("Price is required"),
-  image: Yup.string().required("Image URL is required"),
 });
 
 const EditActivity = () => {
   const { id } = useParams();
-  const [activity, setActivity] = React.useState({});
-
-  const formik = useFormik({
-    initialValues: {
-      name: "",
-      about: "",
-      price: "",
-      image: "",
-    },
-    validationSchema,
-    onSubmit: async (values) => {
-      try {
-        const imageFile = values.image;
-
-        if (imageFile) {
-          const imageUrl = await uploadImage(imageFile);
-          values.image = imageUrl;
-        }
-
-        const dataToSend = {
-          name: values.name,
-          about: values.about,
-          price: parseFloat(values.price),
-          image: [values.image],
-        };
-
-        const token = Cookies.get("token");
-        if (token) {
-          const encodedToken = encodeURIComponent(token);
-          const response = await axios.post(
-            `https://moved-readily-chimp.ngrok-free.app/updateActivity/${id}`,
-            dataToSend,
-            {
-              headers: {
-                "ngrok-skip-browser-warning": true,
-                Authorization: `Bearer ${encodedToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          console.log("Response:", response.data);
-          alert("Activity updated successfully.");
-          formik.resetForm(); // Reset the form after successful submission
-        } else {
-          console.error("Error:", "Token not found in cookies.");
-          alert(
-            "An error occurred while updating the activity. Please try again later."
-          );
-        }
-      } catch (error) {
-        if (error.response && error.response.status === 403) {
-          alert(
-            "Forbidden: You do not have permission to access this resource."
-          );
-        } else {
-          console.error("Error:", error);
-          alert(
-            "An error occurred while updating the activity. Please try again later."
-          );
-        }
-      }
-    },
-  });
-
-  const handleChange = React.useCallback(
-    (event) => {
-      const { name, value } = event.target;
-      formik.setFieldValue(name, value);
-    },
-    [formik]
-  );
+  const [activity, setActivity] = React.useState(null);
 
   React.useEffect(() => {
     const fetchActivity = async () => {
       try {
-        const response = await axios.get(
-          `https://moved-readily-chimp.ngrok-free.app/getActivityDetail/${id}`
-        );
-        setActivity(response.data.activity_details);
+        const response = await axios.get(`https://moved-readily-chimp.ngrok-free.app/getActivityDetail/${id}`, {
+          headers: {
+            "ngrok-skip-browser-warning": true,
+          },
+        });
+        if (response.data && response.data.activity_details) {
+          setActivity(response.data.activity_details);
+        } else {
+          console.error("Empty response data or missing activity_details");
+        }
       } catch (error) {
-        console.error("Error fetching activity:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
     fetchActivity();
   }, [id]);
 
-  // Populate form fields with fetched activity data
-  React.useEffect(() => {
-    formik.setValues({
-      name: activity.name || "",
-      about: activity.about || "",
-      price: activity.price || "",
-      image: activity.image || "",
-    });
-  }, [activity, formik]);
+  const formik = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      name: activity?.name || "",
+      about: activity?.about || "",
+      price: activity?.price || "",
+      image: null, // Set initial image value to null
+    },
+    validationSchema,
+    onSubmit: async (values) => {
+      const token = Cookies.get("token");
+      const encodedToken = encodeURIComponent(token);
+
+      try {
+        let updatedImage = values.image;
+        if (values.image && typeof values.image !== 'string') {
+          const imageUrl = await uploadImage(values.image);
+          updatedImage = imageUrl;
+        }
+
+        const dataToSend = {
+          name: values.name,
+          about: values.about,
+          price: parseFloat(values.price),
+          image: updatedImage,
+        };
+
+        await axios.put(
+          `https://moved-readily-chimp.ngrok-free.app/updateActivity/${id}`,
+          dataToSend,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": true,
+              Authorization: `Bearer ${encodedToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        alert("Activity Edited Successfully.");
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    },
+  });
 
   if (!activity) {
     return <div>Loading...</div>;
@@ -140,6 +111,8 @@ const EditActivity = () => {
     <Box sx={{ maxWidth: 400, margin: "auto", marginTop: 10 }}>
       <Typography variant="h6">Edit Activity</Typography>
 
+      {/* Display existing image */}
+   
       <form onSubmit={formik.handleSubmit}>
         <TextField
           fullWidth
@@ -157,7 +130,7 @@ const EditActivity = () => {
           fullWidth
           id="about"
           name="about"
-          label="Description"
+          label="About"
           multiline
           rows={4}
           value={formik.values.about}
@@ -180,18 +153,27 @@ const EditActivity = () => {
           helperText={formik.touched.price && formik.errors.price}
           margin="normal"
         />
-        <TextField
+        <input
           fullWidth
           id="image"
           name="image"
-          label="Image URL"
-          value={formik.values.image}
-          onChange={formik.handleChange}
+          type="file"
+          accept="image/*"
+          onChange={(event) => {
+            formik.setFieldValue("image", event.currentTarget.files[0]);
+          }}
           onBlur={formik.handleBlur}
-          error={formik.touched.image && Boolean(formik.errors.image)}
-          helperText={formik.touched.image && formik.errors.image}
           margin="normal"
         />
+        
+        <hr />
+        <hr />
+        {activity.image && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+          <img src={activity.image} alt="Existing Image" style={{ maxWidth: '50%' }} />
+        </Box>
+      )}
+
         <Button
           variant="contained"
           color="primary"
