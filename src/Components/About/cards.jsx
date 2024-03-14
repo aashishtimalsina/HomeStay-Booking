@@ -4,22 +4,26 @@ import styles from "../../style";
 
 const Card = () => {
   return (
-    <div className="mt-20 mb-20 ">
+    <div className="mt-20 mb-20">
       <div>
-        <h1 className={`${styles.heading2} mb-10  `}>OUR PRIMARY GOAL</h1>
+        <h1 className={`${styles.heading2} text-center mb-10`}>
+          Why Choose Us
+        </h1>
       </div>
-      <div className=" flex flex-1 flex-wrap lg:justify-between justify-center ">
+      <div className="flex flex-wrap justify-center gap-8">
         {ourMoto.map((data) => (
           <div
             key={data.id}
-            className="w-72 h-96 m-5 border-2 overflow-hidden rounded-md border-black p-5 hover:bg-primary-1  fadeIn duration-1000  hover:bg-opacity-50 hover:border-gray-300 hover:scale-105 transition-all  "
+            className="w-72 h-auto bg-white rounded-md shadow-lg border border-gray-200 overflow-hidden transform transition duration-300 hover:scale-105"
           >
-            <div className="w-full p-2">
-              <img src={data.icon} alt="image" className=" w-20  h-20 m-auto" />
+            <div className="p-4 text-center">
+              <img src={data.icon} alt="icon" className="w-20 h-20 mx-auto" />
             </div>
-            <div>
-              <h5 className={`${styles.heading5} p-4`}>{data.lable}</h5>
-              <p className={`${styles.paragraph} text-center`}>
+            <div className="p-4">
+              <h5 className={`${styles.heading5} text-center mb-4`}>
+                {data.lable}
+              </h5>
+              <p className={`${styles.paragraph} text-center text-sm`}>
                 {data.discription}
               </p>
             </div>
