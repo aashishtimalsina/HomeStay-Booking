@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -16,8 +16,9 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import Cookies from "js-cookie";
 
-function ActicityHead(props) {
+function ActivityHead(props) {
   return (
     <TableHead>
       <TableRow>
@@ -32,7 +33,7 @@ function ActicityHead(props) {
 }
 
 export default function Activity() {
-  const [Activity, setActivity] = React.useState([]);
+  const [activity, setActivity] = React.useState([]);
 
   const apiUrl =
     "https://moved-readily-chimp.ngrok-free.app/activitiesDetails";
@@ -47,8 +48,6 @@ export default function Activity() {
         });
         if (response.data) {
           setActivity(response.data.list || []);
-          console.log("Response data:", response.data);
-          console.log(data);
         } else {
           console.error("Empty response data");
         }
@@ -59,6 +58,33 @@ export default function Activity() {
 
     fetchData();
   }, []);
+
+  const handleDelete = async (id) => {
+    try {
+      // Retrieve the token from cookies
+      const token = Cookies.get("token");
+      if (token) {
+        // Encode the token to ensure it's safely transmitted in the HTTP header
+        const encodedToken = encodeURIComponent(token);
+  
+        // Perform the delete request with the necessary headers
+        await axios.delete(`https://moved-readily-chimp.ngrok-free.app/deleteActivity/${id}`, {
+          headers: {
+            "ngrok-skip-browser-warning": true,
+            "Authorization": `Bearer ${encodedToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+        // Update the state to reflect the deletion
+        setActivity(activity.filter(item => item.id !== id));
+        alert("Activity deleted successfully.");
+      } else {
+        console.error("Token not found");
+      }
+    } catch (error) {
+      console.error("Error deleting activity:", error);
+    }
+  };
 
   const headCells = [
     {
@@ -116,9 +142,9 @@ export default function Activity() {
           }}
         >
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-            <ActicityHead headCells={headCells} />
+            <ActivityHead headCells={headCells} />
             <TableBody>
-              {Activity.map((row) => (
+              {activity.map((row) => (
                 <TableRow key={row.id} sx={{ cursor: "pointer" }}>
                   <TableCell
                     component="th"
@@ -150,7 +176,7 @@ export default function Activity() {
                       <Link to={`edit/${row.id}`}>
                         <EditOutlinedIcon />
                       </Link>
-                      <DeleteForeverOutlinedIcon />
+                      <DeleteForeverOutlinedIcon onClick={() => handleDelete(row.id)} />
                     </Box>
                   </TableCell>
                 </TableRow>
