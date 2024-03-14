@@ -61,21 +61,16 @@ export default function Activity() {
 
   const handleDelete = async (id) => {
     try {
-      // Retrieve the token from cookies
       const token = Cookies.get("token");
       if (token) {
-        // Encode the token to ensure it's safely transmitted in the HTTP header
         const encodedToken = encodeURIComponent(token);
-  
-        // Perform the delete request with the necessary headers
-        await axios.delete(`https://moved-readily-chimp.ngrok-free.app/deleteActivity/${id}`, {
+          await axios.delete(`https://moved-readily-chimp.ngrok-free.app/deleteActivity/${id}`, {
           headers: {
             "ngrok-skip-browser-warning": true,
             "Authorization": `Bearer ${encodedToken}`,
             "Content-Type": "application/json",
           },
         });
-        // Update the state to reflect the deletion
         setActivity(activity.filter(item => item.id !== id));
         alert("Activity deleted successfully.");
       } else {
