@@ -1,20 +1,43 @@
 import React, { useEffect, useState } from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import { Typography } from "@mui/material";
 import { useParams } from "react-router";
+import Cookies from "js-cookie";
+import { imageDb } from "../components/Firebase/Config";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { v4 as uuidv4 } from "uuid";
+
+const uploadImage = async (imageFile) => {
+  return new Promise(async (resolve, reject) => {
+    const storage = getStorage();
+    const imageRef = ref(storage, `images/${uuidv4()}`);
+    try {
+      await uploadBytes(imageRef, imageFile);
+      const imageUrl = await getDownloadURL(imageRef);
+      resolve(imageUrl);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 
 const EditDetailForm = () => {
   const { id } = useParams();
-  console.log("detail id", id);
-  const [detail, setDetail] = useState(null);
+  const [host, setHost] = useState(null);
+  const [formValues, setFormValues] = useState({
+    hostName: "",
+    about: "",
+    email: "",
+    image: "",
+    address: "",
+    phone: "",
+  });
 
   useEffect(() => {
-    const fetchDetail = async () => {
+    const fetchHost = async () => {
       try {
         const response = await axios.get(
           `https://moved-readily-chimp.ngrok-free.app/hostDetails/${id}`,
@@ -24,78 +47,87 @@ const EditDetailForm = () => {
             },
           }
         );
-        if (response.data) {
-          setDetail(response.data.host_details);
-          console.log("Response data:", response.data);
-        } else {
-          console.error("Empty response data");
-        }
+        setHost(response.data.host_details);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching host:", error);
       }
     };
-    fetchDetail();
+
+    fetchHost();
   }, [id]);
 
-  const EditSchema = Yup.object().shape({
-    email: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
-    hostName: Yup.string().required("Host name is required"),
-    address: Yup.string().required("Address is required"),
-    about: Yup.string().required("About is required"),
-    image: Yup.string().required("Image URL is required"),
-    phone: Yup.string().required("Phone number is required"),
-  });
-
-  const { values, errors, touched, handleChange, handleSubmit } = useFormik({
-    initialValues: {
-      email: "",
-      host_name: "",
-      address: "",
-      about: "",
-      image: "",
-      phone: "",
-    },
-    validationSchema: EditSchema,
-    onSubmit: async (values, action) => {
-      try {
-        const response = await axios.put(
-          `https://moved-readily-chimp.ngrok-free.app/hostDetails/${id}`,
-          values
-        );
-        console.log("Response:", response.data);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    },
-  });
-
   useEffect(() => {
-    if (detail) {
-      // Set form values when detail is fetched
-      handleChange({
-        target: { name: "email", value: detail.email },
-      });
-      handleChange({
-        target: { name: "host_name", value: detail.hostName },
-      });
-      handleChange({
-        target: { name: "address", value: detail.address },
-      });
-      handleChange({
-        target: { name: "about", value: detail.about },
-      });
-      handleChange({
-        target: { name: "image", value: detail.image },
-      });
-      handleChange({
-        target: { name: "phone", value: detail.phone },
+    if (host) {
+      setFormValues({
+        hostName: host.hostName || "",
+        about: host.about || "",
+        email: host.email || "",
+        image: host.image || "",
+        address: host.address || "",
+        phone: host.phoneNumber || "",
       });
     }
-  }, [detail, handleChange]);
+  }, [host]);
 
-  if (!detail) {
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const imageFile = formValues.image;
+
+      if (imageFile) {
+        const imageUrl = await uploadImage(imageFile);
+        formValues.image = imageUrl;
+      }
+
+      const dataToSend = {
+        hostName: formValues.hostName,
+        about: formValues.about,
+        email: formValues.email,
+        address: formValues.address,
+        phone: parseInt(formValues.phone),
+        image: formValues.image,
+      };
+
+      const token = Cookies.get("token");
+      if (token) {
+        const encodedToken = encodeURIComponent(token);
+        const response = await axios.post(
+          `https://moved-readily-chimp.ngrok-free.app/updateHost/${id}`,
+          dataToSend,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": true,
+              Authorization: `Bearer ${encodedToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log("Response:", response.data);
+        alert("Host updated successfully.");
+      } else {
+        console.error("Error:", "Token not found in cookies.");
+        alert(
+          "An error occurred while updating the host. Please try again later."
+        );
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 403) {
+        alert("Forbidden: You do not have permission to access this resource.");
+      } else {
+        console.error("Error:", error);
+        alert(
+          "An error occurred while updating the host. Please try again later."
+        );
+      }
+    }
+  };
+
+  if (!host) {
     return <div>Loading...</div>;
   }
 
@@ -112,22 +144,18 @@ const EditDetailForm = () => {
               id="email"
               name="email"
               label="Email"
-              value={values.email}
+              value={formValues.email}
               onChange={handleChange}
-              error={touched.email && Boolean(errors.email)}
-              helperText={touched.email && errors.email}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              id="host_name"
-              name="host_ame"
+              id="hostName"
+              name="hostName"
               label="Host Name"
-              value={values.hostName}
+              value={formValues.hostName}
               onChange={handleChange}
-              error={touched.hostName && Boolean(errors.hostName)}
-              helperText={touched.hostName && errors.hostName}
             />
           </Grid>
           <Grid item xs={12}>
@@ -136,10 +164,8 @@ const EditDetailForm = () => {
               id="address"
               name="address"
               label="Address"
-              value={values.address}
+              value={formValues.address}
               onChange={handleChange}
-              error={touched.address && Boolean(errors.address)}
-              helperText={touched.address && errors.address}
             />
           </Grid>
           <Grid item xs={12}>
@@ -150,22 +176,22 @@ const EditDetailForm = () => {
               label="About"
               multiline
               rows={4}
-              value={values.about}
+              value={formValues.about}
               onChange={handleChange}
-              error={touched.about && Boolean(errors.about)}
-              helperText={touched.about && errors.about}
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField
+            <input
               fullWidth
               id="image"
               name="image"
-              label="Image URL"
-              value={values.image}
-              onChange={handleChange}
-              error={touched.image && Boolean(errors.image)}
-              helperText={touched.image && errors.image}
+              label="Image"
+              type="file"
+              accept="image/*"
+              onChange={(event) => {
+                setFormValues({ ...formValues, image: event.target.files[0] });
+              }}
+              margin="normal"
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -174,10 +200,8 @@ const EditDetailForm = () => {
               id="phone"
               name="phone"
               label="Phone"
-              value={values.phone}
+              value={formValues.phone}
               onChange={handleChange}
-              error={touched.phone && Boolean(errors.phone)}
-              helperText={touched.phone && errors.phone}
             />
           </Grid>
         </Grid>

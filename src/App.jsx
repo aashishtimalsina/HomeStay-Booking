@@ -70,6 +70,7 @@ import ActivitesViewmorePage from "./Components/Home/activitiViewmorePage.jsx";
 
 import DetailPage from "./Admin dasbord/Host/Detail.jsx";
 import GuestAsignForm from "./Components/Form/GuestAsignForm.jsx";
+// import EditDetailForm from "./Admin dasbord/Host/Edit.jsx";
 import EditDetailForm from "./Admin dasbord/Host/Edit.jsx";
 import ActivityForm from "./Admin dasbord/components/Activity/AddActivityForm.jsx";
 import EditActivity from "./Admin dasbord/components/Activity/EditActivity.jsx";
