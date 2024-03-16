@@ -7,13 +7,14 @@ import Cookies from "js-cookie";
 import LoginContex from "../../context/logincontext/CreateLoginContex";
 import styles from "../../style";
 import { Loginschema } from "../../schemas";
+import webApi from '../../Config/config'
 
 const initialValues = {
   username: "",
   password: "",
 };
 
-const apiUrl = "https://moved-readily-chimp.ngrok-free.app/login";
+const apiUrl = webApi.apiUrl + "/login";
 
 const Login = () => {
   const status = useContext(LoginContex);
