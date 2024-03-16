@@ -64,95 +64,103 @@ export default function Activity() {
       const token = Cookies.get("token");
       if (token) {
         const encodedToken = encodeURIComponent(token);
-          await axios.delete(`https://moved-readily-chimp.ngrok-free.app/deleteActivity/${id}`, {
-          headers: {
-            "ngrok-skip-browser-warning": true,
-            "Authorization": `Bearer ${encodedToken}`,
-            "Content-Type": "application/json",
-          },
-        });
-        setActivity(activity.filter(item => item.id !== id));
-        alert("Activity deleted successfully.");
+        await axios.delete(
+          `https://moved-readily-chimp.ngrok-free.app/deleteActivity/${id}`
+        );
+        // After successful deletion, you may want to update the hosts state to reflect the changes
+        setActivity(hosts.filter((host) => host.id !== id));
+        alert("Host deleted successfully");
       } else {
-        console.error("Token not found");
+        console.error("Error:", "Token not found in cookies.");
+        alert(
+          "An error occurred while submitting the form. Please try again later."
+        );
+
       }
     } catch (error) {
       console.error("Error deleting activity:", error);
     }
-  };
 
-  const headCells = [
-    {
-      id: "Name of Activity",
-      numeric: false,
-      disablePadding: true,
-      label: "Name of Activity",
-    },
-    {
-      id: "Description",
-      numeric: false,
-      disablePadding: true,
-      label: "Description",
-    },
-    {
-      id: "Cost",
-      numeric: true,
-      disablePadding: false,
-      label: "Cost",
-    },
-    {
-      id: "Image",
-      numeric: true,
-      disablePadding: false,
-      label: "Image",
-    },
+    const headCells = [
+      {
+        id: "Name of Activity",
+        numeric: false,
+        disablePadding: true,
+        label: "Name of Activity",
+      },
+      {
+        id: "Description",
+        numeric: false,
+        disablePadding: true,
+        label: "Description",
+      },
+      {
+        id: "Cost",
+        numeric: true,
+        disablePadding: false,
+        label: "Cost",
+      },
+      // {
+      //   id: "Image",
+      //   numeric: true,
+      //   disablePadding: false,
+      //   label: "Image",
+      // },
 
-    {
-      id: "Action",
-      numeric: true,
-      disablePadding: false,
-      label: "Action",
-    },
-  ];
 
-  return (
-    <Box sx={{ width: "100%", paddingTop: "50px" }}>
-      <Box
-        sx={{
-          margin: "0px",
-        }}
-        display="flex"
-        justifyContent="space-between"
-      >
-        <Typography variant="h4">Activity</Typography>
-        <Link to="add" display="flex" justifycontent="center">
-          <Addbutton Name="Add" />
-        </Link>
-      </Box>
+      {
+        id: "Action",
+        numeric: true,
+        disablePadding: false,
+        label: "Action",
+      },
+    ];
 
-      <Paper sx={{ width: "100%", mb: 2 }}>
-        <TableContainer
+    return (
+      <Box sx={{ width: "100%", paddingTop: "50px" }}>
+        <Box
           sx={{
-            marginTop: "20px",
+            margin: "0px",
           }}
+          display="flex"
+          justifyContent="space-between"
         >
-          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-            <ActivityHead headCells={headCells} />
-            <TableBody>
-              {activity.map((row) => (
-                <TableRow key={row.id} sx={{ cursor: "pointer" }}>
-                  <TableCell
-                    component="th"
-                    scope="row"
-                    padding="none"
-                    align="center"
-                  >
-                    {row.name}
-                  </TableCell>
-                  <TableCell align="center">{row.about}</TableCell>
-                  <TableCell align="center">{row.price}</TableCell>
+          <Typography variant="h4">Activity</Typography>
+          <Link to="add" display="flex" justifycontent="center">
+            <Addbutton Name="Add" />
+          </Link>
+        </Box>
 
-                  <TableCell sx={{ display: "flex", justifyContent: "center" }}>
+        <Paper sx={{ width: "100%", mb: 2 }}>
+          <TableContainer
+            sx={{
+              marginTop: "20px",
+            }}
+          >
+            <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+              <ActicityHead headCells={headCells} />
+              <TableBody>
+                {Activity.map((row) => (
+                  <TableRow key={row.id} sx={{ cursor: "pointer" }}>
+                    <TableCell
+                      component="th"
+                      scope="row"
+                      padding="none"
+                      align="center"
+                    >
+                      {row.name}
+                    </TableCell>
+                    <TableCell align="center">{row.about}</TableCell>
+                    <TableCell align="center">{row.price}</TableCell>
+
+                    {/* <TableCell
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+
                     <img
                       src={row.image}
                       alt="host-img"
@@ -162,24 +170,29 @@ export default function Activity() {
                         borderRadius: "50%",
                       }}
                     />
-                  </TableCell>
-                  <TableCell sx={{ width: "120px" }}>
-                    <Box display="flex" justifyContent="space-between">
-                      <Link to={`detail/${row.id}`}>
-                        <RemoveRedEyeIcon />
-                      </Link>
-                      <Link to={`edit/${row.id}`}>
-                        <EditOutlinedIcon />
-                      </Link>
-                      <DeleteForeverOutlinedIcon onClick={() => handleDelete(row.id)} />
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
-    </Box>
-  );
+
+                  </TableCell> */}
+                    <TableCell sx={{ width: "120px" }}>
+                      <Box display="flex" justifyContent="space-between">
+                        <Link to={`detail/${row.id}`}>
+                          <RemoveRedEyeIcon />
+                        </Link>
+                        <Link to={`edit/${row.id}`}>
+                          <EditOutlinedIcon />
+                        </Link>
+                        <DeleteForeverOutlinedIcon
+                          onClick={() => handleDeleteHost(row.id)}
+                        />
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
+      </Box>
+    );
+  };
+
 }
