@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import Khalti from "../../Admin dasbord/components/Khalti/khalti";
+// import Khalti from "../../Admin dasbord/components/Khalti/khalti";
 import Cookies from "js-cookie";
 
 const BookingForm = () => {
-  const apiUrl = "https://moved-readily-chimp.ngrok-free.app/bookHomestay";
   const [paymentMethod, setPaymentMethod] = useState("");
+  const [serverError, setServerError] = useState("");
 
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -22,27 +22,49 @@ const BookingForm = () => {
       .matches(/^\d{10}$/, "Phone number must be 10 digits")
       .required("Phone number is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
-    checkInDate: Yup.date()
+    checkIn: Yup.date()
       .required("Check-in date is required")
       .typeError("Check-in date is required"),
-    checkOutDate: Yup.date()
+    checkOut: Yup.date()
       .required("Check-out date is required")
       .typeError("Check-out date is required"),
     specialRequest: Yup.string(),
+    noOfRooms: Yup.number()
+      .min(1, "Minimum 1 room is required")
+      .max(10, "Maximum 10 rooms are allowed")
+      .required("Number of rooms is required"),
     paymentMethod: Yup.string().required("Payment method is required"),
+    guestNames: Yup.array()
+      .of(Yup.string().required("Guest name is required"))
+      .min(1, "At least one guest name is required")
+      .required("Guest names are required"),
   });
 
-  const calculatePrice = (values) => {
-    const pricePerGuest = 2000; // Fixed price per guest
-    const { noOfGuest } = values;
-    return pricePerGuest * noOfGuest;
+  // const calculatePrice = (values) => {
+  //   if (!values) return 0;
+  //   const pricePerGuest = 2000; // Fixed price per guest
+  //   const noOfGuest = values.noOfGuest || 0; // Using default value if noOfGuest is undefined
+  //   return pricePerGuest * noOfGuest;
+  // };
+
+  const initialValues = {
+    name: "",
+    country: "",
+    noOfGuest: 0,
+    checkIn: null,
+    checkOut: "",
+    noOfRooms: 0,
+    contact: null,
+    email: "",
+    specialRequest: "",
+    guestNames: [""],
+    paymentMethod: "",
   };
 
-  const handleFormSubmit = async (values) => {
+  const handleFormSubmit = async (values, { setSubmitting }) => {
     try {
       const token = Cookies.get("token");
       if (!token) {
-        // Handle if token is not available
         alert("Authentication token not found. Please log in.");
         return;
       }
@@ -52,30 +74,36 @@ const BookingForm = () => {
       // Prepare the data to send including the payment method
       const dataToSend = {
         name: values.name,
-        country: values.country,
         noOfGuest: values.noOfGuest,
-        checkIn: values.checkInDate,
-        checkOut: values.checkOutDate,
-        contact: parseInt(values.contact),
+        country: values.country,
         email: values.email,
+        checkIn: values.checkIn,
+        checkOut: values.checkOut,
         noOfRooms: parseInt(values.noOfRooms),
+        paymentMethod: values.paymentMethod,
         specialRequest: values.specialRequest,
-        guestNames: [values.guestNames],
-        paymentMethod: paymentMethod, // Pass the payment method here
+        contact: parseInt(values.contact),
+        guestNames: values.guestNames,
       };
 
-      // Send the request with token authentication
-      const response = await axios.post(apiUrl, dataToSend, {
-        headers: {
-          Authorization: `Bearer ${encodedToken}`,
-        },
-      });
 
-      // Handle the response
+      const response = await axios.post(
+        "https://moved-readily-chimp.ngrok-free.app/bookHomestay",
+        dataToSend,
+        {
+          headers: {
+            "ngrok-skip-browser-warning": true,
+            Authorization: `Bearer ${encodedToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
       if (response.data.success) {
         alert("Booked successfully!");
+        setServerError("");
       } else {
-        alert(
+        setServerError(
           "The selected check-in date is not available. Please choose another date."
         );
       }
@@ -92,24 +120,15 @@ const BookingForm = () => {
   return (
     <div className="w-full flex justify-center">
       <Formik
-        initialValues={{
-          name: "",
-          country: "",
-          noOfGuest: "",
-          checkInDate: new Date(),
-          checkOutDate: new Date(),
-          noOfRooms: "",
-          contact: "",
-          email: "",
-          specialRequest: "",
-          guestNames: [],
-          paymentMethod: "",
-        }}
         validationSchema={validationSchema}
+        initialValues={initialValues}
         onSubmit={handleFormSubmit}
       >
         {({ isSubmitting, values }) => (
           <Form className="flex flex-col space-y-4 w-96 justify-center m-auto my-20 bg-white p-10 rounded-md">
+            {serverError && (
+              <div className="text-red-500 text-xs italic">{serverError}</div>
+            )}
             <Field
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
               id="name"
@@ -139,18 +158,23 @@ const BookingForm = () => {
               id="noOfGuest"
               name="noOfGuest"
               type="number"
-              placeholder="Number of pax"
+              placeholder="Number of Guests"
+            />
+            <ErrorMessage
+              name="noOfGuest"
+              component="div"
+              className="text-red-500 text-xs italic"
             />
             <div>
               <p className="text-gray-500">Check In Date</p>
               <Field
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
-                id="checkInDate"
-                name="checkInDate"
+                id="checkIn"
+                name="checkIn"
                 type="date"
               />
               <ErrorMessage
-                name="checkInDate"
+                name="checkIn"
                 component="div"
                 className="text-red-500 text-xs italic"
               />
@@ -159,12 +183,12 @@ const BookingForm = () => {
               <p className="text-gray-500">Check Out Date</p>
               <Field
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
-                id="checkOutDate"
-                name="checkOutDate"
+                id="checkOut"
+                name="checkOut"
                 type="date"
               />
               <ErrorMessage
-                name="checkOutDate"
+                name="checkOut"
                 component="div"
                 className="text-red-500 text-xs italic"
               />
@@ -195,28 +219,51 @@ const BookingForm = () => {
             />
             <Field
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
-              id="noOfRoom"
-              name="noOfRoom"
+              id="noOfRooms"
+              name="noOfRooms"
               type="number"
-              placeholder="No Of Room"
+              placeholder="Number of Rooms"
             />
             <ErrorMessage
-              name="noOfRoom"
+              name="noOfRooms"
               component="div"
               className="text-red-500 text-xs italic"
             />
-            <Field
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
-              id="guestNames"
-              name="guestNames"
-              type="guestNames"
-              placeholder="guestNames"
-            />
-            <ErrorMessage
-              name="guestNames"
-              component="div"
-              className="text-red-500 text-xs italic"
-            />
+            <FieldArray name="guestNames">
+              {({ push, remove, form }) => (
+                <div>
+                  {form.values.guestNames.map((_, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center space-x-2 mb-2"
+                    >
+                      <Field
+                        className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
+                        name={`guestNames.${index}`}
+                        type="text"
+                        placeholder={`Guest Name ${index + 1}`}
+                      />
+                      {index > 0 && (
+                        <button
+                          type="button"
+                          onClick={() => remove(index)}
+                          className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => push("")}
+                    className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  >
+                    Add Guest
+                  </button>
+                </div>
+              )}
+            </FieldArray>
             <Field
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
               id="specialRequest"
@@ -224,7 +271,14 @@ const BookingForm = () => {
               type="text"
               placeholder="Special request (optional)"
             />
-            <div className="flex justify-between">
+            <Field
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
+              id="paymentMethod"
+              name="paymentMethod"
+              type="text"
+              placeholder="paymentMethod"
+            />
+            {/* <div className="flex justify-between">
               <div onClick={() => setPaymentMethod("Khalti")}>
                 <Khalti values={calculatePrice(values)} />
               </div>
@@ -236,19 +290,19 @@ const BookingForm = () => {
               >
                 Pay on property
               </button>
-            </div>
+            </div> */}
             <div className="flex justify-center">
               <button
                 type="submit"
-                onClick={handleFormSubmit}
                 className="bg-blue-500 w-44 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                // disabled={isSubmitting}
               >
                 Book Now
               </button>
             </div>
-            <div className="text-gray-700 font-bold">
+            {/* <div className="text-gray-700 font-bold">
               Total Price: NPR {calculatePrice(values)}
-            </div>
+            </div> */}
           </Form>
         )}
       </Formik>

@@ -1,6 +1,6 @@
 let myKey ={
-    publicTestKey:'test_secret_key_438ab1d3ae714c1f97d7180e07222a7b',
-    secretKey:'test_public_key_a331138f04e2413586be3fb77cd80641'
+    publicTestKey:'test_public_key_b990c1e04b244788b834ea664724b1b1',
+    secretKey:'test_secret_key_e1c4b1eab56146dd997d875ce3672b25'
 }
 
 export default myKey;

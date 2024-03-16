@@ -38,6 +38,7 @@ const Login = () => {
               Cookies.set("token", response.data.token, { expires: 1 }); 
               navigate("/admin");
             } else if (response.data.role === "user") {
+              Cookies.set("token", response.data.token, { expires: 1 }); 
               navigate("/");
               status.setLoginState("true");
             } else {
