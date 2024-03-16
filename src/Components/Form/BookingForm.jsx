@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-// import Khalti from "../../Admin dasbord/components/Khalti/khalti";
+import Khalti from "../../Admin dasbord/components/Khalti/khalti";
 import Cookies from "js-cookie";
 
 const BookingForm = () => {
@@ -40,12 +40,12 @@ const BookingForm = () => {
       .required("Guest names are required"),
   });
 
-  // const calculatePrice = (values) => {
-  //   if (!values) return 0;
-  //   const pricePerGuest = 2000; // Fixed price per guest
-  //   const noOfGuest = values.noOfGuest || 0; // Using default value if noOfGuest is undefined
-  //   return pricePerGuest * noOfGuest;
-  // };
+  const calculatePrice = (values) => {
+    if (!values) return 0;
+    const pricePerGuest = 2000; // Fixed price per guest
+    const noOfGuest = values.noOfGuest || 0; // Using default value if noOfGuest is undefined
+    return pricePerGuest * noOfGuest;
+  };
 
   const initialValues = {
     name: "",
@@ -278,7 +278,7 @@ const BookingForm = () => {
               type="text"
               placeholder="paymentMethod"
             />
-            {/* <div className="flex justify-between">
+            <div className="flex justify-between">
               <div onClick={() => setPaymentMethod("Khalti")}>
                 <Khalti values={calculatePrice(values)} />
               </div>
@@ -290,7 +290,7 @@ const BookingForm = () => {
               >
                 Pay on property
               </button>
-            </div> */}
+            </div>
             <div className="flex justify-center">
               <button
                 type="submit"
@@ -300,9 +300,9 @@ const BookingForm = () => {
                 Book Now
               </button>
             </div>
-            {/* <div className="text-gray-700 font-bold">
+            <div className="text-gray-700 font-bold">
               Total Price: NPR {calculatePrice(values)}
-            </div> */}
+            </div> 
           </Form>
         )}
       </Formik>
