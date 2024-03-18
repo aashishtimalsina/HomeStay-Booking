@@ -28,6 +28,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { navbar } from "../constants";
 import { logo } from "../assets";
 import { Avatar, Menu, MenuItem, Select, TextField } from "@mui/material";
+import Cookies from "js-cookie";
 
 const customTheme = createTheme({
   palette: {
@@ -149,9 +150,13 @@ const Navbardashboard = () => {
   };
 
   const handleClose = () => {
-    setAnchorEl(null);
+      Cookies.remove("token");
+      Cookies.remove("username");
+      Cookies.remove("role");
   };
 
+  const username = Cookies.get('username');
+  const role = Cookies.get('role');
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar position="fixed" open={open}>
@@ -230,13 +235,13 @@ const Navbardashboard = () => {
                             fontSize="16px"
                             color="rgba(0, 0, 0, 0.6)"
                           >
-                            Jhon Doe
+                            {`${username}`}
                           </Typography>
                           <Typography
                             variant="subtitle1"
                             color="rgba(0, 0, 0, 0.5)"
                           >
-                            Admin
+                            {`${role}`}
                           </Typography>
                         </Box>
                       </Box>

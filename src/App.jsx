@@ -1,5 +1,5 @@
-import React from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Home from "./Components/Home";
 import Contact from "./Components/Contact";
@@ -26,11 +26,23 @@ import EditActivity from "./Admin dasbord/components/Activity/EditActivity.jsx";
 import ActivityDetail from "./Admin dasbord/components/Activity/ActivityDetail.jsx";
 import LoginState from "./context/logincontext/loginstate.jsx";
 import BookingForm from "./Components/Form/BookingForm.jsx";
+import Cookies from "js-cookie";
 
 const App = () => {
-  const location = useLocation();
+     const location = useLocation();
+     const navigate = useNavigate();
   const isAdminPage = location.pathname.startsWith("/admin");
+   const token = Cookies.get("token");
+   const role = Cookies.get("role");
 
+   useEffect(() => {
+  
+  if(isAdminPage  && token === undefined &&  role === undefined ){
+      navigate('/login');
+    }else if(isAdminPage  && token != undefined &&  role === "user" ){
+      navigate('/');
+    }
+   }, [isAdminPage, token, navigate]);
   return (
     <>
       <LoginState>
@@ -45,9 +57,8 @@ const App = () => {
           <Route path="/service" element={<Services />} />
           <Route path="/viewMore/:id" element={<ActivitesViewmorePage />} />
           <Route path="/bookingForm" element={<BookingForm />} />
-
-          {/* private routes  */}
-          {isAdminPage && (
+           {/* private routes  */}
+          {isAdminPage && token !== undefined && role=="admin" &&(
             <Route path="/admin" element={<Admin />}>
               <Route path="dashboard" element={<Dashboard />} />
 
@@ -70,7 +81,7 @@ const App = () => {
               />
             </Route>
           )}
-        </Routes>
+         </Routes>
         {isAdminPage ? "" : <Footer />}
       </LoginState>
     </>

@@ -1,38 +1,38 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { navbar } from "./constants";
 import { logo } from "../Constants";
 import LoginContex from "../../context/logincontext/CreateLoginContex";
 import { Avatar } from "@mui/material";
 import { LogoutOutlined } from "@mui/icons-material";
+import Cookies from "js-cookie";
 
 const Navbar = () => {
-  const getAllLocalStorageItems = () => {
-    const localStorageItems = {};
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      const value = localStorage.getItem(key);
-      localStorageItems[key] = value;
-    }
-    return localStorageItems;
-  };
-  
-  // Get all items from local storage
-  const localStorageItems = getAllLocalStorageItems();
-  
-  // Log all items in the console
-  console.log("All items in local storage:", localStorageItems);
-  
+
   const location = useLocation();
-  const status = useContext(LoginContex);
+  // const status = useContext(LoginContex);
   const pathnames = location.pathname;
  
   const [navbarOpen, setNavbarOpen] = useState(false);
+  const [status, setStatus] = useState(false);
 
   const handleToggle = () => {
     setNavbarOpen(!navbarOpen);
   };
+  const logout = () => {
+    Cookies.remove("token");
+    Cookies.remove("username");
+    Cookies.remove("role");
+    setStatus(false);
+  };
+  const token = Cookies.get("token");
+   const role = Cookies.get("role");
 
+   useEffect(() => {
+  if(token !=undefined){
+    setStatus(true);
+  }
+    }, [token,status]);
   return (
     <nav className="flex flex-wrap items-center w-full justify-between p-2 z-10  ">
       <div className="flex flex-wrap items-center w-full justify-between">
@@ -56,7 +56,7 @@ const Navbar = () => {
             ))}
           </div>
           <div className="flex justify-center items-center text-center">
-            {status.loginstate =="true"? (
+            {status? (
               <div className="flex justify-center items-center text-center">
                 <Link to="#">
                   <Avatar
@@ -76,7 +76,7 @@ const Navbar = () => {
                   <button
                     type="button"
                     className="inline-flex items-center px-3 py-2 text-sm font-medium text-primary-3 bg-transparent rounded-lg hover:bg-white hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-700"
-                    onClick={() => status.setLoginState(false)}
+                    onClick={logout}
                   >
                     <LogoutOutlined />
                   </button>
