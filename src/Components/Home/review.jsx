@@ -19,7 +19,7 @@ const Reviews = () => {
   const navigate = useNavigate();
   const apiUrl = webApi.apiUrl + "/addReview";
   const handleSubmit = async (e) => {
-    
+
     e.preventDefault();
     if(token === undefined){
         navigate('/login');
@@ -33,11 +33,10 @@ const Reviews = () => {
       const response = await axios.post(
         apiUrl,
          {
-            data: {
+            
               name:username,
                 review: review,
-              
-            },
+            
         },
         {
             headers: {
