@@ -10,6 +10,7 @@ import GuestAsignForm from "../Form/GuestAsignForm";
 import HomeStaySection from "./HomeStaySection";
 import { useContext } from "react";
 import LoginContex from "../../context/logincontext/CreateLoginContex";
+import Review from "./review";
 
 const Home = () => {
   const status = useContext(LoginContex);
@@ -24,6 +25,7 @@ const Home = () => {
       {/* <GuestAsignForm /> */}
       <Activities />
       <Service />
+      <Review />
       <Galary />
     </div>
   );

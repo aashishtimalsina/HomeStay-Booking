@@ -7,9 +7,26 @@ import { Avatar } from "@mui/material";
 import { LogoutOutlined } from "@mui/icons-material";
 
 const Navbar = () => {
+  const getAllLocalStorageItems = () => {
+    const localStorageItems = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      const value = localStorage.getItem(key);
+      localStorageItems[key] = value;
+    }
+    return localStorageItems;
+  };
+  
+  // Get all items from local storage
+  const localStorageItems = getAllLocalStorageItems();
+  
+  // Log all items in the console
+  console.log("All items in local storage:", localStorageItems);
+  
   const location = useLocation();
   const status = useContext(LoginContex);
   const pathnames = location.pathname;
+ 
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   const handleToggle = () => {
@@ -39,7 +56,7 @@ const Navbar = () => {
             ))}
           </div>
           <div className="flex justify-center items-center text-center">
-            {status.loginstate ? (
+            {status.loginstate =="true"? (
               <div className="flex justify-center items-center text-center">
                 <Link to="#">
                   <Avatar

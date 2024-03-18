@@ -6,6 +6,7 @@ import { activityimage4 } from "../Constants";
 
 import ActivityBookingForm from "../Form/ActivityBookingForm";
 import LoginContex from "../../context/logincontext/CreateLoginContex";
+import webApi from "../../Config/config";
 
 const ActivitiesViewmorePage = () => {
   const status = useContext(LoginContex);
@@ -14,7 +15,8 @@ const ActivitiesViewmorePage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const apiUrl = `https://moved-readily-chimp.ngrok-free.app/getActivityDetail/${id}`;
+      const apiUrl = webApi.apiUrl + 'getActivityDetail/'+id;
+      // const apiUrl = `https://moved-readily-chimp.ngrok-free.app/getActivityDetail/${id}`;
       try {
         const response = await axios.get(apiUrl, {
           headers: {

@@ -6,7 +6,9 @@ import khalti from "../../assets/khalti.png";
 import Khalti from "../../Admin dasbord/components/Khalti/khalti";
 
 const ActivityBookingForm = () => {
-  const apiUrl = "https://moved-readily-chimp.ngrok-free.app/bookActivities"; // Replace with your API URL
+  const apiUrl = webApi.apiUrl + "/bookActivities";
+
+  // const apiUrl = "https://moved-readily-chimp.ngrok-free.app/bookActivities"; // Replace with your API URL
 
   const validationSchema = Yup.object({
     name: Yup.string()
