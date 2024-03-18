@@ -17,6 +17,7 @@ import Activity from "./Admin dasbord/components/Activity/Activity.jsx";
 import GuestAsign from "./Admin dasbord/components/GuestAssign/GuestAsign.jsx";
 import ActivitesViewmorePage from "./Components/Home/ActivitiViewmorePage.jsx";
 import DetailPage from "./Admin dasbord/Host/Detail.jsx";
+import Reviews from "./Admin dasbord/review/Review.jsx";
 import GuestAsignForm from "./Components/Form/GuestAsignForm.jsx";
 // import EditDetailForm from "./Admin dasbord/Host/Edit.jsx";
 import EditDetailForm from "./Admin dasbord/Host/Edit.jsx";
@@ -61,6 +62,8 @@ const App = () => {
               <Route path="activity/detail/:id" element={<ActivityDetail />} />
               <Route path="activity/edit/:id" element={<EditActivity />} />
               <Route path="guestAssign" element={<GuestAsign />} />
+              <Route path="review" element={<Reviews />} />
+
               <Route
                 path="guestAssign/guestAsignForm"
                 element={<GuestAsignForm />}

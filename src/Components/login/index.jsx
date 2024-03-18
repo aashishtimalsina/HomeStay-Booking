@@ -32,14 +32,16 @@ const Login = () => {
         axios
           .post(apiUrl, values)
           .then((response) => {
-            console.log("Response:", response.data);
+            console.log("Response:", response);
             console.log("role:", response.data.role);
 
             if (response.data.role === "admin") {
               Cookies.set("token", response.data.token, { expires: 1 }); 
+              Cookies.set("username", response.data.username, { expires: 1 }); 
               navigate("/admin");
             } else if (response.data.role === "user") {
               Cookies.set("token", response.data.token, { expires: 1 }); 
+              Cookies.set("username", response.data.username, { expires: 1 }); 
               navigate("/");
               status.setLoginState("true");
             } else {

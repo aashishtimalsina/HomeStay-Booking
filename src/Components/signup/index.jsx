@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import { signupSchema } from "../../schemas";
+import webApi from "../../Config/config";
 
 const initialValues = {
   username: "",
@@ -11,8 +12,9 @@ const initialValues = {
   password: "",
   conform_password: "",
 };
+const apiUrl = webApi.apiUrl + "/addNewUser";
 
-const apiUrl = "https://moved-readily-chimp.ngrok-free.app/addNewUser";
+// const apiUrl = "https://moved-readily-chimp.ngrok-free.app/addNewUser";
 
 const Signup = () => {
   const { values, errors, handleBlur, touched, handleChange, handleSubmit } =

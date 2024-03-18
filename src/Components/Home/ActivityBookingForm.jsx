@@ -4,10 +4,13 @@ import * as Yup from "yup";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import webApi from "../../Config/config";
 
 const ActivityBookingForm = () => {
-  const apiUrl =
-    "https://c23a-2400-1a00-b060-8b27-90e7-4323-28d6-9cf6.ngrok-free.app/addNewActivity?fbclid=IwAR0yc5pu5P9BVqNQaZnyqs-a0YJUaJuMXchALYVPC-i0-CDK1q66P9imt7M";
+  const apiUrl = webApi.apiUrl + "/addNewActivity?fbclid=IwAR0yc5pu5P9BVqNQaZnyqs-a0YJUaJuMXchALYVPC-i0-CDK1q66P9imt7M";
+
+  // const apiUrl =
+  //   "https://c23a-2400-1a00-b060-8b27-90e7-4323-28d6-9cf6.ngrok-free.app/addNewActivity?fbclid=IwAR0yc5pu5P9BVqNQaZnyqs-a0YJUaJuMXchALYVPC-i0-CDK1q66P9imt7M";
 
   return (
     <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden">

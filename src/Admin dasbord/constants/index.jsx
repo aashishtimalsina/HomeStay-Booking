@@ -25,6 +25,12 @@ export const navbar = [
     url: "guestAssign",
     icon: dashboard,
   },
+  {
+    id: 5,
+    label: "Review",
+    url: "review",
+    icon: dashboard,
+  },
 ];
 export const HostHeadTitle = [
   {
