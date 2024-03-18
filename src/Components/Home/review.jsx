@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { activities } from "./constant";
 import { image2 } from "../Constants";
 import Button from "../reusuable/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "../../style";
 import axios from "axios";
 import { TextField } from "@mui/material";
@@ -14,14 +14,22 @@ const Reviews = () => {
   const token = Cookies.get("token");
   const username = Cookies.get("username");
   const encodedToken = encodeURIComponent(token);
-
-
+  const [inputValue, setInputValue] = useState("");
+  const [error, setError] = useState(false);
+  const navigate = useNavigate();
   const apiUrl = webApi.apiUrl + "/addReview";
   const handleSubmit = async (e) => {
+    
     e.preventDefault();
+    if(token === undefined){
+        navigate('/login');
+    }else{
 
+    if (review.trim() === "") {
+      setError(true); 
+    } else {
+      
     try {
-      // Send review data to your Axios API
       const response = await axios.post(
         apiUrl,
          {
@@ -39,12 +47,13 @@ const Reviews = () => {
             }
         }
     );
-      console.log(response.data); // Handle response data as needed
-      // Optionally, you can reset the review input after submission
+      console.log(response.data); 
       setReview('');
     } catch (error) {
       console.error('Error submitting review:', error);
     }
+  }
+}
   };
   React.useEffect(() => {
     const fetchData = async () => {
@@ -55,9 +64,9 @@ const Reviews = () => {
           },
         });
         if (response.data) {
-          setActivityData(response.data.list || []);
           console.log("Response data:", response.data);
         } else {
+          setActivityData(response.data.list || []);
           console.error("Empty response data");
         }
       } catch (error) {
@@ -82,7 +91,7 @@ const Reviews = () => {
     <p style={{textAlign:'center'}}>Tell us about your stay. Your feedback helps us improve!</p>
     <br />
     <form onSubmit={handleSubmit}>
-    <TextField fullWidth  label="Your Review" id="reviewInput"  onChange={(e) => setReview(e.target.value)}/>
+    <TextField fullWidth  label="Your Review"   error={error}  onChange={(e) => setReview(e.target.value)}  helperText={error ? "Review is required" : ""}/>
     <br />
     <br />
    
