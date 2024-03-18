@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import khalti from "../../assets/khalti.png";
 import Khalti from "../../Admin dasbord/components/Khalti/khalti";
+import webApi from "../../Config/config";
 
 const ActivityBookingForm = () => {
   const apiUrl = webApi.apiUrl + "/bookActivities";
