@@ -26,6 +26,10 @@ import EditActivity from "./Admin dasbord/components/Activity/EditActivity.jsx";
 import ActivityDetail from "./Admin dasbord/components/Activity/ActivityDetail.jsx";
 import LoginState from "./context/logincontext/loginstate.jsx";
 import BookingForm from "./Components/Form/BookingForm.jsx";
+import AboutUs from "./Admin dasbord/AboutUs/AboutUs.jsx";
+import EditAboutUs from "./Admin dasbord/AboutUs/EditAboutUs.jsx";
+
+
 
 const App = () => {
   const location = useLocation();
@@ -63,6 +67,9 @@ const App = () => {
               <Route path="activity/edit/:id" element={<EditActivity />} />
               <Route path="guestAssign" element={<GuestAsign />} />
               <Route path="review" element={<Reviews />} />
+              <Route path="aboutUs" element={<AboutUs />} />
+              <Route path="aboutUs/edit/:id" element={<EditAboutUs />} />
+
 
               <Route
                 path="guestAssign/guestAsignForm"

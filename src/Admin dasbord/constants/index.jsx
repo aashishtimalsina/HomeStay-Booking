@@ -31,6 +31,12 @@ export const navbar = [
     url: "review",
     icon: dashboard,
   },
+  {
+    id: 6,
+    label: "About Us",
+    url: "aboutUs",
+    icon: dashboard,
+  },
 ];
 export const HostHeadTitle = [
   {
