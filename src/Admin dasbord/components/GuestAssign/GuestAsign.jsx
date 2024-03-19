@@ -21,6 +21,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Button } from "@mui/base";
 import { Stack } from "@mui/system";
 import { useState } from "react";
+import webApi from "../../../Config/config";
 
 function GuestHead(props) {
   return (
@@ -39,8 +40,7 @@ function GuestHead(props) {
 export default function GuestAssign() {
   const [guest, setGuest] = React.useState([]);
 
-  const apiUrl =
-    "https://moved-readily-chimp.ngrok-free.app/getAllBooking?fbclid=IwAR0UhPOGXIyOI1dXaBdwZWKAblpwyx9Cpiz5rLI_8bFswqa7IkL80jyuBwQ";
+  const apiUrl = webApi.apiUrl + "/getHostDetails";
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -63,35 +63,7 @@ export default function GuestAssign() {
 
     fetchData();
   }, []);
-  // const guests = [
-  //   {
-  //     id: 1,
-  //     index: 1,
-  //     guestName: "John Doe",
-  //     noOfPax: 3,
-  //     guestList: "ram, sam, hari",
-  //     checkInDate: "2024-03-08",
-  //     checkOutDate: "2024-03-15",
-  //     country: "USA",
-  //     phoneNumber: "+1234567890",
-  //     specialRequest: "None",
-  //     amount: 1000, // Added amount
-  //   },
-  //   {
-  //     id: 2,
-  //     index: 2,
-  //     guestName: "Jane Smith",
-  //     noOfPax: 2,
-  //     guestList: "ram, sam, hari",
-  //     checkInDate: "2024-03-10",
-  //     checkOutDate: "2024-03-17",
-  //     country: "Canada",
-  //     phoneNumber: "+1987654321",
-  //     specialRequest: "Vegetarian meals",
-  //     amount: 1500, // Added amount
-  //   },
-  //   // Add more guests with amount as needed
-  // ];
+  
 
   const headCells = [
     {

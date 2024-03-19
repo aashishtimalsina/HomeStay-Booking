@@ -9,7 +9,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
 import axios from "axios";
 
@@ -18,6 +18,12 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import webApi from "../../Config/config";
+import { Cookie } from "@mui/icons-material";
+import Cookies from "js-cookie";
+import Swal from "sweetalert2";
+import withReactContent from 'sweetalert2-react-content'
+
 
 function HostHead(props) {
   return (
@@ -35,15 +41,22 @@ function HostHead(props) {
 
 export default function Review() {
   const [reviews, setReviews] = React.useState([]);
-
-  const apiUrl = "https://moved-readily-chimp.ngrok-free.app/getReviews";
+  const apiUrls = webApi.apiUrl ;
+  const MySwal = withReactContent(Swal)
+  const token = Cookies.get('token');
+  const navigate = useNavigate( );
 
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(apiUrl, {
+        if (token) {
+          const encodedToken = encodeURIComponent(token);
+        const response = await axios.get(apiUrls +"/getReviews", {
           headers: {
+            
             "ngrok-skip-browser-warning": true,
+            Authorization: `Bearer ${encodedToken}`,
+            "Content-Type": "application/json",
           },
         });
         if (response.data) {
@@ -51,6 +64,8 @@ export default function Review() {
           console.log("Response data:", response.data);
         } else {
           console.error("Empty response data");
+        }}else{
+          navigate('/login')
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -59,14 +74,29 @@ export default function Review() {
 
     fetchData();
   }, []);
-  const handleDeleteHost = async (phone) => {
+  const handleDeleteHost = async (id) => {
     try {
+      if (token) {
+        const encodedToken = encodeURIComponent(token);
       await axios.delete(
-        `https://moved-readily-chimp.ngrok-free.app/deleteHost/${phone}`
-      );
+        
+        apiUrls +  "/deleteReviews/"+id,  {
+          headers: {
+            
+            "ngrok-skip-browser-warning": true,
+            Authorization: `Bearer ${encodedToken}`,
+            "Content-Type": "application/json",
+          },
+        });
       // After successful deletion, you may want to update the hosts state to reflect the changes
-      setHosts(reviews.filter((reviews) => reviews.phone !== phone));
-      alert("Host deleted successfully");
+      setReviews(reviews.filter((reviews) => reviews.id !== id));
+      return MySwal.fire({
+        icon: 'success',
+        title: 'Review Deleted Successful',
+       });
+    }else{
+      navigate('/login')
+    }
     } catch (error) {
       console.error("Error deleting host:", error);
     }
@@ -145,7 +175,7 @@ export default function Review() {
                         <EditOutlinedIcon />
                       </Link> */}
                       <DeleteForeverOutlinedIcon
-                        onClick={() => handleDeleteHost(row.phone)}
+                        onClick={() => handleDeleteHost(row.id)}
                       />
                     </Box>
                   </TableCell>
