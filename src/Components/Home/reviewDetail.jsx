@@ -84,6 +84,24 @@ const ImageUrl = "../../../public/review_avatar.png"
             </div>
             <p className="text-xl mb-4">{reviewIndex[currentIndex]?.name}</p>
             <p>{reviewIndex[currentIndex]?.review}</p>
+            <div className="flex justify-center mt-4">
+              {/* Add your star icon here */}
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2M12 4.38L9.47 10.05L3.76 12.36L8.52 16.6L7.5 22.64L12 19.77L16.5 22.64L15.5 16.6L20.24 12.36L14.53 10.05L12 4.38Z" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2M12 4.38L9.47 10.05L3.76 12.36L8.52 16.6L7.5 22.64L12 19.77L16.5 22.64L15.5 16.6L20.24 12.36L14.53 10.05L12 4.38Z" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2M12 4.38L9.47 10.05L3.76 12.36L8.52 16.6L7.5 22.64L12 19.77L16.5 22.64L15.5 16.6L20.24 12.36L14.53 10.05L12 4.38Z" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2M12 4.38L9.47 10.05L3.76 12.36L8.52 16.6L7.5 22.64L12 19.77L16.5 22.64L15.5 16.6L20.24 12.36L14.53 10.05L12 4.38Z" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2M12 4.38L9.47 10.05L3.76 12.36L8.52 16.6L7.5 22.64L12 19.77L16.5 22.64L15.5 16.6L20.24 12.36L14.53 10.05L12 4.38Z" />
+              </svg>
+            </div>
           </div>
         </div>
       </div>
