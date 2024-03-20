@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import Khalti from "../../Admin dasbord/components/Khalti/khalti";
 import Cookies from "js-cookie";
+import webApi from "../../Config/config";
+import Swal from "sweetalert2";
+import withReactContent from 'sweetalert2-react-content'
 
 const BookingForm = () => {
+
   const [paymentMethod, setPaymentMethod] = useState("");
   const [serverError, setServerError] = useState("");
+  const [pricePerGuest, setPricePerGuest] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [noOfGuest, setNoOfGuest] = useState(1);
 
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -38,13 +45,38 @@ const BookingForm = () => {
       .of(Yup.string().required("Guest name is required"))
       .min(1, "At least one guest name is required")
       .required("Guest names are required"),
+      paymentStatus: Yup.array()
+      .of(Yup.string().nullable())
+     
   });
-
-  const calculatePrice = (values) => {
-    if (!values) return 0;
-    const pricePerGuest = 2000; // Fixed price per guest
-    const noOfGuest = values.noOfGuest || 0; // Using default value if noOfGuest is undefined
-    return pricePerGuest * noOfGuest;
+  const fetchDetail = async () => {
+    try {
+      const response = await axios.get(
+        apiUrl+"/getHomeStayInfo/1",
+        {
+          headers: {
+            "ngrok-skip-browser-warning": true,
+          },
+        }
+      );
+      console.log(response.data);
+       if (response.data) {
+        console.log(response.data.homestay_details.price);
+         setPricePerGuest(response.data.homestay_details.price);
+      
+      } else {
+        console.error("Empty response data");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  useEffect(() => {
+    fetchDetail();
+  }, []);
+  const calculatePrices = () => {
+        
+       setTotalPrice( pricePerGuest * noOfGuest);
   };
 
   const initialValues = {
@@ -59,7 +91,10 @@ const BookingForm = () => {
     specialRequest: "",
     guestNames: [""],
     paymentMethod: "",
+    paymentStatus: "",
   };
+  const apiUrl = webApi.apiUrl ;
+  const MySwal = withReactContent(Swal)
 
   const handleFormSubmit = async (values, { setSubmitting }) => {
     try {
@@ -71,8 +106,7 @@ const BookingForm = () => {
 
       const encodedToken = encodeURIComponent(token);
 
-      // Prepare the data to send including the payment method
-      const dataToSend = {
+       const dataToSend = {
         name: values.name,
         noOfGuest: values.noOfGuest,
         country: values.country,
@@ -83,12 +117,12 @@ const BookingForm = () => {
         paymentMethod: values.paymentMethod,
         specialRequest: values.specialRequest,
         contact: parseInt(values.contact),
+        paymentStatus:'paid/.' ,
         guestNames: values.guestNames,
       };
 
-
       const response = await axios.post(
-        "https://moved-readily-chimp.ngrok-free.app/bookHomestay",
+        apiUrl+"/bookHomestay",
         dataToSend,
         {
           headers: {
@@ -98,9 +132,11 @@ const BookingForm = () => {
           },
         }
       );
-
-      if (response.data.success) {
-        alert("Booked successfully!");
+       if (response.status_code ==200) {
+        return MySwal.fire({
+          icon: 'success',
+          title: 'Review Deleted Successful',
+         });
         setServerError("");
       } else {
         setServerError(
@@ -116,8 +152,9 @@ const BookingForm = () => {
     // Set submitting to false
     setSubmitting(false);
   };
-
-  return (
+  
+   Cookies.remove("redirectTo");
+    return (
     <div className="w-full flex justify-center">
       <Formik
         validationSchema={validationSchema}
@@ -153,13 +190,14 @@ const BookingForm = () => {
               component="div"
               className="text-red-500 text-xs italic"
             />
-            <Field
+            {/* <Field
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
               id="noOfGuest"
               name="noOfGuest"
               type="number"
-              placeholder="Number of Guests"
-            />
+              onchange={totalPrice()}
+               placeholder="Number of Guests"
+            /> */}
             <ErrorMessage
               name="noOfGuest"
               component="div"
@@ -246,7 +284,11 @@ const BookingForm = () => {
                       {index > 0 && (
                         <button
                           type="button"
-                          onClick={() => remove(index)}
+                            onClick={() => {
+                            remove(index)
+                            setNoOfGuest(noOfGuest - 1)
+                            calculatePrices();
+                         }}
                           className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                         >
                           Remove
@@ -256,7 +298,11 @@ const BookingForm = () => {
                   ))}
                   <button
                     type="button"
-                    onClick={() => push("")}
+                    onClick={() => {
+                      push("");
+                      setNoOfGuest(noOfGuest + 1);
+                      calculatePrices();
+                    }}
                     className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   >
                     Add Guest
@@ -280,7 +326,7 @@ const BookingForm = () => {
             />
             <div className="flex justify-between">
               <div onClick={() => setPaymentMethod("Khalti")}>
-                <Khalti values={calculatePrice(values)} />
+                <Khalti values={totalPrice} />
               </div>
 
               <button
@@ -301,7 +347,7 @@ const BookingForm = () => {
               </button>
             </div>
             <div className="text-gray-700 font-bold">
-              Total Price: NPR {calculatePrice(values)}
+              Total Price: NPR {totalPrice}
             </div> 
           </Form>
         )}

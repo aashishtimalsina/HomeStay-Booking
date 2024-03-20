@@ -5,12 +5,12 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const DetailPage = () => {
   const { id } = useParams();
   console.log("detail id", id);
   const [details, setDetail] = useState(null);
-  import Cookies from "js-cookie";
 
   useEffect(() => {
     const fetchDetail = async () => {
