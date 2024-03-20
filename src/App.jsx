@@ -4,6 +4,7 @@ import Navbar from "./Components/Navbar";
 import Home from "./Components/Home";
 import Contact from "./Components/Contact";
 import About from "./Components/About";
+import Hosts from "./Components/Host";
 import Footer from "./Components/Footers";
 import Services from "./Components/Services";
 import Signup from "./Components/signup";
@@ -36,15 +37,19 @@ const App = () => {
   const isAdminPage = location.pathname.startsWith("/admin");
    const token = Cookies.get("token");
    const role = Cookies.get("role");
+    const { pathname } = useLocation();
 
    useEffect(() => {
+  
+      window.scrollTo(0, 0);
+   
   
   if(isAdminPage  && token === undefined &&  role === undefined ){
       navigate('/login');
     }else if(isAdminPage  && token != undefined &&  role === "user" ){
       navigate('/');
     }
-   }, [isAdminPage, token, navigate]);
+   }, [isAdminPage, token, navigate,pathname]);
   return (
     <>
       <LoginState>
@@ -54,6 +59,7 @@ const App = () => {
           <Route exact path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
+          <Route path="/host" element={<Hosts />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/service" element={<Services />} />

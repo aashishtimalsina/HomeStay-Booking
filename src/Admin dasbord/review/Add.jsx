@@ -10,6 +10,7 @@
   import { imageDb } from "../components/Firebase/Config";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
+import { useNavigate } from "react-router-dom";
 
 const uploadImage = async (imageFile) => {
   return new Promise(async (resolve, reject) => {
@@ -23,6 +24,7 @@ const uploadImage = async (imageFile) => {
     }
   });
 };
+const navigate = useNavigate();
 
 
   const AddDetailForm = () => {
@@ -84,10 +86,7 @@ const uploadImage = async (imageFile) => {
               alert("Activity added successfully.");
               formik.resetForm();
             } else {
-              console.error("Error:", "Token not found in cookies.");
-              alert(
-                "An error occurred while submitting the form. Please try again later."
-              );
+              navigate('/')
             }
           } catch (error) {
             if (error.response && error.response.status === 403) {

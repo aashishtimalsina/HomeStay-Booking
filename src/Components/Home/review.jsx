@@ -8,8 +8,11 @@ import axios from "axios";
 import { TextField } from "@mui/material";
 import Cookies from "js-cookie";
 import webApi from "../../Config/config";
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 const Reviews = () => {
+  const MySwal = withReactContent(Swal)
   const [review, setReview] = useState('');
   const token = Cookies.get("token");
   const username = Cookies.get("username");
@@ -21,23 +24,22 @@ const Reviews = () => {
   const handleSubmit = async (e) => {
 
     e.preventDefault();
-    if(token === undefined){
+  
+    if(token === undefined || username == undefined){
         navigate('/login');
     }else{
-
-    if (review.trim() === "") {
+     if (review === "") {
       setError(true); 
     } else {
       
     try {
-      const response = await axios.post(
+      const dataToSend={
+        name:username,
+        review: review, 
+      }
+       const response = await axios.post(
         apiUrl,
-         {
-            
-              name:username,
-                review: review,
-            
-        },
+        dataToSend,
         {
             headers: {
                 "ngrok-skip-browser-warning": true,
@@ -47,34 +49,39 @@ const Reviews = () => {
         }
     );
       console.log(response.data); 
-      setReview('');
+    
+      return MySwal.fire({
+        icon: 'success',
+        title: 'Review Successful',
+       });
+            
     } catch (error) {
       console.error('Error submitting review:', error);
     }
   }
 }
   };
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(apiUrl, {
-          headers: {
-            "ngrok-skip-browser-warning": true,
-          },
-        });
-        if (response.data) {
-          console.log("Response data:", response.data);
-        } else {
-          setActivityData(response.data.list || []);
-          console.error("Empty response data");
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+  // React.useEffect(() => {
+  //   // const fetchData = async () => {
+  //   //   try {
+  //   //     const response = await axios.get(apiUrl, {
+  //   //       headers: {
+  //   //         "ngrok-skip-browser-warning": true,
+  //   //       },
+  //   //     });
+  //   //     if (response.data) {
+  //   //       console.log("Response data:", response.data);
+  //   //     } else {
+  //   //       setActivityData(response.data.list || []);
+  //   //       console.error("Empty response data");
+  //   //     }
+  //   //   } catch (error) {
+  //   //     console.error("Error fetching data:", error);
+  //   //   }
+  //   // };
 
-    fetchData();
-  }, []);
+  //   // fetchData();
+  // }, []);
 
   return (
     <section className="bg-gray-100">

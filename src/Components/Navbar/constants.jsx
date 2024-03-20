@@ -11,6 +11,11 @@ export const navbar = [
   },
   {
     id: 3,
+    label: "Host",
+    url: "/host",
+  },
+  {
+    id: 3,
     label: "Services",
     url: "/service",
   },
