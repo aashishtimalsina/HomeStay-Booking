@@ -44,7 +44,11 @@ const Login = () => {
               Cookies.set("token", response.data.token, { expires: 1 }); 
               Cookies.set("username", response.data.username, { expires: 1 }); 
               Cookies.set("role", response.data.role, { expires: 1 }); 
+              if(Cookies.get('redirectTo') !== "undefined"){
+                navigate(Cookies.get('redirectTo'))
+              }else{
               navigate("/");
+            }
               status.setLoginState("true");
             } else {
               console.error(

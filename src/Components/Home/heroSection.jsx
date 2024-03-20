@@ -13,6 +13,8 @@ import Cookies from "js-cookie";
 const HeroSection = () => {
   const [status,SetStatus]=useState(false);
   useEffect(() => {
+    const role = Cookies.get("role");
+
   const token = Cookies.get('token');
   if (token && token !=="undefined") {
     
@@ -42,7 +44,11 @@ const HeroSection = () => {
                 <p className="mb-5 text-gray-600">{data.location}</p>
                 <div className="">
                   <Link to={status ? "/bookingForm" : "/login"}>
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={()=>{
+                        if(status == false){
+                          Cookies.set("redirectTo",'/bookingForm')
+                        }
+                    }}>
                       Book Now
                     </button>
                   </Link>
