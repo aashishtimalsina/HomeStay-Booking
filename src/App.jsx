@@ -35,7 +35,7 @@ const App = () => {
      const location = useLocation();
      const navigate = useNavigate();
   const isAdminPage = location.pathname.startsWith("/admin");
-  const islogedIn = location.pathname.at("/login") ||location.pathname.at("/signup") ;
+  const islogedIn = location.pathname === "/login" || location.pathname === "/signup"; ;
    const token = Cookies.get("token");
    const role = Cookies.get("role");
     const { pathname } = useLocation();
@@ -50,11 +50,11 @@ const App = () => {
     }else if(isAdminPage  && token != undefined &&  role === "user" ){
       navigate('/');
 
-    // }else if(islogedIn && token != undefined &&  role === "user" ){
-    //   navigate('/');
-    // }
-    // else if(islogedIn && token != undefined &&  role === "admin" ){
-    //   navigate('/admin/dashboard');
+    }else if(islogedIn && token != undefined &&  role === "user" ){
+      navigate('/');
+    }
+    else if(islogedIn && token != undefined &&  role === "admin" ){
+      navigate('/admin/dashboard');
     }
    }, [isAdminPage, token, navigate,pathname]);
   return (
