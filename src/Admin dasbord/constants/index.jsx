@@ -1,41 +1,48 @@
 import { dashboard, watch } from "../assets";
+import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
+import GiteRoundedIcon from "@mui/icons-material/GiteRounded";
+import LocalActivityRoundedIcon from "@mui/icons-material/LocalActivityRounded";
+import PeopleAltRoundedIcon from "@mui/icons-material/PeopleAltRounded";
+import ReviewsIconRoundedIcon from '@mui/icons-material/ReviewsRounded';
+import InfoIconRoundedIcon from "@mui/icons-material/InfoRounded";
+import BookmarkRoundedIcon from '@mui/icons-material/BookmarkRounded';
 
 export const navbar = [
-  // {
-  //   id: 1,
-  //   label: "Dashboard",
-  //   url: "dashboard",
-  //   icon: dashboard,
-  // },
+  {
+    id: 1,
+    label: "Dashboard",
+    url: "dashboard",
+    icon: <GridViewRoundedIcon />,
+  },
   {
     id: 2,
-    label: "Host",
-    url: "host",
-    icon: dashboard,
+    label: "About Us",
+    url: "aboutUs",
+    icon: <InfoIconRoundedIcon />,
   },
   {
     id: 3,
-    label: "Activity",
-    url: "activity",
-    icon: dashboard,
+    label: "Host",
+    url: "host",
+    icon: <GiteRoundedIcon />,
   },
   {
     id: 4,
-    label: "Guest",
-    url: "guestAssign",
-    icon: dashboard,
+    label: "Activity",
+    url: "activity",
+    icon: <LocalActivityRoundedIcon />,
   },
   {
     id: 5,
-    label: "Review",
-    url: "review",
-    icon: dashboard,
+    label: "Booking",
+    url: "guestAssign",
+    icon: <BookmarkRoundedIcon />,
   },
   {
     id: 6,
-    label: "About Us",
-    url: "aboutUs",
-    icon: dashboard,
+    label: "Review",
+    url: "review",
+    icon: <ReviewsIconRoundedIcon />,
   },
 ];
 export const HostHeadTitle = [
