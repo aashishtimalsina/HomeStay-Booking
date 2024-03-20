@@ -9,7 +9,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
 import axios from "axios";
 
@@ -22,6 +22,7 @@ import { Button } from "@mui/base";
 import { Stack } from "@mui/system";
 import { useState } from "react";
 import webApi from "../../../Config/config";
+import Cookies from "js-cookie";
 
 function GuestHead(props) {
   return (
@@ -37,17 +38,27 @@ function GuestHead(props) {
   );
 }
 
-export default function GuestAssign() {
+export default function Booking() {
+  const navigate = useNavigate();
   const [guest, setGuest] = React.useState([]);
 
-  const apiUrl = webApi.apiUrl + "/getHostDetails";
+  const apiUrl = webApi.apiUrl + "/getAllBooking";
+  const token = Cookies.get("token");
+ 
 
-  React.useEffect(() => {
+   React.useEffect(() => {
+    if (!token || token == 'undefined') {
+      navigate('/login');
+    }
+      const encodedToken = encodeURIComponent(token);
+    
     const fetchData = async () => {
       try {
         const response = await axios.get(apiUrl, {
           headers: {
             "ngrok-skip-browser-warning": true,
+            Authorization: `Bearer ${encodedToken}`,
+            "Content-Type": "application/json",
           },
         });
         if (response.data) {
@@ -85,29 +96,18 @@ export default function GuestAssign() {
       label: "No Of Guest",
     },
     {
-      id: "guestList",
+      id: "noOfRooms",
       numeric: true,
       disablePadding: false,
-      label: "Guest List",
+      label: "No Of Rooms",
     },
-    {
-      id: "checkInDate",
-      numeric: true,
-      disablePadding: false,
-      label: "Check In",
-    },
-    {
-      id: "checkOutDate",
-      numeric: true,
-      disablePadding: false,
-      label: "Check Out",
-    },
-    {
-      id: "country",
-      numeric: true,
-      disablePadding: false,
-      label: "Country",
-    },
+ 
+    // {
+    //   id: "country",
+    //   numeric: true,
+    //   disablePadding: false,
+    //   label: "Country",
+    // },
     {
       id: "phoneNumber",
       numeric: true,
@@ -125,6 +125,24 @@ export default function GuestAssign() {
       numeric: true,
       disablePadding: false,
       label: "Amount",
+    },
+    {
+      id: "paymentStatus",
+      numeric: true,
+      disablePadding: false,
+      label: "Payment Status",
+    },
+    {
+      id: "checkInDate",
+      numeric: true,
+      disablePadding: false,
+      label: "Check In",
+    },
+    {
+      id: "checkOutDate",
+      numeric: true,
+      disablePadding: false,
+      label: "Check Out",
     },
     {
       id: "action",
@@ -159,7 +177,7 @@ export default function GuestAssign() {
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <GuestHead headCells={headCells} />
             <TableBody>
-              {guest.map((row) => (
+              {guest.map((row,index) => (
                 <TableRow key={row.id} sx={{ cursor: "pointer" }}>
                   <TableCell
                     component="th"
@@ -167,18 +185,26 @@ export default function GuestAssign() {
                     padding="none"
                     align="center"
                   >
-                    {row.index}
+                    {index+1}
                   </TableCell>
-                  <TableCell align="center">{row.guestName}</TableCell>
+                  <TableCell align="center">
+                  {row.guestNames.map((item, index) => (
+                        <span key={index}>
+                          {item}
+                          {index !== row.guestNames.length - 1 && ", "}
+                        </span>
+                      ))}
+                  </TableCell>
                   <TableCell align="center">{row.noOfGuest}</TableCell>
-                  <TableCell align="center">{row.guestList}</TableCell>
-                  <TableCell align="center">{row.checkIn}</TableCell>
-                  <TableCell align="center">{row.checkOut}</TableCell>
-                  <TableCell align="center">{row.country}</TableCell>
+                  <TableCell align="center">{row.noOfRooms}</TableCell>
+                  
+                  {/* <TableCell align="center">{row.country}</TableCell> */}
                   <TableCell align="center">{row.contact}</TableCell>
                   <TableCell align="center">{row.specialRequest}</TableCell>
-                  <TableCell align="center">{row.amount}</TableCell>
-
+                  <TableCell align="center">{row.totalAmount}</TableCell>
+                  <TableCell align="center">{row.paymentStatus}</TableCell>
+                  <TableCell align="center">{row.checkIn}</TableCell>
+                  <TableCell align="center">{row.checkOut}</TableCell>
                   <TableCell align="center">
                     <Link
                       to="guestAsignForm"

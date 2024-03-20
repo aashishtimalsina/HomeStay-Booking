@@ -33,9 +33,10 @@ export const navbar = [
     icon: <LocalActivityRoundedIcon />,
   },
   {
+
     id: 5,
     label: "Booking",
-    url: "guestAssign",
+    url: "booking",
     icon: <BookmarkRoundedIcon />,
   },
   {

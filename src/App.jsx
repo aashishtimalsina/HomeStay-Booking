@@ -15,8 +15,7 @@ import BarGraph from "./Admin dasbord/components/reuseable/BarGraph.jsx";
 import Host from "./Admin dasbord/Host/Host.jsx";
 import AddDetailForm from "./Admin dasbord/Host/Add.jsx";
 import Activity from "./Admin dasbord/components/Activity/Activity.jsx";
-import GuestAsign from "./Admin dasbord/components/GuestAssign/GuestAsign.jsx";
-import ActivitesViewmorePage from "./Components/Home/ActivitiViewmorePage.jsx";
+ import ActivitesViewmorePage from "./Components/Home/ActivitiViewmorePage.jsx";
 import DetailPage from "./Admin dasbord/Host/Detail.jsx";
 import Reviews from "./Admin dasbord/review/Review.jsx";
 import GuestAsignForm from "./Components/Form/GuestAsignForm.jsx";
@@ -30,11 +29,13 @@ import BookingForm from "./Components/Form/BookingForm.jsx";
 import Cookies from "js-cookie";
 import AboutUs from "./Admin dasbord/AboutUs/AboutUs.jsx";
 import EditAboutUs from "./Admin dasbord/AboutUs/EditAboutUs.jsx";
+import Booking from "./Admin dasbord/components/booking/Booking.jsx";
 
 const App = () => {
      const location = useLocation();
      const navigate = useNavigate();
   const isAdminPage = location.pathname.startsWith("/admin");
+  const islogedIn = location.pathname.at("/login") ||location.pathname.at("/signup") ;
    const token = Cookies.get("token");
    const role = Cookies.get("role");
     const { pathname } = useLocation();
@@ -48,6 +49,11 @@ const App = () => {
       navigate('/login');
     }else if(isAdminPage  && token != undefined &&  role === "user" ){
       navigate('/');
+    }else if(islogedIn && token != undefined &&  role === "user" ){
+      navigate('/');
+    }
+    else if(islogedIn && token != undefined &&  role === "admin" ){
+      navigate('/admin/dashboard');
     }
    }, [isAdminPage, token, navigate,pathname]);
   return (
@@ -59,11 +65,19 @@ const App = () => {
           <Route exact path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
-          <Route path="/host" element={<Hosts />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/host" element={<Hosts />} /
+          >
+           {
+              token == undefined && (
+                <>
+                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/login" element={<Login />} />
+                </>
+              )
+            }
           <Route path="/service" element={<Services />} />
           <Route path="/viewMore/:id" element={<ActivitesViewmorePage />} />
+          
           <Route path="/bookingForm" element={<BookingForm />} />
            {/* private routes  */}
           {isAdminPage && token !== undefined && role=="admin" &&(
@@ -80,14 +94,14 @@ const App = () => {
               <Route path="activity/add" element={<ActivityForm />} />
               <Route path="activity/detail/:id" element={<ActivityDetail />} />
               <Route path="activity/edit/:id" element={<EditActivity />} />
-              <Route path="guestAssign" element={<GuestAsign />} />
+              <Route path="Booking" element={<Booking />} />
               <Route path="review" element={<Reviews />} />
               <Route path="aboutUs" element={<AboutUs />} />
               <Route path="aboutUs/edit/:id" element={<EditAboutUs />} />
 
 
               <Route
-                path="guestAssign/guestAsignForm"
+                path="booking/guestAsignForm"
                 element={<GuestAsignForm />}
               />
             </Route>

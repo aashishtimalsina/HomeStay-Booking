@@ -2,6 +2,9 @@ import React from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Select } from "@mui/material";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+import webApi from "../../Config/config";
 
 const FormSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
@@ -12,28 +15,61 @@ const FormSchema = Yup.object().shape({
 });
 
 const GuestAsignForm = () => {
-  const handleSubmit = async (values, actions) => {
+  const apiUrl = webApi.apiUrl;
+  const navigate =useNavigate();
+  const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      // Make API call here
-      const response = await fetch("your-api-endpoint", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to submit form");
+      const token = Cookies.get("token");
+      if (!token) {
+        navigate('/login');
       }
 
-      console.log("Form submitted successfully:", values);
-      actions.resetForm();
+      const encodedToken = encodeURIComponent(token);
+
+      // Prepare the data to send including the payment method
+      const dataToSend = {
+        name: values.name,
+        noOfGuest: values.noOfGuest,
+        country: values.country,
+        email: values.email,
+        checkIn: values.checkIn,
+        checkOut: values.checkOut,
+        noOfRooms: parseInt(values.noOfRooms),
+        paymentMethod: values.paymentMethod,
+        specialRequest: values.specialRequest,
+        contact: parseInt(values.contact),
+        guestNames: values.guestNames,
+      };
+
+
+      const response = await axios.post(
+        apiUrl+ "/bookHomestay",
+        dataToSend,
+        {
+          headers: {
+            "ngrok-skip-browser-warning": true,
+            Authorization: `Bearer ${encodedToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.data.success) {
+        alert("Booked successfully!");
+        setServerError("");
+      } else {
+        setServerError(
+          "The selected check-in date is not available. Please choose another date."
+        );
+      }
     } catch (error) {
-      console.error("Error submitting form:", error);
-    } finally {
-      actions.setSubmitting(false);
+      // Handle errors
+      alert("Error booking. Please try again later.");
+      console.error(error);
     }
+
+    // Set submitting to false
+    setSubmitting(false);
   };
 
   const options = [
