@@ -106,7 +106,7 @@ const App = () => {
   };
 
   const calculateDistanceFromDestination = (userLatitude, userLongitude) => {
-    const destinationLocation = { latitude: 37.7749, longitude: -122.4194 }; // panauti ko longitude and latitde yha rakhnye haiii
+    const destinationLocation = { latitude: 37.7749, longitude: -122.4194 }; // panauti ko longitude and latitde yha rakhnye haiiicc
     const userLocation = { latitude: userLatitude, longitude: userLongitude };
     const distance = haversine(userLocation, destinationLocation);
     console.log(`Distance from user's location to destination: ${distance} meters`);

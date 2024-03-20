@@ -1,5 +1,6 @@
 import React from "react";
 import HeroSection from "./heroSection";
+import MapSection from "./map";
 import Activities from "./activities";
 import Service from "./service";
 
@@ -18,6 +19,7 @@ const Home = () => {
   return (
     <div>
       <HeroSection />
+      <MapSection />
 
       {/* {status.loginstate ? <BookingForm /> : ""} */}
 
