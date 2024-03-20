@@ -15,11 +15,10 @@ import BarGraph from "./Admin dasbord/components/reuseable/BarGraph.jsx";
 import Host from "./Admin dasbord/Host/Host.jsx";
 import AddDetailForm from "./Admin dasbord/Host/Add.jsx";
 import Activity from "./Admin dasbord/components/Activity/Activity.jsx";
- import ActivitesViewmorePage from "./Components/Home/ActivitiViewmorePage.jsx";
+import ActivitesViewmorePage from "./Components/Home/ActivitiViewmorePage.jsx";
 import DetailPage from "./Admin dasbord/Host/Detail.jsx";
 import Reviews from "./Admin dasbord/review/Review.jsx";
 import GuestAsignForm from "./Components/Form/GuestAsignForm.jsx";
-// import EditDetailForm from "./Admin dasbord/Host/Edit.jsx";
 import EditDetailForm from "./Admin dasbord/Host/Edit.jsx";
 import ActivityForm from "./Admin dasbord/components/Activity/AddActivityForm.jsx";
 import EditActivity from "./Admin dasbord/components/Activity/EditActivity.jsx";
@@ -30,33 +29,89 @@ import Cookies from "js-cookie";
 import AboutUs from "./Admin dasbord/AboutUs/AboutUs.jsx";
 import EditAboutUs from "./Admin dasbord/AboutUs/EditAboutUs.jsx";
 import Booking from "./Admin dasbord/components/booking/Booking.jsx";
+import haversine from "haversine-distance";
 
 const App = () => {
-     const location = useLocation();
-     const navigate = useNavigate();
+  const location = useLocation();
+  const navigate = useNavigate();
   const isAdminPage = location.pathname.startsWith("/admin");
-  const islogedIn = location.pathname === "/login" || location.pathname === "/signup"; ;
-   const token = Cookies.get("token");
-   const role = Cookies.get("role");
-    const { pathname } = useLocation();
+  const islogedIn =
+    location.pathname === "/login" || location.pathname === "/signup";
+  const token = Cookies.get("token");
+  const role = Cookies.get("role");
+  const { pathname } = useLocation();
 
-   useEffect(() => {
-  
-      window.scrollTo(0, 0);
-   
-  
-  if(isAdminPage  && token === undefined &&  role === undefined ){
-      navigate('/login');
-    }else if(isAdminPage  && token != undefined &&  role === "user" ){
-      navigate('/');
+  useEffect(() => {
+    window.scrollTo(0, 0);
 
-    }else if(islogedIn && token != undefined &&  role === "user" ){
-      navigate('/');
+    if (isAdminPage && token === undefined && role === undefined) {
+      navigate("/login");
+    } else if (isAdminPage && token !== undefined && role === "user") {
+      navigate("/");
+    } else if (islogedIn && token !== undefined && role === "user") {
+      navigate("/");
+    } else if (islogedIn && token !== undefined && role === "admin") {
+      navigate("/admin/dashboard");
     }
-    else if(islogedIn && token != undefined &&  role === "admin" ){
-      navigate('/admin/dashboard');
+
+    if (location.pathname === "/") {
+      requestLocationPermission();
     }
-   }, [isAdminPage, token, navigate,pathname]);
+  }, [isAdminPage, token, navigate, pathname, location.pathname]);
+
+  const requestLocationPermission = () => {
+    navigator.permissions.query({ name: "geolocation" }).then((result) => {
+      if (result.state === "granted") {
+        getCurrentPosition();
+      } else if (result.state === "prompt") {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            Cookies.set("latitude", latitude);
+            Cookies.set("longitude", longitude);
+            calculateDistanceFromDestination(latitude, longitude);
+          },
+          (error) => {
+            console.error("Error getting location:", error);
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0,
+          }
+        );
+      } else if (result.state === "denied") {
+        console.log("Location permission denied");
+      }
+    });
+  };
+
+  const getCurrentPosition = () => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        Cookies.set("latitude", latitude);
+        Cookies.set("longitude", longitude);
+        calculateDistanceFromDestination(latitude, longitude);
+      },
+      (error) => {
+        console.error("Error getting location:", error);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+      }
+    );
+  };
+
+  const calculateDistanceFromDestination = (userLatitude, userLongitude) => {
+    const destinationLocation = { latitude: 37.7749, longitude: -122.4194 }; // panauti ko longitude and latitde yha rakhnye haiii
+    const userLocation = { latitude: userLatitude, longitude: userLongitude };
+    const distance = haversine(userLocation, destinationLocation);
+    console.log(`Distance from user's location to destination: ${distance} meters`);
+  };
+
   return (
     <>
       <LoginState>
@@ -66,22 +121,19 @@ const App = () => {
           <Route exact path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
-          <Route path="/host" element={<Hosts />} /
-          >
-           {
-              token == undefined && (
-                <>
-                  <Route path="/signup" element={<Signup />} />
-                  <Route path="/login" element={<Login />} />
-                </>
-              )
-            }
+          <Route path="/host" element={<Hosts />} />
+          {token === undefined && (
+            <>
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/login" element={<Login />} />
+            </>
+          )}
           <Route path="/service" element={<Services />} />
           <Route path="/viewMore/:id" element={<ActivitesViewmorePage />} />
-          
+
           <Route path="/bookingForm" element={<BookingForm />} />
-           {/* private routes  */}
-          {isAdminPage && token !== undefined && role=="admin" &&(
+          {/* private routes  */}
+          {isAdminPage && token !== undefined && role === "admin" && (
             <Route path="/admin" element={<Admin />}>
               <Route path="dashboard" element={<Dashboard />} />
 
@@ -100,14 +152,13 @@ const App = () => {
               <Route path="aboutUs" element={<AboutUs />} />
               <Route path="aboutUs/edit/:id" element={<EditAboutUs />} />
 
-
               <Route
                 path="booking/guestAsignForm"
                 element={<GuestAsignForm />}
               />
             </Route>
           )}
-         </Routes>
+        </Routes>
         {isAdminPage ? "" : <Footer />}
       </LoginState>
     </>
