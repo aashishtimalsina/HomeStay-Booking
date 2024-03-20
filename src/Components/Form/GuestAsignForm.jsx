@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { Select } from "@mui/material";
+import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import webApi from "../../Config/config";
+import axios from "axios";
 
 const FormSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
@@ -13,9 +14,13 @@ const FormSchema = Yup.object().shape({
   phoneNumber: Yup.string().required("Phone number is required"),
   hostName: Yup.string().required("HostName is required"),
 });
-
-const GuestAsignForm = () => {
+const GuestAsignForm = (props) => {
+  const location = useLocation();
+  const { id } = location.state || {};
   const apiUrl = webApi.apiUrl;
+  const [hostdetail,setHostdetail]=useState([]);
+  const [guestdetail,setGuestdetail]=useState([]);
+
   const navigate =useNavigate();
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
@@ -71,13 +76,77 @@ const GuestAsignForm = () => {
     // Set submitting to false
     setSubmitting(false);
   };
+  const fetchHostDetail = async () => {
+    try {
+      const token = Cookies.get("token");
+      if (!token) {
+        navigate('/login');
+      }
 
-  const options = [
-    { value: "host1", label: "Host 1" },
-    { value: "host2", label: "Host 2" },
-    { value: "host3", label: "Host 3" },
-    // Add more options as needed
-  ];
+      const encodedToken = encodeURIComponent(token);
+      const response = await axios.get(
+        apiUrl+"/getHostDetails",
+        {
+          headers: {
+            "ngrok-skip-browser-warning": true,
+            Authorization: `Bearer ${encodedToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response.data);
+       if (response.data) {
+          setHostdetail(response.data.list);
+      
+      } else {
+        console.error("Empty response data");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  const fetchGuestDetail = async () => {
+    try {
+      const token = Cookies.get("token");
+      if (!token) {
+        navigate('/login');
+      }
+
+      const encodedToken = encodeURIComponent(token);
+      const response = await axios.get(
+        apiUrl+"/getBookingById"+id,
+        {
+          headers: {
+            "ngrok-skip-browser-warning": true,
+            Authorization: `Bearer ${encodedToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response.data);
+       if (response.data) {
+        setGuestdetail(response.data.list);
+      
+      } else {
+        console.error("Empty response data");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  useEffect(() => {
+    fetchHostDetail();
+    fetchGuestDetail();
+console.log("guest:" +guestdetail)
+
+}, []);
+const options = hostdetail.map(host => ({
+  value: host.hostName,
+  label: host.hostName
+}));
+
+// Add more options as needed
+
   return (
     <div className="my-10 w-full flex justify-center items-center m-auto">
       <div>
@@ -96,29 +165,23 @@ const GuestAsignForm = () => {
           onSubmit={handleSubmit}
         >
           {({ errors, touched }) => (
-            <Form className="">
-              <div className="mb-4 mr-4 w-1/2">
-                <label
-                  htmlFor="hostName"
-                  className="block text-gray-700 font-bold mb-2"
-                >
-                  HostName
-                </label>
+            <Form>
+              <FormControl
+                fullWidth
+                margin="normal"
+                error={errors.hostName && touched.hostName}
+              >
+                <InputLabel id="hostName-label">HostName</InputLabel>
                 <Field
                   name="hostName"
                   as={Select}
-                  size="small"
-                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                    errors.hostName && touched.hostName ? "border-red-500" : ""
-                  }`}
+                  labelId="hostName-label"
+                  label="HostName"
                 >
-                  <option value="" disabled>
-                    Select HostName
-                  </option>
                   {options.map((option) => (
-                    <option key={option.value} value={option.value}>
+                    <MenuItem key={option.value} value={option.value}>
                       {option.label}
-                    </option>
+                    </MenuItem>
                   ))}
                 </Field>
                 <ErrorMessage
@@ -126,148 +189,81 @@ const GuestAsignForm = () => {
                   component="div"
                   className="text-red-500"
                 />
-              </div>
+              </FormControl>
 
-              {/* More form fields */}
-              <div className="flex flex-wrap w-full">
-                <div className="flex flex-wrap">
-                  <div className="mb-4 mr-4 ">
-                    <label
-                      htmlFor="name"
-                      className="block text-gray-700 font-bold mb-2"
-                    >
-                      Guest Name
-                    </label>
-                    <Field
-                      name="name"
-                      type="text"
-                      className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                        errors.name && touched.name ? "border-red-500" : ""
-                      }`}
-                    />
-                    <ErrorMessage
-                      name="name"
-                      component="div"
-                      className="text-red-500"
-                    />
-                  </div>
-                </div>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={4}>
+                  <TextField
+                    fullWidth
+                    margin="normal"
+                    name="name"
+                    label="Guest Name"
+                    error={errors.name && touched.name}
+                    helperText={touched.name && errors.name}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <TextField
+                    fullWidth
+                    margin="normal"
+                    name="amount"
+                    label="Amount"
+                    type="number"
+                    error={errors.amount && touched.amount}
+                    helperText={touched.amount && errors.amount}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <TextField
+                    fullWidth
+                    margin="normal"
+                    name="noOfPax"
+                    label="Number of Pax"
+                    type="number"
+                    error={errors.noOfPax && touched.noOfPax}
+                    helperText={touched.noOfPax && errors.noOfPax}
+                  />
+                </Grid>
+              </Grid>
 
-                <div className="mb-4 ">
-                  <label
-                    htmlFor="amount"
-                    className="block text-gray-700 font-bold mb-2"
-                  >
-                    Amount
-                  </label>
-                  <Field
-                    name="amount"
-                    type="number"
-                    className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                      errors.amount && touched.amount ? "border-red-500" : ""
-                    }`}
-                  />
-                  <ErrorMessage
-                    name="amount"
-                    component="div"
-                    className="text-red-500"
-                  />
-                </div>
-              </div>
-              <div className="flex flex-wrap w-full">
-                <div className="mb-4 mr-4">
-                  <label
-                    htmlFor="noOfPax"
-                    className="block text-gray-700 font-bold mb-2"
-                  >
-                    Number of Pax
-                  </label>
-                  <Field
-                    name="noOfPax"
-                    type="number"
-                    className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                      errors.noOfPax && touched.noOfPax ? "border-red-500" : ""
-                    }`}
-                  />
-                  <ErrorMessage
-                    name="noOfPax"
-                    component="div"
-                    className="text-red-500"
-                  />
-                </div>
-                <div className="mb-4">
-                  <label
-                    htmlFor="phoneNumber"
-                    className="block text-gray-700 font-bold mb-2"
-                  >
-                    Phone Number
-                  </label>
-                  <Field
-                    name="phoneNumber"
-                    type="tel"
-                    className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                      errors.phoneNumber && touched.phoneNumber
-                        ? "border-red-500"
-                        : ""
-                    }`}
-                  />
-                  <ErrorMessage
-                    name="phoneNumber"
-                    component="div"
-                    className="text-red-500"
-                  />
-                </div>
-              </div>
-              <div className="flex flex-wrap w-full">
-                <div className="mb-4 mr-4">
-                  <label
-                    htmlFor="phone"
-                    className="block text-gray-700 font-bold mb-2"
-                  >
-                    Phone
-                  </label>
-                  <Field
-                    name="phone"
-                    type="tel"
-                    className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                      errors.phone && touched.phone ? "border-red-500" : ""
-                    }`}
-                  />
-                  <ErrorMessage
-                    name="phone"
-                    component="div"
-                    className="text-red-500"
-                  />
-                </div>
-                <div className="mb-4">
-                  <label
-                    htmlFor="email"
-                    className="block text-gray-700 font-bold mb-2"
-                  >
-                    Email
-                  </label>
-                  <Field
-                    name="email"
-                    type="email"
-                    className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                      errors.email && touched.email ? "border-red-500" : ""
-                    }`}
-                  />
-                  <ErrorMessage
-                    name="email"
-                    component="div"
-                    className="text-red-500"
-                  />
-                </div>
-              </div>
-              <div className="mb-4">
-                <button
-                  type="submit"
-                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                >
-                  Submit
-                </button>
-              </div>
+              <TextField
+                fullWidth
+                margin="normal"
+                name="phoneNumber"
+                label="Phone Number"
+                type="tel"
+                error={errors.phoneNumber && touched.phoneNumber}
+                helperText={touched.phoneNumber && errors.phoneNumber}
+              />
+
+              <TextField
+                fullWidth
+                margin="normal"
+                name="phone"
+                label="Phone"
+                type="tel"
+                error={errors.phone && touched.phone}
+                helperText={touched.phone && errors.phone}
+              />
+
+              <TextField
+                fullWidth
+                margin="normal"
+                name="email"
+                label="Email"
+                type="email"
+                error={errors.email && touched.email}
+                helperText={touched.email && errors.email}
+              />
+
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                className="mt-4"
+              >
+                Submit
+              </Button>
             </Form>
           )}
         </Formik>

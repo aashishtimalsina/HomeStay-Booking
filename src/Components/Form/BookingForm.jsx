@@ -14,17 +14,13 @@ const BookingForm = () => {
   const [serverError, setServerError] = useState("");
   const [pricePerGuest, setPricePerGuest] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [noOfGuest, setNoOfGuest] = useState(1);
-
+  const [noOfGuest, setNoOfGuest] = useState(0);
+ 
   const validationSchema = Yup.object({
     name: Yup.string()
       .min(3, "Name must be at least 3 characters")
       .required("Name is required"),
     country: Yup.string().required("Country is required"),
-    noOfGuest: Yup.number()
-      .min(1, "Minimum 1 guest is required")
-      .max(10, "Maximum 10 guests are allowed")
-      .required("Number of guests is required"),
     contact: Yup.string()
       .matches(/^\d{10}$/, "Phone number must be 10 digits")
       .required("Phone number is required"),
@@ -45,8 +41,8 @@ const BookingForm = () => {
       .of(Yup.string().required("Guest name is required"))
       .min(1, "At least one guest name is required")
       .required("Guest names are required"),
-      paymentStatus: Yup.array()
-      .of(Yup.string().nullable())
+      paymentStatus: 
+      Yup.string().nullable()
      
   });
   const fetchDetail = async () => {
@@ -61,8 +57,7 @@ const BookingForm = () => {
       );
       console.log(response.data);
        if (response.data) {
-        console.log(response.data.homestay_details.price);
-         setPricePerGuest(response.data.homestay_details.price);
+          setPricePerGuest(response.data.homestay_details.price);
       
       } else {
         console.error("Empty response data");
@@ -72,11 +67,16 @@ const BookingForm = () => {
     }
   };
   useEffect(() => {
+        Cookies.remove("redirectTo");
     fetchDetail();
+    calculatePrices();
+    
   }, []);
-  const calculatePrices = () => {
+  const calculatePrices = (noOfGuest) => {
+       setTotalPrice( pricePerGuest * noOfGuest );
+    
+   
         
-       setTotalPrice( pricePerGuest * noOfGuest);
   };
 
   const initialValues = {
@@ -153,7 +153,6 @@ const BookingForm = () => {
     setSubmitting(false);
   };
   
-   Cookies.remove("redirectTo");
     return (
     <div className="w-full flex justify-center">
       <Formik
@@ -190,14 +189,14 @@ const BookingForm = () => {
               component="div"
               className="text-red-500 text-xs italic"
             />
-            {/* <Field
+            <Field
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
               id="noOfGuest"
               name="noOfGuest"
               type="number"
-              onchange={totalPrice()}
+              onchange={calculatePrices(values.noOfGuest)}
                placeholder="Number of Guests"
-            /> */}
+            />
             <ErrorMessage
               name="noOfGuest"
               component="div"
@@ -286,8 +285,8 @@ const BookingForm = () => {
                           type="button"
                             onClick={() => {
                             remove(index)
-                            setNoOfGuest(noOfGuest - 1)
-                            calculatePrices();
+                            
+                            
                          }}
                           className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                         >
@@ -300,8 +299,7 @@ const BookingForm = () => {
                     type="button"
                     onClick={() => {
                       push("");
-                      setNoOfGuest(noOfGuest + 1);
-                      calculatePrices();
+                     
                     }}
                     className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   >
