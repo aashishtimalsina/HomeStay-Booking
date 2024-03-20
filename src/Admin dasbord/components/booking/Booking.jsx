@@ -207,7 +207,10 @@ export default function Booking() {
                   <TableCell align="center">{row.checkOut}</TableCell>
                   <TableCell align="center">
                     <Link
-                      to="guestAsignForm"
+                     to={{
+                      pathname: "guestAsignForm",
+                      state: { id: row.id },
+                    }}
                       display="flex"
                       justifycontent="center"
                     >

@@ -41,8 +41,8 @@ const BookingForm = () => {
       .of(Yup.string().required("Guest name is required"))
       .min(1, "At least one guest name is required")
       .required("Guest names are required"),
-      paymentStatus: Yup.array()
-      .of(Yup.string().nullable())
+      paymentStatus: 
+      Yup.string().nullable()
      
   });
   const fetchDetail = async () => {
