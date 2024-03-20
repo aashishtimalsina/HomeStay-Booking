@@ -69,7 +69,7 @@ const navigate = useNavigate();
               about: values.about,
             };
             const token = Cookies.get("token");
-            if (token) {
+            if (token && token !=="undefined") {
               const encodedToken = encodeURIComponent(token);
               const response = await axios.post(
                apiUrl,

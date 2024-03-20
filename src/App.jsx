@@ -35,6 +35,7 @@ const App = () => {
      const location = useLocation();
      const navigate = useNavigate();
   const isAdminPage = location.pathname.startsWith("/admin");
+  const islogedIn = location.pathname.at("/login") ||location.pathname.at("/signup") ;
    const token = Cookies.get("token");
    const role = Cookies.get("role");
     const { pathname } = useLocation();
@@ -48,6 +49,11 @@ const App = () => {
       navigate('/login');
     }else if(isAdminPage  && token != undefined &&  role === "user" ){
       navigate('/');
+    }else if(islogedIn && token != undefined &&  role === "user" ){
+      navigate('/');
+    }
+    else if(islogedIn && token != undefined &&  role === "admin" ){
+      navigate('/admin/dashboard');
     }
    }, [isAdminPage, token, navigate,pathname]);
   return (
@@ -59,11 +65,19 @@ const App = () => {
           <Route exact path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
-          <Route path="/host" element={<Hosts />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/host" element={<Hosts />} /
+          >
+           {
+              token == undefined && (
+                <>
+                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/login" element={<Login />} />
+                </>
+              )
+            }
           <Route path="/service" element={<Services />} />
           <Route path="/viewMore/:id" element={<ActivitesViewmorePage />} />
+          
           <Route path="/bookingForm" element={<BookingForm />} />
            {/* private routes  */}
           {isAdminPage && token !== undefined && role=="admin" &&(

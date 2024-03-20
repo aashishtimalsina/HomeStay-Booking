@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { HomeDetails } from "./constant";
 import "../../index.css";
 import Navbar from "../Navbar";
@@ -7,10 +7,19 @@ import { background, temple } from "../Constants";
 import { Addbutton } from "../../Admin dasbord/components/Button/Addbutton";
 import { Link } from "react-router-dom";
 import LoginContex from "../../context/logincontext/CreateLoginContex";
+import { Cookie } from "@mui/icons-material";
+import Cookies from "js-cookie";
 
 const HeroSection = () => {
-  const status = useContext(LoginContex);
-  return (
+  const [status,SetStatus]=useState(false);
+  useEffect(() => {
+  const token = Cookies.get('token');
+  if (token && token !=="undefined") {
+    
+   SetStatus(true);
+     }
+  }, );
+      return (
     <>
       {/* <Navbar /> */}
       {HomeDetails.map((data) => (
@@ -32,7 +41,7 @@ const HeroSection = () => {
                 </h1>
                 <p className="mb-5 text-gray-600">{data.location}</p>
                 <div className="">
-                  <Link to={status.loginstate ? "/bookingForm" : "/login"}>
+                  <Link to={status ? "/bookingForm" : "/login"}>
                     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                       Book Now
                     </button>
