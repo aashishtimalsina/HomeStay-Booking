@@ -49,11 +49,12 @@ const App = () => {
       navigate('/login');
     }else if(isAdminPage  && token != undefined &&  role === "user" ){
       navigate('/');
-    }else if(islogedIn && token != undefined &&  role === "user" ){
-      navigate('/');
-    }
-    else if(islogedIn && token != undefined &&  role === "admin" ){
-      navigate('/admin/dashboard');
+
+    // }else if(islogedIn && token != undefined &&  role === "user" ){
+    //   navigate('/');
+    // }
+    // else if(islogedIn && token != undefined &&  role === "admin" ){
+    //   navigate('/admin/dashboard');
     }
    }, [isAdminPage, token, navigate,pathname]);
   return (
