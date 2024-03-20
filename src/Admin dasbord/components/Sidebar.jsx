@@ -19,7 +19,7 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { Link, useLocation } from "react-router-dom";
-import LogoutIcon from "@mui/icons-material/LoginRounded";
+import LogoutIcon from '@mui/icons-material/LogoutRounded';
 import ProfileIcon from "@mui/icons-material/People";
 import BellIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -35,14 +35,10 @@ const customTheme = createTheme({
     primary: {
       main: "#FF5733",
       light: "#FFFFFF",
-      // light: will be calculated from palette.primary.main,
-      // dark: will be calculated from palette.primary.main,
-      // contrastText: will be calculated to contrast with palette.primary.main
     },
     secondary: {
       main: "#E0C2FF",
       light: "#F5EBFF",
-      // dark: will be calculated from palette.secondary.main,
       contrastText: "#47008F",
     },
     ternary: {
@@ -80,7 +76,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "flex-end",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
@@ -281,7 +276,7 @@ const Navbardashboard = () => {
           >
             {/* <img src="/favicon.svg" alt="logo" width={35} height={35} /> */}
             <Typography variant="h6" noWrap component="div">
-              PCH
+              Home Stay
             </Typography>
           </Box>
           <IconButton onClick={handleDrawerClose}>
@@ -294,42 +289,41 @@ const Navbardashboard = () => {
         </DrawerHeader>
         <Divider />
         <List>
-          {navbar.map((text) => {
-            return (
-              <ListItem key={text.id} disablePadding sx={{ display: "block" }}>
-                <Link to={`${text.url}`}>
-                  <ListItemButton
-                    sx={{
-                      minHeight: 48,
-                      justifyContent: open ? "initial" : "center",
-                      px: 2.5,
-                    }}
-                  >
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : "auto",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <img src={text.icon} alt="icon" width={20} height={20} />
-                    </ListItemIcon>
-
-                    <ListItemText
-                      primary={text.label}
-                      sx={{
-                        opacity: open ? 1 : 0,
-                        color:
-                          text.url === checkpathname[1]
-                            ? "black"
-                            : "rgba(0, 0, 0, 0.5)",
-                      }}
-                    />
-                  </ListItemButton>
-                </Link>
-              </ListItem>
-            );
-          })}
+        {navbar.map((text) => {
+  return (
+    <ListItem key={text.id} disablePadding sx={{ display: "block" }}>
+      <Link to={`${text.url}`}>
+        <ListItemButton
+          sx={{
+            minHeight: 48,
+            justifyContent: open ? "initial" : "center",
+            px: 2.5,
+          }}
+        >
+          <ListItemIcon
+            sx={{
+              minWidth: 0,
+              mr: open ? 3 : "auto",
+              justifyContent: "center",
+            }}
+          >
+            {text.icon} {/* Render the icon component directly */}
+          </ListItemIcon>
+          <ListItemText
+            primary={text.label}
+            sx={{
+              opacity: open ? 1 : 0,
+              color:
+                text.url === checkpathname[1]
+                  ? "black"
+                  : "rgba(0, 0, 0, 0.5)",
+            }}
+          />
+        </ListItemButton>
+      </Link>
+    </ListItem>
+  );
+})}
         </List>
         <Divider />
       </Drawer>

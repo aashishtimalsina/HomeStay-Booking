@@ -39,7 +39,7 @@ const Login = () => {
               Cookies.set("token", response.data.token, { expires: 1 }); 
               Cookies.set("username", response.data.username, { expires: 1 }); 
               Cookies.set("role", response.data.role, { expires: 1 }); 
-              navigate("/admin");
+              navigate("/admin/dashboard");
             } else if (response.data.role === "user") {
               Cookies.set("token", response.data.token, { expires: 1 }); 
               Cookies.set("username", response.data.username, { expires: 1 }); 
