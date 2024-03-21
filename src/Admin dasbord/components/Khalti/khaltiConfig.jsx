@@ -2,7 +2,7 @@ import myKey from "./khaltiKey";
 
 let config = {
     // replace this key with yours
-    "publicKey": "myKey.publicTestKey",
+    "publicKey": "test_public_key_d577b97ec4b54691a1abfeef62a5218e",
     "productIdentity": "9808733193",
     "productName": "HomeStay",
     "productUrl": "http://localhost:5173",
