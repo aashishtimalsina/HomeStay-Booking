@@ -53,7 +53,7 @@ const Activities = () => {
                   className=" absolute w-full h-full group-hover:animate-rotate rounded-md "
                 /> */}
                 <img
-                  src={image2}
+                  src={activity.image}
                   className=" absolute w-full h-full group-hover:animate-rotate rounded-md "
                 />
                 <div className="absolute z-10  w-full h-full bg-black group-hover:animate-rotate bg-opacity-5 ">

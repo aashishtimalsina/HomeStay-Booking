@@ -73,44 +73,44 @@ export const activities = [
 export const services = [
   {
     id: 1,
-    name: "Pick up services",
+    name: "Feel like home",
     description:
-      "Lorem ipsum proin gravida velit auctor sde re sit amet space.",
+      "The experience feels like being at home, with hosts going out of their way to ensure visitors feel comfortable and cared for.",
     icon: car,
   },
   {
     id: 2,
-    name: "Hosekeeper Services",
+    name: "Hot shower",
     description:
-      "Lorem ipsum proin gravida velit auctor sde re sit amet space.",
+      "There is good facility of hot shower in every house",
     icon: housekeeping,
   },
   {
     id: 3,
     name: "Wifi & Internet",
     description:
-      "Lorem ipsum proin gravida velit auctor sde re sit amet space.",
+      "High speed continious wifi is present in every home here in the homestay",
     icon: wifi,
   },
   {
     id: 4,
     name: "Laundry Services",
     description:
-      "Lorem ipsum proin gravida velit auctor sde re sit amet space.",
+      "Laundry services are near to the host home or you can do in your particular home in homestay.",
     icon: laundry,
   },
   {
     id: 5,
-    name: "Breakfast in Bed",
+    name: "Heartily meal",
     description:
-      "Lorem ipsum proin gravida velit auctor sde re sit amet space.",
+      "The meals are prepared in your particular home you live in by your host",
     icon: breakfast,
   },
   {
     id: 6,
-    name: "Swimming Pool",
+    name: "Clean drinking water",
     description:
-      "Lorem ipsum proin gravida velit auctor sde re sit amet space.",
+      "With filters and boiled water present in all homestay there is provision of good drinking water in all homes.",
     icon: pool,
   },
 ];
