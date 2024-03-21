@@ -135,7 +135,7 @@ const BookingForm = () => {
        if (response.status_code ==200) {
         return MySwal.fire({
           icon: 'success',
-          title: 'Review Deleted Successful',
+          title: 'Booking  Successful',
          });
         setServerError("");
       } else {

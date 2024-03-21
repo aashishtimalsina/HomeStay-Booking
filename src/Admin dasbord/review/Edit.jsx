@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 import { imageDb } from "../components/Firebase/Config";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
+import webApi from "../../Config/config";
 
 const uploadImage = async (imageFile) => {
   return new Promise(async (resolve, reject) => {
@@ -35,13 +36,14 @@ const EditDetailForm = () => {
     address: "",
     phone: "",
   });
+  const apiUrls = webApi.apiUrl ;
 
   useEffect(() => {
     const fetchHost = async () => {
       try {
         const response = await axios.get(
-          `https://moved-readily-chimp.ngrok-free.app/hostDetails/${id}`,
-          {
+          apiUrls+"/hostDetails/"+id,
+           {
             headers: {
               "ngrok-skip-browser-warning": true,
             },
@@ -97,8 +99,8 @@ const EditDetailForm = () => {
       if (token) {
         const encodedToken = encodeURIComponent(token);
         const response = await axios.post(
-          `https://moved-readily-chimp.ngrok-free.app/updateHost/${id}`,
-          dataToSend,
+          apiUrls+"/updateHost/"+id,
+           dataToSend,
           {
             headers: {
               "ngrok-skip-browser-warning": true,

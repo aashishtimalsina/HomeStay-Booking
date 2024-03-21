@@ -5,11 +5,13 @@ import Button from "../reusuable/button";
 import { Link } from "react-router-dom";
 import styles from "../../style";
 import axios from "axios";
+import webApi from "../../Config/config";
 
 const Activities = () => {
   const [activityData, setActivityData] = useState([]);
-  const apiUrl = "https://moved-readily-chimp.ngrok-free.app/activitiesDetails";
+  const apiUrls = webApi.apiUrl+"/activitiesDetails" ;
 
+ 
   React.useEffect(() => {
     const fetchData = async () => {
       try {

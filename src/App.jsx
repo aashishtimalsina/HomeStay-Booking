@@ -119,6 +119,11 @@ const App = () => {
         {isAdminPage ? "" : <Navbar />}
         <Routes>
           {/* public routes */}
+          <Route
+                path="booking/guestAsignForm"
+                element={<GuestAsignForm />}
+              />
+         
           <Route exact path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
@@ -154,7 +159,7 @@ const App = () => {
               <Route path="aboutUs/edit/:id" element={<EditAboutUs />} />
 
               <Route
-                path="booking/guestAsignForm"
+                path="booking/guestAsignForm/:id"
                 element={<GuestAsignForm />}
               />
             </Route>

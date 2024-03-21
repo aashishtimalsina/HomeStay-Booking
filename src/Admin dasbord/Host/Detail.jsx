@@ -10,13 +10,14 @@ const DetailPage = () => {
   const { id } = useParams();
   console.log("detail id", id);
   const [details, setDetail] = useState(null);
+  const apiUrl = webApi.apiUrl + "/saveHost";
 
   useEffect(() => {
     const fetchDetail = async () => {
       try {
         const response = await axios.get(
-          `https://moved-readily-chimp.ngrok-free.app/hostDetails/${id}`,
-          {
+          apiUrl+"/hostDetails"+id,
+           {
             headers: {
               "ngrok-skip-browser-warning": true,
             },

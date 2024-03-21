@@ -6,17 +6,20 @@ import Grid from "@mui/material/Grid";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
+import webApi from "../../Config/config";
 
 const DetailPage = () => {
   const { id } = useParams();
   console.log("detail id", id);
   const [details, setDetail] = useState(null);
+  const apiUrls = webApi.apiUrl ;
 
   useEffect(() => {
     const fetchDetail = async () => {
       try {
         const response = await axios.get(
-          `https://moved-readily-chimp.ngrok-free.app/hostDetails/${id}`,
+          apiUrls+"/hostDetails/"+id,
+
           {
             headers: {
               "ngrok-skip-browser-warning": true,

@@ -11,6 +11,7 @@
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import { useNavigate } from "react-router-dom";
+import webApi from "../../Config/config";
 
 const uploadImage = async (imageFile) => {
   return new Promise(async (resolve, reject) => {
