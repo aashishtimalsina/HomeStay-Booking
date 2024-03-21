@@ -13,24 +13,21 @@ import { useContext } from "react";
 import LoginContex from "../../context/logincontext/CreateLoginContex";
 import Review from "./review";
 import ReviewDetail from "./reviewDetail";
+import Slider from "./slider";
 
 const Home = () => {
   const status = useContext(LoginContex);
   return (
     <div>
+      <Slider />
       <HeroSection />
-      <MapSection />
-
-      {/* {status.loginstate ? <BookingForm /> : ""} */}
-
       <HomeStaySection />
-      {/* <ActivityBookingForm /> */}
-      {/* <GuestAsignForm /> */}
       <Activities />
       <Service />
       <Galary />
       <Review />
       <ReviewDetail />
+      <MapSection />
     </div>
   );
 };
