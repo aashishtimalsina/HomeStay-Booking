@@ -15,7 +15,7 @@ const Activities = () => {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(apiUrl, {
+        const response = await axios.get(apiUrls, {
           headers: {
             "ngrok-skip-browser-warning": true,
           },
