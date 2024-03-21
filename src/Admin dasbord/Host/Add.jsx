@@ -10,6 +10,7 @@
   import { imageDb } from "../components/Firebase/Config";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
+import webApi from "../../Config/config";
 
 const uploadImage = async (imageFile) => {
   return new Promise(async (resolve, reject) => {
@@ -24,6 +25,7 @@ const uploadImage = async (imageFile) => {
   });
 };
 
+const apiUrl = webApi.apiUrl + "/saveHost";
 
   const AddDetailForm = () => {
     const HostValid = Yup.object().shape({
@@ -69,8 +71,8 @@ const uploadImage = async (imageFile) => {
             if (token) {
               const encodedToken = encodeURIComponent(token);
               const response = await axios.post(
-                "https://moved-readily-chimp.ngrok-free.app/saveHost",
-                dataToSend,
+                apiUrl+"/saveHost",
+           dataToSend,
                 {
                   headers: {
                     "ngrok-skip-browser-warning": true,

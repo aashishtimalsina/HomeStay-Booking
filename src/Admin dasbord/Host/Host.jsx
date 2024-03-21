@@ -35,13 +35,13 @@ function HostHead(props) {
 
 export default function Host() {
   const [hosts, setHosts] = React.useState([]);
+  const apiUrls = webApi.apiUrl;
 
-  const apiUrl = "https://moved-readily-chimp.ngrok-free.app/getHostDetails";
-
+ 
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(apiUrl, {
+        const response = await axios.get(apiUrls+"/getHostDetails", {
           headers: {
             "ngrok-skip-browser-warning": true,
           },
@@ -62,8 +62,8 @@ export default function Host() {
   const handleDeleteHost = async (phone) => {
     try {
       await axios.delete(
-        `https://moved-readily-chimp.ngrok-free.app/deleteHost/${phone}`
-      );
+        apiUrls+"/deleteHost/"+phone
+       );
       // After successful deletion, you may want to update the hosts state to reflect the changes
       setHosts(hosts.filter((host) => host.phone !== phone));
       alert("Host deleted successfully");
