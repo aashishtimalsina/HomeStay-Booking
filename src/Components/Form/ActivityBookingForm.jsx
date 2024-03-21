@@ -9,8 +9,6 @@ import webApi from "../../Config/config";
 const ActivityBookingForm = () => {
   const apiUrl = webApi.apiUrl + "/bookActivities";
 
-  // const apiUrl = "https://moved-readily-chimp.ngrok-free.app/bookActivities"; // Replace with your API URL
-
   const validationSchema = Yup.object({
     name: Yup.string()
       .min(3, "Name must be at least 3 characters")

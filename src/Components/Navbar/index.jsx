@@ -8,11 +8,9 @@ import { LogoutOutlined } from "@mui/icons-material";
 import Cookies from "js-cookie";
 
 const Navbar = () => {
-
   const location = useLocation();
-  // const status = useContext(LoginContex);
   const pathnames = location.pathname;
- 
+
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [status, setStatus] = useState(false);
 
@@ -26,13 +24,13 @@ const Navbar = () => {
     setStatus(false);
   };
   const token = Cookies.get("token");
-   const role = Cookies.get("role");
+  const role = Cookies.get("role");
 
-   useEffect(() => {
-  if(token !=undefined){
-    setStatus(true);
-  }
-    }, [token,status]);
+  useEffect(() => {
+    if (token != undefined) {
+      setStatus(true);
+    }
+  }, [token, status]);
   return (
     <nav className="flex flex-wrap items-center w-full justify-between p-2 z-10  ">
       <div className="flex flex-wrap items-center w-full justify-between">
@@ -56,7 +54,7 @@ const Navbar = () => {
             ))}
           </div>
           <div className="flex justify-center items-center text-center">
-            {status? (
+            {status ? (
               <div className="flex justify-center items-center text-center">
                 <Link to="#">
                   <Avatar
