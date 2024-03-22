@@ -19,7 +19,7 @@ const Home = () => {
   const status = useContext(LoginContex);
   return (
     <div>
-      <Slider />
+      {/* <Slider /> */}
       <HeroSection />
       <HomeStaySection />
       <Activities />
