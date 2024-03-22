@@ -109,7 +109,9 @@ const App = () => {
   const calculateDistanceFromDestination = (userLatitude, userLongitude) => {
     const destinationLocation = { latitude: 27.58741,longitude: 85.50915 }; 
     const userLocation = { latitude: userLatitude, longitude: userLongitude };
-    const distance = haversine(userLocation, destinationLocation);
+    const distanceInMeter = haversine(userLocation, destinationLocation);
+    const distance = (distanceInMeter / 1000).toFixed(2);
+
     Cookies.set("distance", distance);
     console.log(`Distance from user's location to destination: ${distance} meters`);
   };

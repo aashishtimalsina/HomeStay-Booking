@@ -1,25 +1,28 @@
 import { Box } from "@mui/material";
 import React from "react";
-import BarGraph from "../reuseable/BarGraph";
-import LineGraph from "../reuseable/lineGraph";
-import BreadcrumbsComponent from "../reuseable/Breadcrumbs";
 import DashboardCard from "../reuseable/cards/DashboardCard";
+import Alert from "@mui/material/Alert";
+import IconButton from "@mui/material/IconButton";
+import Collapse from "@mui/material/Collapse";
+import CloseIcon from "@mui/icons-material/Close";
+import Cookies from "js-cookie";
+
 
 const cardDatas = [
   {
     label: "Total Hosts",
     number: 50000,
-    icon: "AccountBalanceWalletIcon",
+    icon: "PeopleAltIcon",
   },
   {
     label: "Total Activities",
     number: 85000,
-    icon: "CurrencyRupeeIcon",
+    icon: "AccountBalanceWalletIcon",
   },
   {
     label: "Total Booking",
     number: 200000,
-    icon: "RequestQuoteIcon",
+    icon: "CurrencyRupeeIcon",
   },
   {
     label: "Total Reviews",
@@ -27,18 +30,38 @@ const cardDatas = [
     icon: "RequestQuoteIcon",
   },
 ];
+const username = Cookies.get("username");
 
 const Dashboard = () => {
+  const [open, setOpen] = React.useState(true);
+
   return (
     <Box width="100%" pt="100px">
-    
+      <Collapse in={open}>
+        <Alert
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+          sx={{ mb: 2 }}
+        >
+          Hello {username}! Welcome to your Dashboard.
+        </Alert>
+      </Collapse>
+
       <Box
         display="flex"
         flexWrap="wrap"
         justifyContent="space-between"
-        sx={{
-          mt: "20px",
-        }}
+       
       >
         {cardDatas.map((data, index) => (
           <DashboardCard
@@ -57,14 +80,7 @@ const Dashboard = () => {
         sx={{
           mt: "80px",
         }}
-      >
-        <Box width="45%">
-          <BarGraph />
-        </Box>
-        <Box width="45%">
-          <LineGraph />
-        </Box>
-      </Box>
+      ></Box>
     </Box>
   );
 };
