@@ -3,6 +3,13 @@ import { activityimage3 } from "../Constants";
 import styles from "../../style";
 import { useFormik } from "formik";
 import { contactschema } from "../../schemas";
+import webApi from "../../Config/config";
+import Swal from "sweetalert2";
+import withReactContent from 'sweetalert2-react-content'
+
+
+const apiUrls = webApi.apiUrl;
+const MySwal = withReactContent(Swal)
 
 const initialValues = {
   name: "",
@@ -11,13 +18,50 @@ const initialValues = {
 };
 
 const Herosection = () => {
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
+
   const { values, errors, handleBlur, touched, handleChange, handleSubmit } =
     useFormik({
       initialValues: initialValues,
       validationSchema: contactschema,
-      onSubmit: (values, action) => {
-        console.log(values);
-        action.resetForm();
+      onSubmit: async (values, action) => {
+        try {
+          const response = await fetch(apiUrls+"/saveContact",
+            {
+              method: "POST",
+              headers: {
+                "ngrok-skip-browser-warning": true,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                username: values.name,
+                email: values.email,
+                message: values.message,
+              }),
+            }
+          );
+
+          if (response.ok) {
+            setSubmitSuccess(true);
+            setSubmitError(null);
+            action.resetForm();
+
+            return MySwal.fire({
+              icon: 'success',
+              title: 'Contact Form Submitted Successfully',
+              showConfirmButton: false,
+              timer: 1500
+             });
+          } else {
+            setSubmitSuccess(false);
+            setSubmitError("Failed to submit the form");
+          }
+        } catch (error) {
+          setSubmitSuccess(false);
+          setSubmitError("An error occurred while submitting the form");
+          console.error("Error:", error);
+        }
       },
     });
 
@@ -26,6 +70,11 @@ const Herosection = () => {
       <div className="w-full md:w-1/2 flex items-center">
         <div className="max-w-lg w-full mx-auto p-6">
           <h2 className="text-2xl font-semibold mb-6">Contact Us</h2>
+          {submitSuccess && (
+            <p className="text-green-500 mb-4">Contact Form submitted successfully! Stay tuned!</p>
+          )}
+          {submitError && <p className="text-red-500 mb-4">{submitError}</p>}
+
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label
