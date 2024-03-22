@@ -15,8 +15,10 @@ import Cookies from "js-cookie";
 export default function HostList() {
   const [rows, setRows] = React.useState([]);
   const Api = webApi.apiUrl;
-  const apiUrl = Api + "/getContacts";
+  const username = Cookies.get("username");
+  const apiUrl = Api + "/getAssignmentDetails/"+ username;
   const token = Cookies.get("token");
+
   const encodedToken = encodeURIComponent(token);
 
   React.useEffect(() => {
@@ -52,7 +54,7 @@ export default function HostList() {
       display="flex"
       justifyContent="space-between"
     >
-      <Typography variant="h4">Contact Form</Typography>
+      <Typography variant="h4">Get Assignment Details</Typography>
       {/* <Link to="add" display="flex" justifycontent="center">
         <Addbutton Name="Add" />
       </Link> */}
@@ -64,18 +66,23 @@ export default function HostList() {
         <TableHead>
           <TableRow>
             <TableCell>ID</TableCell>
-            <TableCell>Username</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>Message</TableCell>
+            <TableCell>No of Guests</TableCell>
+            <TableCell>Guest Name</TableCell>
+            <TableCell>Assignment Date</TableCell>
+            <TableCell>Total Stay Duration</TableCell>
+            <TableCell>Total Price</TableCell>
+            <TableCell>Host Income</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map((row) => (
             <TableRow key={row.id}>
-              <TableCell>{row.id}</TableCell>
-              <TableCell>{row.username}</TableCell>
-              <TableCell>{row.email}</TableCell>
-              <TableCell>{row.message}</TableCell>
+              <TableCell>{row.numOfGuests}</TableCell>
+              <TableCell>{row.guestName}</TableCell>
+              <TableCell>{row.assignmentDate}</TableCell>
+              <TableCell>{row.totalStayDuration}</TableCell>
+              <TableCell>{row.totalPrice}</TableCell>
+              <TableCell>{row.hostIncome}</TableCell>
             </TableRow>
           ))}
         </TableBody>
