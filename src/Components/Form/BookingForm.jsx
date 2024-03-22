@@ -2,13 +2,23 @@ import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import Khalti from "../../Admin dasbord/components/Khalti/khalti";
+// import Khalti from "../../Admin dasbord/components/Khalti/khalti";
 import Cookies from "js-cookie";
 import webApi from "../../Config/config";
 import Swal from "sweetalert2";
 import withReactContent from 'sweetalert2-react-content'
+import KhaltiCheckout from "khalti-checkout-web";
+import config from "../../Admin dasbord/components/Khalti/khaltiConfig";
 
 const BookingForm = () => {
+  const checkout = new KhaltiCheckout(config); // Initialize outside rendering
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    checkout.show({ amount:totalPrice *100}); 
+    setPaymentMethod("Khalti")
+    handleFormSubmit(e); 
+  };
 
   const [paymentMethod, setPaymentMethod] = useState("");
   const [serverError, setServerError] = useState("");
@@ -114,14 +124,13 @@ const BookingForm = () => {
         checkIn: values.checkIn,
         checkOut: values.checkOut,
         noOfRooms: parseInt(values.noOfRooms),
-        paymentMethod: values.paymentMethod,
+        paymentMethod: paymentMethod,
         specialRequest: values.specialRequest,
         contact: parseInt(values.contact),
-        paymentStatus:'paid/.' ,
+        paymentStatus:'paid' ,
         guestNames: values.guestNames,
       };
-
-      const response = await axios.post(
+      await axios.post(
         apiUrl+"/bookHomestay",
         dataToSend,
         {
@@ -132,21 +141,28 @@ const BookingForm = () => {
           },
         }
       );
-       if (response.status_code ==200) {
+
+       
         return MySwal.fire({
           icon: 'success',
           title: 'Booking  Successful',
          });
-        setServerError("");
-      } else {
-        setServerError(
-          "The selected check-in date is not available. Please choose another date."
-        );
-      }
+        // setServerError("");
+      
     } catch (error) {
       // Handle errors
-      alert("Error booking. Please try again later.");
-      console.error(error);
+      
+     if(error.status_code== 400){
+      return MySwal.fire({
+        icon: 'error',
+        title: 'Requested rooms are not available for the given dates.',
+       });
+     }else{
+      return MySwal.fire({
+        icon: 'error',
+        title: 'Please enter a valid date or phone number and verify the guest and guest number .',
+       });
+     }
     }
 
     // Set submitting to false
@@ -318,21 +334,21 @@ const BookingForm = () => {
             <Field
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
               id="paymentMethod"
-              name="paymentMethod"  
+              name="paymentMethod"
               type="text"
               placeholder="paymentMethod"
             />
             <div className="flex justify-between">
-              <div onClick={(event) => {
-                event.preventDefault()
-                setPaymentMethod("Khalti")}}
-                >
-                <Khalti amount={totalPrice}  />
-              </div>
-
+               <button
+                    onClick={handleClick}
+                    className=" bg-primary-7 hover:bg-white hover:text-primary-7 text-white transition-all duration-700  py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  >
+                    Pay Via Khalti
+                  </button>
+ 
               <button
                 type="button"
-                onClick={() => setPaymentMethod("pay on property")}
+                onClick={(e) =>{ e.preventDefault();setPaymentMethod("pay on property")}}
                 className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               >
                 Pay on property
