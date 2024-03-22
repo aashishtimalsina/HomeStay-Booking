@@ -10,6 +10,7 @@ import { Typography } from "@mui/material";
 import { imageDb } from "../Firebase/Config";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
+import webApi from "../../../Config/config";
 
 const uploadImage = async (imageFile) => {
   return new Promise(async (resolve, reject) => {
@@ -41,6 +42,8 @@ const initialValues = {
 };
 
 const ActivityForm = () => {
+  const apiUrl = webApi.apiUrl;
+
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -62,7 +65,7 @@ const ActivityForm = () => {
         if (token) {
           const encodedToken = encodeURIComponent(token);
           const response = await axios.post(
-            "https://moved-readily-chimp.ngrok-free.app/addNewActivity",
+            apiUrl+"/addNewActivity",
             dataToSend,
             {
               headers: {

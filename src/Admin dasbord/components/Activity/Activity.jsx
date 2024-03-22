@@ -17,6 +17,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import Cookies from "js-cookie";
+import webApi from "../../../Config/config";
 
 function ActivityHead(props) {
   return (
@@ -34,16 +35,24 @@ function ActivityHead(props) {
 
 export default function Activity() {
   const [activity, setActivity] = React.useState([]);
+  const token = Cookies.get("token");
+  if (!token) {
+    alert("Authentication token not found. Please log in.");
+    return;
+  }
 
+  const encodedToken = encodeURIComponent(token);
   const apiUrl =
-    "https://moved-readily-chimp.ngrok-free.app/activitiesDetails";
+    webApi.apiUrl;
 
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(apiUrl, {
+        const response = await axios.get(apiUrl+"/activitiesDetails", {
           headers: {
             "ngrok-skip-browser-warning": true,
+            Authorization: `Bearer ${encodedToken}`,
+            "Content-Type": "application/json",
           },
         });
         if (response.data) {
@@ -64,7 +73,7 @@ export default function Activity() {
       const token = Cookies.get("token");
       if (token) {
         const encodedToken = encodeURIComponent(token);
-          await axios.delete(`https://moved-readily-chimp.ngrok-free.app/deleteActivity/${id}`, {
+          await axios.delete(apiUrl+"deleteActivity/"+id, {
           headers: {
             "ngrok-skip-browser-warning": true,
             "Authorization": `Bearer ${encodedToken}`,

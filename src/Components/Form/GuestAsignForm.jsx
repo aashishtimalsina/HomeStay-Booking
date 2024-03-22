@@ -36,10 +36,8 @@ const GuestAsignForm = (props) => {
 
   const [guestPerPrice,SetguestPerPrice]=useState(null);
   const [checkInDate,SetCheckInDate]=useState(null);
-  const [formattedCheckInDate,SetformattedCheckInDate]=useState(null);
-  const [checkOutDate,SetCheckOutDate]=useState(null);
-  const [formattedCheckOutDate,SetformattedCheckOutDate]=useState(null);
-  const [totalPrice,SetTotalPrice] =useState(0);
+   const [checkOutDate,SetCheckOutDate]=useState(null);
+   const [totalPrice,SetTotalPrice] =useState(0);
   const [hostingPrice,SetHostingPrice] =useState(0);
 
   const [totalStayDuration,SetTotalStayDuration]=useState(0);
@@ -97,6 +95,19 @@ const GuestAsignForm = (props) => {
     // Set submitting to false
     setSubmitting(false);
   };
+  const calculateTotalStayDuration = () => {
+      
+    const dt1 = new Date(checkInDate);
+   const dt2 = new Date(checkOutDate);
+   const diff= Math.floor(
+     (Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) -
+       Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) /
+       (1000 * 60 * 60 * 24)
+   );
+ 
+ SetTotalStayDuration(diff);
+ console.log("ok:"+checkInDate,checkOutDate);
+};
   const fetchHostDetail = async () => {
     try {
       const token = Cookies.get("token");
@@ -127,6 +138,7 @@ const GuestAsignForm = (props) => {
     }
   };
   const fetchGuestDetail = async () => {
+    
     try {
       const token = Cookies.get("token");
       if (!token) {
@@ -149,6 +161,7 @@ const GuestAsignForm = (props) => {
           setUnAssaignedGuest(response.data.booking_details.guestNames);       
           SetCheckInDate(response.data.booking_details.checkIn);    
           SetCheckOutDate(response.data.booking_details.checkOut);   
+ 
       } else {
         console.error("Empty response data");
       }
@@ -176,7 +189,8 @@ const GuestAsignForm = (props) => {
       );
         if (response.data) {
           SetguestPerPrice(response.data.homestay_details.price);      
-         
+          calculateTotalPrice();
+          calculateHostingPrice();
       } else {
         console.error("Empty response data");
       }
@@ -184,79 +198,27 @@ const GuestAsignForm = (props) => {
       console.error("Error fetching data:", error);
     }
   };
-  const dataFormatChange = async () => {
-     if (checkInDate) {
-      const [Inyear, Inmonth, Inday] = checkInDate.split('-');
-      const formattedCheckInDates = `${Inmonth}/${Inday}/${Inyear}`;   
-      SetformattedCheckInDate(formattedCheckInDates);
-       
-  }
-  if (checkOutDate) {
-      const [Outyear, Outmonth, Outday] = checkOutDate.split('-');
-      const formattedCheckOutDates = `${Outmonth}/${Outday}/${Outyear}`;     
-      SetformattedCheckOutDate(formattedCheckOutDates);
-      
-  }
-  }
-  const calculateTotalStayDuration = () => {
-    if (formattedCheckInDate && formattedCheckOutDate) {
-     
-      
-        const dt1 = new Date(formattedCheckInDate);
-        const dt2 = new Date(formattedCheckOutDate);
-        const diff= Math.floor(
-          (Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) -
-            Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) /
-            (1000 * 60 * 60 * 24)
-        );
-       
-    
-      SetTotalStayDuration(diff);
-    }
-  };
-  const calculateTotalPrice =()=>{
-    if(guestPerPrice && totalStayDuration){
-      const totalPrices=guestPerPrice*totalStayDuration*noOfGuest;
-      SetTotalPrice(totalPrices);
-    }
-  }
-  const calculateHostingPrice =()=>{
-    if(totalPrice){
-      const hostprice=totalPrice*80/100;
-      SetHostingPrice(hostprice);
-    }
-  }
-  useEffect(() => {
-//     fetchHostDetail();
-//     fetchGuestDetail();
-//     fetchHometayInfo();
-//     dataFormatChange();
-    calculateTotalStayDuration();
-  calculateTotalPrice();
-  calculateHostingPrice();
- }, []);
  
- const debouncedCalculations = useCallback(
-  debounce(() => {
-    dataFormatChange();
-    calculateTotalStayDuration();
-    calculateTotalPrice();
-    calculateHostingPrice();
-  }, 100),
-  [
-    dataFormatChange,
-    calculateTotalStayDuration,
-    calculateTotalPrice,
-    calculateHostingPrice,
-  ]
-);
-// useEffect(() => {
-//   // fetchHostDetail();
-//   fetchGuestDetail();
-//   fetchHometayInfo();
-//   debouncedCalculations();
+  
+  const calculateTotalPrice =()=>{
+    
+       const totalPrices=guestPerPrice*totalStayDuration*noOfGuest;
+      SetTotalPrice(totalPrices);
+   }
+  const calculateHostingPrice =()=>{
+       const hostprice=totalPrice*80/100;
+      SetHostingPrice(hostprice);
+   }
+  useEffect(() => {
+    fetchHostDetail();
+    fetchGuestDetail();
+    fetchHometayInfo();
+    
+  
+ }, []);
 
-// });
+ 
+
 
 
 const options = useMemo(
@@ -384,7 +346,8 @@ const changeCheckoutDate=(selectedDate)=>{
               </FormControl>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
-                
+                <p className="text-gray-500">Check In Date</p>
+
                   {/* <TextField
                     fullWidth
                     margin="normal"
@@ -396,8 +359,20 @@ const changeCheckoutDate=(selectedDate)=>{
                     error={errors.amount && touched.amount}
                     helperText={touched.amount && errors.amount}
                   /> */}
-                
-                <LocalizationProvider  dateAdapter={AdapterDayjs}>
+                    <Field
+                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
+                id="checkOut"
+                name="checkOut"
+                value={checkInDate ||""}
+                onChange={changeCheckInDate}
+                type="date"
+              />
+              <ErrorMessage
+                name="checkOut"
+                component="div"
+                className="text-red-500 text-xs italic"
+              />
+                {/* <LocalizationProvider  dateAdapter={AdapterDayjs}>
                     <DemoContainer components={['DatePicker']}>
 
                       <DatePicker label="Check In Date"
@@ -405,29 +380,24 @@ const changeCheckoutDate=(selectedDate)=>{
                         //  value={formattedCheckInDate} 
                        />
                     </DemoContainer>
-                 </LocalizationProvider>
+                 </LocalizationProvider> */}
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                {/* <TextField
-                    fullWidth
-                    margin="normal"
-                    name="assignmentDate"
-                    label="Check Out Date"
-                    type="text"
-                    disabled
-                    value={checkOutDate || ""}
-                    error={errors.amount && touched.amount}
-                    helperText={touched.amount && errors.amount}
-                  /> */}
-                <LocalizationProvider  dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={['DatePicker']}>
-                     
-                      <DatePicker label="Check Out Date"
-                      onChange={changeCheckoutDate()}
-                        //  value={formattedCheckOutDate} 
-                       />
-                    </DemoContainer>
-                 </LocalizationProvider>
+              <p className="text-gray-500">Check Out Date</p>
+                      <Field
+                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
+                id="checkOut"
+                name="checkOut"
+                value={checkOutDate ||""}
+                onChange={changeCheckoutDate}
+                type="date"
+              />
+              <ErrorMessage
+                name="checkOut"
+                component="div"
+                className="text-red-500 text-xs italic"
+              />
+               
                 </Grid>
               </Grid>
                
@@ -455,7 +425,7 @@ const changeCheckoutDate=(selectedDate)=>{
                     name="totalPrice "
                     label="Total Price "
                     type="number"
-                    value={totalPrice||0}
+                    value={totalPrice}
                     InputLabelProps={{
                       shrink: !!totalPrice,
                     }}
@@ -472,7 +442,7 @@ const changeCheckoutDate=(selectedDate)=>{
                     name="hostIncome "
                     label="Host Income "
                     disabled
-                    value={hostingPrice||0}
+                    value={hostingPrice}
                     type="number"
                     InputLabelProps={{
                       shrink: !!hostingPrice,

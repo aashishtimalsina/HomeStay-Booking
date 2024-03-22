@@ -29,6 +29,7 @@ import Cookies from "js-cookie";
 import AboutUs from "./Admin dasbord/AboutUs/AboutUs.jsx";
 import EditAboutUs from "./Admin dasbord/AboutUs/EditAboutUs.jsx";
 import Booking from "./Admin dasbord/components/booking/Booking.jsx";
+import ActivityBooking from "./Admin dasbord/ActivityBooking/ActivityBooking.jsx";
 import haversine from "haversine-distance";
 
 const App = () => {
@@ -154,6 +155,7 @@ const App = () => {
               <Route path="activity/detail/:id" element={<ActivityDetail />} />
               <Route path="activity/edit/:id" element={<EditActivity />} />
               <Route path="Booking" element={<Booking />} />
+              <Route path="activityBooking" element={<ActivityBooking />} />
               <Route path="review" element={<Reviews />} />
               <Route path="aboutUs" element={<AboutUs />} />
               <Route path="aboutUs/edit/:id" element={<EditAboutUs />} />

@@ -3,6 +3,7 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import webApi from "../../../Config/config";
 
 const ActivityDetail = () => {
   const { id } = useParams();
@@ -12,8 +13,8 @@ const ActivityDetail = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const apiUrl = `https://moved-readily-chimp.ngrok-free.app/getActivityDetail/${id}`;
-      try {
+      const apiUrl = webApi.apiUrl+"/getActivityDetail/"+id;
+       try {
         const response = await axios.get(apiUrl, {
           headers: {
             "ngrok-skip-browser-warning": true,
