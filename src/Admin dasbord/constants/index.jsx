@@ -29,25 +29,31 @@ export const navbar = [
   },
   {
     id: 4,
+    label: "SignUp Host",
+    url: "signupHost",
+    icon: <GiteRoundedIcon />,
+  },
+  {
+    id: 5,
     label: "Activity",
     url: "activity",
     icon: <LocalActivityRoundedIcon />,
   },
   {
-    id: 4,
+    id: 6,
     label: "Activity Booking",
     url: "activityBooking",
     icon: <BookmarkAddTwoTone />,
   },
   {
 
-    id: 5,
+    id: 7,
     label: "Booking",
     url: "booking",
     icon: <BookmarkRoundedIcon />,
   },
   {
-    id: 6,
+    id: 8,
     label: "Review",
     url: "review",
     icon: <ReviewsIconRoundedIcon />,
