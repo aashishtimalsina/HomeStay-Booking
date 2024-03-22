@@ -6,6 +6,7 @@ import PeopleAltRoundedIcon from "@mui/icons-material/PeopleAltRounded";
 import ReviewsIconRoundedIcon from '@mui/icons-material/ReviewsRounded';
 import InfoIconRoundedIcon from "@mui/icons-material/InfoRounded";
 import BookmarkRoundedIcon from '@mui/icons-material/BookmarkRounded';
+import { BookmarkAddTwoTone } from "@mui/icons-material";
 
 export const navbar = [
   {
@@ -31,6 +32,12 @@ export const navbar = [
     label: "Activity",
     url: "activity",
     icon: <LocalActivityRoundedIcon />,
+  },
+  {
+    id: 4,
+    label: "Activity Booking",
+    url: "activityBooking",
+    icon: <BookmarkAddTwoTone />,
   },
   {
 

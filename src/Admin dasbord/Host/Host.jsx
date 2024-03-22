@@ -9,7 +9,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
 import axios from "axios";
 
@@ -18,6 +18,8 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import webApi from "../../Config/config";
+import Cookies from "js-cookie";
 
 function HostHead(props) {
   return (
@@ -34,16 +36,23 @@ function HostHead(props) {
 }
 
 export default function Host() {
+  const navigate = useNavigate();
   const [hosts, setHosts] = React.useState([]);
   const apiUrls = webApi.apiUrl;
-
- 
+  const token = Cookies.get("token");
+  if (token == 'undefined') {
+    navigate('/login')
+  }
+    const encodedToken = encodeURIComponent(token);
+  
   React.useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(apiUrls+"/getHostDetails", {
           headers: {
             "ngrok-skip-browser-warning": true,
+            Authorization: `Bearer ${encodedToken}`,
+            "Content-Type": "application/json",
           },
         });
         if (response.data) {

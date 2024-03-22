@@ -58,7 +58,7 @@ const BookingForm = () => {
       console.log(response.data);
        if (response.data) {
           setPricePerGuest(response.data.homestay_details.price);
-      
+          calculatePrices;
       } else {
         console.error("Empty response data");
       }
@@ -69,7 +69,7 @@ const BookingForm = () => {
   useEffect(() => {
         Cookies.remove("redirectTo");
     fetchDetail();
-    calculatePrices();
+    
     
   }, []);
   const calculatePrices = (noOfGuest) => {
@@ -318,13 +318,16 @@ const BookingForm = () => {
             <Field
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
               id="paymentMethod"
-              name="paymentMethod"
+              name="paymentMethod"  
               type="text"
               placeholder="paymentMethod"
             />
             <div className="flex justify-between">
-              <div onClick={() => setPaymentMethod("Khalti")}>
-                <Khalti values={totalPrice} />
+              <div onClick={(event) => {
+                event.preventDefault()
+                setPaymentMethod("Khalti")}}
+                >
+                <Khalti amount={totalPrice}  />
               </div>
 
               <button

@@ -11,6 +11,7 @@ import Cookies from "js-cookie";
 import { imageDb } from "../Firebase/Config";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
+import webApi from "../../../Config/config";
 
 const uploadImage = async (imageFile) => {
   return new Promise(async (resolve, reject) => {
@@ -36,11 +37,11 @@ const validationSchema = Yup.object({
 const EditActivity = () => {
   const { id } = useParams();
   const [activity, setActivity] = React.useState(null);
-
+  const apiUrl = webApi.apiUrl;
   React.useEffect(() => {
     const fetchActivity = async () => {
       try {
-        const response = await axios.get(`https://moved-readily-chimp.ngrok-free.app/getActivityDetail/${id}`, {
+        const response = await axios.get(apiUrl+"/getActivityDetail/"+id, {
           headers: {
             "ngrok-skip-browser-warning": true,
           },
@@ -86,7 +87,7 @@ const EditActivity = () => {
         };
 
         await axios.put(
-          `https://moved-readily-chimp.ngrok-free.app/updateActivity/${id}`,
+          apiUrl+"/updateActivity"+id,
           dataToSend,
           {
             headers: {
