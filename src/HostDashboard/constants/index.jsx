@@ -2,7 +2,7 @@ import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
 import GiteRoundedIcon from "@mui/icons-material/GiteRounded";
 
 
-export const navbar = [
+export const hostnavbar = [
   {
     id: 1,
     label: "Dashboard",
@@ -12,7 +12,7 @@ export const navbar = [
   {
     id: 2,
     label: "Host",
-    url: "host",
+    url: "hostlist",
     icon: <GiteRoundedIcon />,
   },
 ];
