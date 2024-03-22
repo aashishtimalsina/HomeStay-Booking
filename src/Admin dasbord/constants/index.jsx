@@ -6,6 +6,7 @@ import PeopleAltRoundedIcon from "@mui/icons-material/PeopleAltRounded";
 import ReviewsIconRoundedIcon from '@mui/icons-material/ReviewsRounded';
 import InfoIconRoundedIcon from "@mui/icons-material/InfoRounded";
 import BookmarkRoundedIcon from '@mui/icons-material/BookmarkRounded';
+import ContactMailRoundedIcon from '@mui/icons-material/ContactMailRounded';
 import { BookmarkAddTwoTone } from "@mui/icons-material";
 
 export const navbar = [
@@ -51,6 +52,12 @@ export const navbar = [
     label: "Review",
     url: "review",
     icon: <ReviewsIconRoundedIcon />,
+  },
+  {
+    id: 7,
+    label: "Contact Us",
+    url: "contact",
+    icon: <ContactMailRoundedIcon />,
   },
 ];
 export const HostHeadTitle = [

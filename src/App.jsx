@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Home from "./Components/Home";
-import Contact from "./Components/Contact";
 import About from "./Components/About";
 import Hosts from "./Components/Host";
 import Footer from "./Components/Footers";
@@ -10,6 +9,7 @@ import Services from "./Components/Services";
 import Signup from "./Components/signup";
 import Login from "./Components/login";
 import Dashboard from "./Admin dasbord/components/Dashboard/Dashboard";
+import Contact from "./Admin dasbord/Contact/contact.jsx";
 import Admin from "./Admin dasbord/index.jsx";
 import BarGraph from "./Admin dasbord/components/reuseable/BarGraph.jsx";
 import Host from "./Admin dasbord/Host/Host.jsx";
@@ -107,13 +107,15 @@ const App = () => {
   };
 
   const calculateDistanceFromDestination = (userLatitude, userLongitude) => {
-    const destinationLocation = { latitude: 27.58741,longitude: 85.50915 }; 
+    const destinationLocation = { latitude: 27.58741, longitude: 85.50915 };
     const userLocation = { latitude: userLatitude, longitude: userLongitude };
     const distanceInMeter = haversine(userLocation, destinationLocation);
     const distance = (distanceInMeter / 1000).toFixed(2);
 
     Cookies.set("distance", distance);
-    console.log(`Distance from user's location to destination: ${distance} meters`);
+    console.log(
+      `Distance from user's location to destination: ${distance} meters`
+    );
   };
 
   return (
@@ -122,11 +124,8 @@ const App = () => {
         {isAdminPage ? "" : <Navbar />}
         <Routes>
           {/* public routes */}
-          <Route
-                path="booking/guestAsignForm"
-                element={<GuestAsignForm />}
-              />
-         
+          <Route path="booking/guestAsignForm" element={<GuestAsignForm />} />
+
           <Route exact path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
@@ -161,7 +160,7 @@ const App = () => {
               <Route path="review" element={<Reviews />} />
               <Route path="aboutUs" element={<AboutUs />} />
               <Route path="aboutUs/edit/:id" element={<EditAboutUs />} />
-
+              <Route path="contact" element={<Contact />} />
               <Route
                 path="booking/guestAsignForm/:id"
                 element={<GuestAsignForm />}
