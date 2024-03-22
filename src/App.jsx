@@ -34,16 +34,16 @@ import haversine from "haversine-distance";
 
 import HostAdmin from "./HostDashboard/index.jsx";
 import HostDashboard from "./HostDashboard/components/Dashboard/Dashboard.jsx";
-import HostList from "./HostDashboard/Host/Host.jsx";
+import HostList from "./HostDashboard/Host/HostList.jsx";
 
 
 const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isAdminPage = location.pathname.startsWith("/admin");
-  const isHostPage = location.pathname.startsWith("/host");
-  const islogedIn =
-    location.pathname === "/login" || location.pathname === "/signup";
+  const isHostPage = location.pathname.startsWith("/hostadmin");
+  const isHostlogedIn = location.pathname === "/hostadmin";
+  const islogedIn = location.pathname === "/login" || location.pathname === "/signup";
   const token = Cookies.get("token");
   const role = Cookies.get("role");
   const { pathname } = useLocation();
@@ -58,8 +58,8 @@ const App = () => {
       navigate("/");
     } else if (islogedIn && token !== undefined && role === "admin") {
       navigate("/admin/dashboard");
-    } else if (isHostPage && token !== undefined && role === "host") {
-      navigate("/host/dashboard");
+    } else if (isHostlogedIn && token !== undefined && role === "host") {
+      navigate("/hostadmin/dashboard");
     } 
 
     if (location.pathname === "/") {
@@ -128,7 +128,7 @@ const App = () => {
   return (
     <>
       <LoginState>
-        {isAdminPage ? "" : <Navbar />}
+        {isAdminPage || isHostPage ? "" : <Navbar />}
         <Routes>
           <Route path="booking/guestAsignForm" element={<GuestAsignForm />} />
           <Route exact path="/" element={<Home />} />
@@ -170,15 +170,17 @@ const App = () => {
           )}
           
           {isHostPage && token !== undefined && role === "host" && (
-            <Route path="/host" element={<HostAdmin />}>
+            <Route path="/hostadmin" element={<HostAdmin />}>
               <Route path="dashboard" element={<HostDashboard />} />
-              <Route path="host" element={<HostList />} />
+              <Route path="hostlist" element={<HostList />} />
               {/* <Route path="host/add" element={<AddDetailForm />} />
               <Route path="host/update/:id" element={<EditDetailForm />} />
               <Route path="host/detail/:id" element={<DetailPage />} /> */}
             </Route>
           )}
         </Routes>
+        {isAdminPage || isHostPage ? "" : <Footer />}
+
       </LoginState>
     </>
   );

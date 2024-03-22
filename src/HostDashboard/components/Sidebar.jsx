@@ -25,7 +25,7 @@ import BellIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
 // import { withRouter } from "react-router-dom";
 
-import { navbar } from "../constants";
+import { hostnavbar } from "../constants";
 import { logo } from "../assets";
 import { Avatar, Menu, MenuItem, Select, TextField } from "@mui/material";
 import Cookies from "js-cookie";
@@ -289,7 +289,7 @@ const Navbardashboard = () => {
         </DrawerHeader>
         <Divider />
         <List>
-          {navbar.map((text) => {
+          {hostnavbar.map((text) => {
             return (
               <ListItem key={text.id} disablePadding sx={{ display: "block" }}>
                 <Link to={`${text.url}`}>
