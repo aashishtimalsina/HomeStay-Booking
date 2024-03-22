@@ -32,16 +32,21 @@ import Booking from "./Admin dasbord/components/booking/Booking.jsx";
 import ActivityBooking from "./Admin dasbord/ActivityBooking/ActivityBooking.jsx";
 import haversine from "haversine-distance";
 
+import HostAdmin from "./HostDashboard/index.jsx";
+import HostDashboard from "./HostDashboard/components/Dashboard/Dashboard.jsx";
+import HostList from "./HostDashboard/Host/Host.jsx";
+
+
 const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isAdminPage = location.pathname.startsWith("/admin");
+  const isHostPage = location.pathname.startsWith("/host");
   const islogedIn =
     location.pathname === "/login" || location.pathname === "/signup";
   const token = Cookies.get("token");
   const role = Cookies.get("role");
   const { pathname } = useLocation();
-
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -53,12 +58,14 @@ const App = () => {
       navigate("/");
     } else if (islogedIn && token !== undefined && role === "admin") {
       navigate("/admin/dashboard");
-    }
+    } else if (isHostPage && token !== undefined && role === "host") {
+      navigate("/host/dashboard");
+    } 
 
     if (location.pathname === "/") {
       requestLocationPermission();
     }
-  }, [isAdminPage, token, navigate, pathname, location.pathname]);
+  }, [isAdminPage, isHostPage,token, navigate, pathname, location.pathname]);
 
   const requestLocationPermission = () => {
     navigator.permissions.query({ name: "geolocation" }).then((result) => {
@@ -123,9 +130,7 @@ const App = () => {
       <LoginState>
         {isAdminPage ? "" : <Navbar />}
         <Routes>
-          {/* public routes */}
           <Route path="booking/guestAsignForm" element={<GuestAsignForm />} />
-
           <Route exact path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
@@ -138,18 +143,14 @@ const App = () => {
           )}
           <Route path="/service" element={<Services />} />
           <Route path="/viewMore/:id" element={<ActivitesViewmorePage />} />
-
           <Route path="/bookingForm" element={<BookingForm />} />
-          {/* private routes  */}
           {isAdminPage && token !== undefined && role === "admin" && (
             <Route path="/admin" element={<Admin />}>
               <Route path="dashboard" element={<Dashboard />} />
 
               <Route path="host" element={<Host />} />
               <Route path="host/add" element={<AddDetailForm />} />
-
               <Route path="host/update/:id" element={<EditDetailForm />} />
-              {/* {/* <Route path="host/delete/:id" element={<Hostdelete />} /> */}
               <Route path="host/detail/:id" element={<DetailPage />} />
               <Route path="activity" element={<Activity />} />
               <Route path="activity/add" element={<ActivityForm />} />
@@ -167,8 +168,17 @@ const App = () => {
               />
             </Route>
           )}
+          
+          {isHostPage && token !== undefined && role === "host" && (
+            <Route path="/host" element={<HostAdmin />}>
+              <Route path="dashboard" element={<HostDashboard />} />
+              <Route path="host" element={<HostList />} />
+              {/* <Route path="host/add" element={<AddDetailForm />} />
+              <Route path="host/update/:id" element={<EditDetailForm />} />
+              <Route path="host/detail/:id" element={<DetailPage />} /> */}
+            </Route>
+          )}
         </Routes>
-        {isAdminPage ? "" : <Footer />}
       </LoginState>
     </>
   );
