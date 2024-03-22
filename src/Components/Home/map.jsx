@@ -70,7 +70,7 @@ const MapSection = () => {
       </CardContent>
       <CardActions>
         <Typography variant="body2" color="text.secondary">
-          Distance = {distance} Meter
+          Distance = {distance} KM
         </Typography>
       </CardActions>
     </Card>
