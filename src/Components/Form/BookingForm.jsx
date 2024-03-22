@@ -20,7 +20,8 @@ const BookingForm = () => {
     handleFormSubmit(e); 
   };
 
-  const [paymentMethod, setPaymentMethod] = useState("");
+
+  const [paymentMethod, setPaymentMethod] = useState("No Payment method");
   const [serverError, setServerError] = useState("");
   const [pricePerGuest, setPricePerGuest] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -160,7 +161,7 @@ const BookingForm = () => {
      }else{
       return MySwal.fire({
         icon: 'error',
-        title: 'Please enter a valid date or phone number and verify the guest and guest number .',
+        title: 'Please enter a valid date or phone number and verify the guest and number of guest .',
        });
      }
     }
@@ -348,7 +349,7 @@ const BookingForm = () => {
  
               <button
                 type="button"
-                onClick={(e) =>{ e.preventDefault();setPaymentMethod("pay on property")}}
+                onClick={()=>{setPaymentMethod("Property")}}
                 className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               >
                 Pay on property

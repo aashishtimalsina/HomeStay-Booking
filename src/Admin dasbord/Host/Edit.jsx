@@ -6,6 +6,7 @@ import Grid from "@mui/material/Grid";
 import { Typography } from "@mui/material";
 import { useParams } from "react-router";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 import { imageDb } from "../components/Firebase/Config";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
@@ -37,15 +38,24 @@ const EditDetailForm = () => {
     phone: "",
   });
   const apiUrl = webApi.apiUrl + "/saveHost";
-
+const navigate =useNavigate()
   useEffect(() => {
     const fetchHost = async () => {
       try {
+        const token = Cookies.get("token");
+        if (token == "undefined") {
+        
+          navigate('/login');
+        }else{
+          const encodedToken = encodeURIComponent(token);
+        }
         const response = await axios.get(
           apiUrl+"/hostDetails/"+id,
           {
             headers: {
               "ngrok-skip-browser-warning": true,
+              Authorization: `Bearer ${encodedToken}`,
+              "Content-Type": "application/json",
             },
           }
         );
@@ -96,7 +106,7 @@ const EditDetailForm = () => {
       };
 
       const token = Cookies.get("token");
-      if (token) {
+      if (token !="undefined") {
         const encodedToken = encodeURIComponent(token);
         const response = await axios.post(
           apiUrl+"/updateHost/"+id,

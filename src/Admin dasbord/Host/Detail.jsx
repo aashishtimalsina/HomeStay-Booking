@@ -3,23 +3,31 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-
+import webApi from "../../Config/config";
+import Cookies from "js-cookie";
+ 
 const DetailPage = () => {
+  
   const { id } = useParams();
   console.log("detail id", id);
   const [details, setDetail] = useState(null);
-  const apiUrl = webApi.apiUrl + "/saveHost";
-
+  const apiUrl = webApi.apiUrl ;
+  const token = Cookies.get("token");
+  if (!token) {
+   }
+    const encodedToken = encodeURIComponent(token);
   useEffect(() => {
     const fetchDetail = async () => {
       try {
         const response = await axios.get(
-          apiUrl+"/hostDetails"+id,
+          apiUrl+"/hostDetails/"+id,
            {
             headers: {
               "ngrok-skip-browser-warning": true,
+                Authorization: `Bearer ${encodedToken}`,
+              "Content-Type": "application/json",
             },
           }
         );

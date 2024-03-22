@@ -96,7 +96,7 @@ const EditDetailForm = () => {
       };
 
       const token = Cookies.get("token");
-      if (token) {
+      if (token !="undefined") {
         const encodedToken = encodeURIComponent(token);
         const response = await axios.post(
           apiUrls+"/updateHost/"+id,

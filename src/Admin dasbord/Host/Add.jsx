@@ -25,7 +25,7 @@ const uploadImage = async (imageFile) => {
   });
 };
 
-const apiUrl = webApi.apiUrl + "/saveHost";
+const apiUrl = webApi.apiUrl ;
 
   const AddDetailForm = () => {
     const HostValid = Yup.object().shape({

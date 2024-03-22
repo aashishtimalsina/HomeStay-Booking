@@ -31,6 +31,7 @@ import EditAboutUs from "./Admin dasbord/AboutUs/EditAboutUs.jsx";
 import Booking from "./Admin dasbord/components/booking/Booking.jsx";
 import ActivityBooking from "./Admin dasbord/ActivityBooking/ActivityBooking.jsx";
 import haversine from "haversine-distance";
+import HostSignUp from "./Admin dasbord/HostSignUp.jsx";
 
 import HostAdmin from "./HostDashboard/index.jsx";
 import HostDashboard from "./HostDashboard/components/Dashboard/Dashboard.jsx";
@@ -149,6 +150,7 @@ const App = () => {
               <Route path="dashboard" element={<Dashboard />} />
 
               <Route path="host" element={<Host />} />
+              <Route path="signupHost" element={<HostSignUp />} />
               <Route path="host/add" element={<AddDetailForm />} />
               <Route path="host/update/:id" element={<EditDetailForm />} />
               <Route path="host/detail/:id" element={<DetailPage />} />
