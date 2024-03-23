@@ -16,15 +16,16 @@ const ActivitiesViewmorePage = () => {
     const fetchData = async () => {
       const apiUrl = webApi.apiUrl + '/getActivityDetail/'+id;
 
-      console.log("apiUrl", apiUrl);
+
+    
       try {
         const response = await axios.get(apiUrl, {
           headers: {
             "ngrok-skip-browser-warning": true,
           },
         });
-        console.log("response", response.data);
         if (response.data) {
+          console.log(response.data);
           setActivity(response.data.activity_details || null);
         } else {
           console.error("Empty response data");
@@ -63,7 +64,7 @@ const ActivitiesViewmorePage = () => {
         {/* Photo Section */}
         <div className="w-full md:w-1/2">
           <img
-            src={activityimage4}
+            src={activity?activity.image:activityimage4}
             alt="Activity"
             className="w-full h-auto object-cover"
           />

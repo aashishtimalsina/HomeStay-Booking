@@ -110,7 +110,7 @@ const BookingForm = () => {
   const handleFormSubmit = async (values, { setSubmitting }) => {
     try {
       const token = Cookies.get("token");
-      if (!token) {
+      if (token  =="undefined" ) {
         alert("Authentication token not found. Please log in.");
         return;
       }
