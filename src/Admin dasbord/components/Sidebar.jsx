@@ -19,7 +19,7 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { Link, useLocation } from "react-router-dom";
-import LogoutIcon from '@mui/icons-material/LogoutRounded';
+import LogoutIcon from "@mui/icons-material/LogoutRounded";
 import ProfileIcon from "@mui/icons-material/People";
 import BellIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -145,13 +145,13 @@ const Navbardashboard = () => {
   };
 
   const handleClose = () => {
-      Cookies.remove("token");
-      Cookies.remove("username");
-      Cookies.remove("role");
+    Cookies.remove("token");
+    Cookies.remove("username");
+    Cookies.remove("role");
   };
 
-  const username = Cookies.get('username');
-  const role = Cookies.get('role');
+  const username = Cookies.get("username");
+  const role = Cookies.get("role");
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar position="fixed" open={open}>
@@ -289,41 +289,41 @@ const Navbardashboard = () => {
         </DrawerHeader>
         <Divider />
         <List>
-        {navbar.map((text) => {
-  return (
-    <ListItem key={text.id} disablePadding sx={{ display: "block" }}>
-      <Link to={`${text.url}`}>
-        <ListItemButton
-          sx={{
-            minHeight: 48,
-            justifyContent: open ? "initial" : "center",
-            px: 2.5,
-          }}
-        >
-          <ListItemIcon
-            sx={{
-              minWidth: 0,
-              mr: open ? 3 : "auto",
-              justifyContent: "center",
-            }}
-          >
-            {text.icon} {/* Render the icon component directly */}
-          </ListItemIcon>
-          <ListItemText
-            primary={text.label}
-            sx={{
-              opacity: open ? 1 : 0,
-              color:
-                text.url === checkpathname[1]
-                  ? "black"
-                  : "rgba(0, 0, 0, 0.5)",
-            }}
-          />
-        </ListItemButton>
-      </Link>
-    </ListItem>
-  );
-})}
+          {navbar.map((text) => {
+            return (
+              <ListItem key={text.id} disablePadding sx={{ display: "block" }}>
+                <Link to={`${text.url}`}>
+                  <ListItemButton
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
+                    }}
+                  >
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {text.icon} {/* Render the icon component directly */}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={text.label}
+                      sx={{
+                        opacity: open ? 1 : 0,
+                        color:
+                          text.url === checkpathname[1]
+                            ? "black"
+                            : "rgba(0, 0, 0, 0.5)",
+                      }}
+                    />
+                  </ListItemButton>
+                </Link>
+              </ListItem>
+            );
+          })}
         </List>
         <Divider />
       </Drawer>

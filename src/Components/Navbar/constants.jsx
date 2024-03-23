@@ -15,7 +15,7 @@ export const navbar = [
     url: "/host",
   },
   {
-    id: 3,
+    id: 4,
     label: "Services",
     url: "/service",
   },

@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 import LoginContex from "../../context/logincontext/CreateLoginContex";
 import styles from "../../style";
 import { Loginschema } from "../../schemas";
-import webApi from '../../Config/config'
+import webApi from "../../Config/config";
 
 const initialValues = {
   username: "",
@@ -36,19 +36,24 @@ const Login = () => {
             console.log("role:", response.data.role);
 
             if (response.data.role === "admin") {
-              Cookies.set("token", response.data.token, { expires: 1 }); 
-              Cookies.set("username", response.data.username, { expires: 1 }); 
-              Cookies.set("role", response.data.role, { expires: 1 }); 
+              Cookies.set("token", response.data.token, { expires: 1 });
+              Cookies.set("username", response.data.username, { expires: 1 });
+              Cookies.set("role", response.data.role, { expires: 1 });
               navigate("/admin/dashboard");
+            } else if (response.data.role === "host") {
+              Cookies.set("token", response.data.token, { expires: 1 });
+              Cookies.set("username", response.data.username, { expires: 1 });
+              Cookies.set("role", response.data.role, { expires: 1 });
+              navigate("/hostadmin/dashboard");
             } else if (response.data.role === "user") {
-              Cookies.set("token", response.data.token, { expires: 1 }); 
-              Cookies.set("username", response.data.username, { expires: 1 }); 
-              Cookies.set("role", response.data.role, { expires: 1 }); 
-              if(Cookies.get('redirectTo') !== "undefined"){
-                navigate(Cookies.get('redirectTo'))
-              }else{
-              navigate("/");
-            }
+              Cookies.set("token", response.data.token, { expires: 1 });
+              Cookies.set("username", response.data.username, { expires: 1 });
+              Cookies.set("role", response.data.role, { expires: 1 });
+              if (Cookies.get("redirectTo") !== "undefined") {
+                navigate(Cookies.get("redirectTo"));
+              } else {
+                navigate("/");
+              }
               status.setLoginState("true");
             } else {
               console.error(

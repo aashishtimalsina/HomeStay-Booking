@@ -3,7 +3,6 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import Navbar from "../Navbar";
 import { activityimage4 } from "../Constants";
-
 import ActivityBookingForm from "../Form/ActivityBookingForm";
 import LoginContex from "../../context/logincontext/CreateLoginContex";
 import webApi from "../../Config/config";
@@ -16,7 +15,9 @@ const ActivitiesViewmorePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       const apiUrl = webApi.apiUrl + '/getActivityDetail/'+id;
-      // const apiUrl = `https://moved-readily-chimp.ngrok-free.app/getActivityDetail/${id}`;
+
+
+    
       try {
         const response = await axios.get(apiUrl, {
           headers: {

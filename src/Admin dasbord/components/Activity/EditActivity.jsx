@@ -87,7 +87,7 @@ const EditActivity = () => {
         };
 
         await axios.put(
-          apiUrl+"/updateActivity"+id,
+          apiUrl+"/updateActivity/"+id,
           dataToSend,
           {
             headers: {
