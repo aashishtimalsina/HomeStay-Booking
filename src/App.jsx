@@ -10,6 +10,7 @@ import Signup from "./Components/signup";
 import Login from "./Components/login";
 import Dashboard from "./Admin dasbord/components/Dashboard/Dashboard";
 import Contact from "./Admin dasbord/Contact/contact.jsx";
+import ContactForm from "./Components/Contact/index.jsx";
 import Admin from "./Admin dasbord/index.jsx";
 import BarGraph from "./Admin dasbord/components/reuseable/BarGraph.jsx";
 import Host from "./Admin dasbord/Host/Host.jsx";
@@ -133,7 +134,7 @@ const App = () => {
         <Routes>
           <Route path="booking/guestAsignForm" element={<GuestAsignForm />} />
           <Route exact path="/" element={<Home />} />
-          <Route path="/contact" element={<Contact />} />
+          <Route path="/contact" element={<ContactForm />} />
           <Route path="/about" element={<About />} />
           <Route path="/host" element={<Hosts />} />
           {token === undefined && (
