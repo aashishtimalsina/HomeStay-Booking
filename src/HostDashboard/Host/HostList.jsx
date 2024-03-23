@@ -71,7 +71,7 @@ export default function HostList() {
             <TableCell>Assignment Date</TableCell>
             <TableCell>Total Stay Duration</TableCell>
             <TableCell>Total Price</TableCell>
-            <TableCell>Host Income<assignmentDate/TableCell>
+            <TableCell>Host Income</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
