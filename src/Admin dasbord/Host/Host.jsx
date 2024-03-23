@@ -70,12 +70,21 @@ export default function Host() {
   }, []);
   const handleDeleteHost = async (phone) => {
     try {
-      await axios.delete(
-        apiUrls+"/deleteHost/"+phone
-       );
-      // After successful deletion, you may want to update the hosts state to reflect the changes
-      setHosts(hosts.filter((host) => host.phone !== phone));
-      alert("Host deleted successfully");
+      const token = Cookies.get("token");
+      if (token) {
+        const encodedToken = encodeURIComponent(token);
+        await axios.delete(`${apiUrls}/deleteHost/${phone}`, {
+          headers: {
+            "ngrok-skip-browser-warning": true,
+            Authorization: `Bearer ${encodedToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+        setHosts(hosts.filter((host) => host.phone !== phone));
+        alert("Host deleted successfully");
+      } else {
+        console.error("Token not found");
+      }
     } catch (error) {
       console.error("Error deleting host:", error);
     }

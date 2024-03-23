@@ -37,18 +37,15 @@ const EditDetailForm = () => {
     address: "",
     phone: "",
   });
-  const apiUrl = webApi.apiUrl + "/saveHost";
-const navigate =useNavigate()
+  const apiUrl = webApi.apiUrl ;
+  const navigate =useNavigate()
   useEffect(() => {
     const fetchHost = async () => {
       try {
         const token = Cookies.get("token");
-        if (token == "undefined") {
-        
-          navigate('/login');
-        }else{
+     
           const encodedToken = encodeURIComponent(token);
-        }
+        
         const response = await axios.get(
           apiUrl+"/hostDetails/"+id,
           {
@@ -108,7 +105,7 @@ const navigate =useNavigate()
       const token = Cookies.get("token");
       if (token !="undefined") {
         const encodedToken = encodeURIComponent(token);
-        const response = await axios.post(
+        const response = await axios.put(
           apiUrl+"/updateHost/"+id,
            dataToSend,
           {
