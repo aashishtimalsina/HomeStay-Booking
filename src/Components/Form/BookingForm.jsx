@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import withReactContent from 'sweetalert2-react-content'
 import KhaltiCheckout from "khalti-checkout-web";
 import config from "../../Admin dasbord/components/Khalti/khaltiConfig";
+import { useNavigate } from "react-router-dom";
 
 const BookingForm = () => {
   const checkout = new KhaltiCheckout(config); // Initialize outside rendering
@@ -106,12 +107,13 @@ const BookingForm = () => {
   };
   const apiUrl = webApi.apiUrl ;
   const MySwal = withReactContent(Swal)
+  const navigate =useNavigate()
 
   const handleFormSubmit = async (values, { setSubmitting }) => {
     try {
       const token = Cookies.get("token");
       if (token  =="undefined" ) {
-        alert("Authentication token not found. Please log in.");
+      navigate('/login')
         return;
       }
 
