@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
+import { Formik, Form, Field, ErrorMessage, FieldArray, useFormikContext } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 // import Khalti from "../../Admin dasbord/components/Khalti/khalti";
@@ -94,10 +94,10 @@ const BookingForm = () => {
   const initialValues = {
     name: "",
     country: "",
-    noOfGuest: 0,
+    noOfGuest: "",
     checkIn: null,
     checkOut: "",
-    noOfRooms: 0,
+    noOfRooms: "",
     contact: null,
     email: "",
     specialRequest: "",
@@ -128,6 +128,7 @@ const BookingForm = () => {
         checkOut: values.checkOut,
         noOfRooms: parseInt(values.noOfRooms),
         paymentMethod: paymentMethod,
+        totalAmount:totalPrice.toFixed(2),  
         specialRequest: values.specialRequest,
         contact: parseInt(values.contact),
         paymentStatus:'paid' ,
@@ -171,7 +172,12 @@ const BookingForm = () => {
     // Set submitting to false
     setSubmitting(false);
   };
-  
+  const submitForm   = useFormikContext();
+  const   PropertySubmit =()=>{
+    // console.log(submitForm);
+    setPaymentMethod("Property")
+    // submitForm();  
+  }
     return (
     <div className="w-full flex justify-center">
       <Formik
@@ -351,7 +357,11 @@ const BookingForm = () => {
  
               <button
                 type="button"
-                onClick={()=>{setPaymentMethod("Property")}}
+                onClick={() => {
+                  setPaymentMethod("Property");
+                  submitForm();
+                }}
+                // onClick={PropertySubmit}
                 className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               >
                 Pay on property

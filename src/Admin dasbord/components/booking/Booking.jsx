@@ -8,6 +8,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
+import TablePagination from "@mui/material/TablePagination";
 import Paper from "@mui/material/Paper";
 import { Link, useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
@@ -40,11 +41,22 @@ function GuestHead(props) {
 
 export default function Booking() {
   const navigate = useNavigate();
+
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
   const [guest, setGuest] = React.useState([]);
 
   const apiUrl = webApi.apiUrl + "/getAllBooking";
   const token = Cookies.get("token");
- 
+  const emptyRows =
+  page > 0 ? Math.max(0, (1 + page) * rowsPerPage - guest.length) : 0;
+
+const visibleGuests = React.useMemo(
+  () =>
+    guest.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+  [guest, page, rowsPerPage]
+);
 
    React.useEffect(() => {
     if (!token || token == 'undefined') {
@@ -84,10 +96,28 @@ export default function Booking() {
       label: "S.N",
     },
     {
-      id: "guestName",
+      id: "name",
+      numeric: false,
+      disablePadding: true,
+      label: " Name",
+    },
+    {
+      id: "email",
+      numeric: false,
+      disablePadding: true,
+      label: " Email",
+    },
+    {
+      id: "Guest",
       numeric: false,
       disablePadding: true,
       label: "Guest Name",
+    },
+    {
+      id: "unAssaignName",
+      numeric: false,
+      disablePadding: true,
+      label: "UnAssaign Guest",
     },
     {
       id: "noOfPax",
@@ -102,12 +132,12 @@ export default function Booking() {
       label: "No Of Rooms",
     },
  
-    // {
-    //   id: "country",
-    //   numeric: true,
-    //   disablePadding: false,
-    //   label: "Country",
-    // },
+    {
+      id: "country",
+      numeric: true,
+      disablePadding: false,
+      label: "Country",
+    },
     {
       id: "phoneNumber",
       numeric: true,
@@ -121,16 +151,22 @@ export default function Booking() {
       label: "Special Request",
     },
     {
-      id: "amount",
+      id: "totalAmount",
       numeric: true,
       disablePadding: false,
-      label: "Amount",
+      label: "totalAmount",
     },
     {
       id: "paymentStatus",
       numeric: true,
       disablePadding: false,
       label: "Payment Status",
+    },
+    {
+      id: "paymentMethod",
+      numeric: true,
+      disablePadding: false,
+      label: "Payment Method",
     },
     {
       id: "checkInDate",
@@ -177,7 +213,7 @@ export default function Booking() {
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <GuestHead headCells={headCells} />
             <TableBody>
-              {guest.map((row,index) => (
+              {visibleGuests.map((row,index) => (
                 <TableRow key={row.id} sx={{ cursor: "pointer" }}>
                   <TableCell
                     component="th"
@@ -187,8 +223,19 @@ export default function Booking() {
                   >
                     {index+1}
                   </TableCell>
+                  <TableCell align="center">{row.name}</TableCell>
+                  <TableCell align="center">{row.email}</TableCell>
+
                   <TableCell align="center">
                   {row.guestNames.map((item, index) => (
+                        <span key={index}>
+                          {item}
+                          {index !== row.guestNames.length - 1 && ", "}
+                        </span>
+                      ))}
+                  </TableCell>
+                  <TableCell align="center">
+                  {row.unassignedGuests.map((item, index) => (
                         <span key={index}>
                           {item}
                           {index !== row.guestNames.length - 1 && ", "}
@@ -198,11 +245,12 @@ export default function Booking() {
                   <TableCell align="center">{row.noOfGuest}</TableCell>
                   <TableCell align="center">{row.noOfRooms}</TableCell>
                   
-                  {/* <TableCell align="center">{row.country}</TableCell> */}
+                  <TableCell align="center">{row.country}</TableCell>
                   <TableCell align="center">{row.contact}</TableCell>
                   <TableCell align="center">{row.specialRequest}</TableCell>
                   <TableCell align="center">{row.totalAmount}</TableCell>
                   <TableCell align="center">{row.paymentStatus}</TableCell>
+                  <TableCell align="center">{row.paymentMethod}</TableCell>
                   <TableCell align="center">{row.checkIn}</TableCell>
                   <TableCell align="center">{row.checkOut}</TableCell>
                   <TableCell align="center">
@@ -228,7 +276,20 @@ export default function Booking() {
                 </TableRow>
               ))}
             </TableBody>
+            
           </Table>
+          <TablePagination
+  rowsPerPageOptions={[5, 10, 25]}
+  component="div"
+  count={guest.length}
+  rowsPerPage={rowsPerPage}
+  page={page}
+  onPageChange={(event, newPage) => setPage(newPage)}
+  onRowsPerPageChange={(event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  }}
+/>
         </TableContainer>
       </Paper>
     </Box>
