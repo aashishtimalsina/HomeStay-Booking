@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
+import { Formik, Form, Field, ErrorMessage, FieldArray, useFormikContext } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 // import Khalti from "../../Admin dasbord/components/Khalti/khalti";
@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import withReactContent from 'sweetalert2-react-content'
 import KhaltiCheckout from "khalti-checkout-web";
 import config from "../../Admin dasbord/components/Khalti/khaltiConfig";
+import { useNavigate } from "react-router-dom";
 
 const BookingForm = () => {
   const checkout = new KhaltiCheckout(config); // Initialize outside rendering
@@ -93,10 +94,10 @@ const BookingForm = () => {
   const initialValues = {
     name: "",
     country: "",
-    noOfGuest: 0,
+    noOfGuest: "",
     checkIn: null,
     checkOut: "",
-    noOfRooms: 0,
+    noOfRooms: "",
     contact: null,
     email: "",
     specialRequest: "",
@@ -106,12 +107,13 @@ const BookingForm = () => {
   };
   const apiUrl = webApi.apiUrl ;
   const MySwal = withReactContent(Swal)
+  const navigate =useNavigate()
 
   const handleFormSubmit = async (values, { setSubmitting }) => {
     try {
       const token = Cookies.get("token");
       if (token  =="undefined" ) {
-        alert("Authentication token not found. Please log in.");
+      navigate('/login')
         return;
       }
 
@@ -126,6 +128,7 @@ const BookingForm = () => {
         checkOut: values.checkOut,
         noOfRooms: parseInt(values.noOfRooms),
         paymentMethod: paymentMethod,
+        totalAmount:totalPrice.toFixed(2),  
         specialRequest: values.specialRequest,
         contact: parseInt(values.contact),
         paymentStatus:'paid' ,
@@ -169,7 +172,12 @@ const BookingForm = () => {
     // Set submitting to false
     setSubmitting(false);
   };
-  
+  const submitForm   = useFormikContext();
+  const   PropertySubmit =()=>{
+    // console.log(submitForm);
+    setPaymentMethod("Property")
+    // submitForm();  
+  }
     return (
     <div className="w-full flex justify-center">
       <Formik
@@ -349,7 +357,11 @@ const BookingForm = () => {
  
               <button
                 type="button"
-                onClick={()=>{setPaymentMethod("Property")}}
+                onClick={() => {
+                  setPaymentMethod("Property");
+                  submitForm();
+                }}
+                // onClick={PropertySubmit}
                 className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               >
                 Pay on property

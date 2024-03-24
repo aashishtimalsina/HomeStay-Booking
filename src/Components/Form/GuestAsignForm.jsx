@@ -7,23 +7,21 @@ import Cookies from "js-cookie";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import webApi from "../../Config/config";
 import axios from "axios";
-import dayjs from "dayjs";
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { debounce } from 'lodash'; 
+import Swal from "sweetalert2";
+import withReactContent from 'sweetalert2-react-content'
 
 const FormSchema = Yup.object().shape({
   
-  // name: Yup.string().required("Name is required"),
+   hostName: Yup.string().required("Host is Required "),
   // email: Yup.string().email("Invalid email").required("Email is required"),
   // noOfPax: Yup.number().required("Number of passengers is required"),
   // phoneNumber: Yup.string().required("Phone number is required"),
   // hostName: Yup.string().required("HostName is required"),
 });
+
 const GuestAsignForm = (props) => {
-  const today = new Date();
+   const MySwal = withReactContent(Swal)
+   const today = new Date();
   const defaultDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
   // const id =props.match.params.id
   const location = useLocation();
@@ -32,9 +30,9 @@ const GuestAsignForm = (props) => {
   
   const [hostdetail,setHostdetail]=useState([]);
   const [unAssaignedGuest,setUnAssaignedGuest]=useState([]);
-  const [noOfGuest,SetNoOfGuest]=useState(null);
-
-  const [guestPerPrice,SetguestPerPrice]=useState(null);
+  const [unAssaignedGuestWise, setUnAssaignedGuestWise] = useState(['No Data Found']);
+    const [noOfGuest,SetNoOfGuest]=useState(0);
+  const [guestPerPrice,SetguestPerPrice]=useState(0);
   const [checkInDate,SetCheckInDate]=useState(null);
    const [checkOutDate,SetCheckOutDate]=useState(null);
    const [totalPrice,SetTotalPrice] =useState(0);
@@ -43,7 +41,9 @@ const GuestAsignForm = (props) => {
   const [totalStayDuration,SetTotalStayDuration]=useState(0);
   
   const navigate =useNavigate();
+  
   const handleSubmit = async (values, { setSubmitting }) => {
+   
     try {
       const token = Cookies.get("token");
       if (!token) {
@@ -53,21 +53,19 @@ const GuestAsignForm = (props) => {
       const encodedToken = encodeURIComponent(token);
        // Prepare the data to send including the payment method
       const dataToSend = {
-     
-      noOfGuest: values.noOfGuest ||noOfGuest,
-         guestNames: personName, 
-         hostName:values.hostName,
-        country: values.country,
-        email: values.email,
-        checkIn: values.checkIn,
-        checkOut: values.checkOut,
-        noOfRooms: parseInt(values.noOfRooms),
-        paymentMethod: values.paymentMethod,
+        booking_id:id,
+        guestName: personName, 
+        hostName:values.hostName,
+        assignmentDate: checkInDate,
+         numOfGuests: noOfGuest,
+         totalStayDuration: totalStayDuration,
+         totalPrice: totalPrice,
+         hostIncome: hostingPrice,
        };
-        console.log(dataToSend);  
-
+       console.log(dataToSend);
+ 
       const response = await axios.post(
-        apiUrl+ "/bookHomestay",
+        apiUrl+ "/assign",
         dataToSend,
         {
           headers: {
@@ -77,27 +75,37 @@ const GuestAsignForm = (props) => {
           },
         }
       );
-
-      if (response.data.success) {
-        alert("Assaigned successfully!");
-        setServerError("");
+       if (response.data.status == 200 ) {
+        return MySwal.fire({
+          icon: 'success',
+          title: 'Booking  Successful',
+         });
       } else {
-        setServerError(
-          "The selected check-in date is not available. Please choose another date."
-        );
+        return MySwal.fire({
+          icon: 'error',
+          title: 'Booking  Successful',
+         });
       }
     } catch (error) {
-      // Handle errors
-      alert("Error booking. Please try again later.");
-      console.error(error);
+      console.log(error)
+      if(error.response.status == 400){
+        return MySwal.fire({
+          icon: 'error',
+          title: error.response.data.status,
+         });
+      }else{
+      return MySwal.fire({
+        icon: 'error',
+        title: 'Please check the Guest Field Or Try Again ! Something went wrong ',
+       });
+      }
     }
 
     // Set submitting to false
     setSubmitting(false);
   };
-  const calculateTotalStayDuration = () => {
-      
-    const dt1 = new Date(checkInDate);
+  function calculateTotalStayDuration  (checkInDate,checkOutDate)  {
+     const dt1 = new Date(checkInDate);
    const dt2 = new Date(checkOutDate);
    const diff= Math.floor(
      (Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) -
@@ -106,8 +114,9 @@ const GuestAsignForm = (props) => {
    );
  
  SetTotalStayDuration(diff);
- console.log("ok:"+checkInDate,checkOutDate);
+
 };
+
   const fetchHostDetail = async () => {
     try {
       const token = Cookies.get("token");
@@ -157,10 +166,12 @@ const GuestAsignForm = (props) => {
         }
       );
         if (response.data) {
-           SetNoOfGuest(response.data.booking_details.noOfGuest);      
+          //  SetNoOfGuest(response.data.booking_details.noOfGuest);      
           setUnAssaignedGuest(response.data.booking_details.guestNames);       
+          setUnAssaignedGuestWise(response.data.booking_details.guestNames);       
           SetCheckInDate(response.data.booking_details.checkIn);    
           SetCheckOutDate(response.data.booking_details.checkOut);   
+          calculateTotalStayDuration(response.data.booking_details.checkIn,response.data.booking_details.checkOut);
  
       } else {
         console.error("Empty response data");
@@ -189,8 +200,8 @@ const GuestAsignForm = (props) => {
       );
         if (response.data) {
           SetguestPerPrice(response.data.homestay_details.price);      
-          calculateTotalPrice();
-          calculateHostingPrice();
+          calculateTotalPrice(response.data.homestay_details.price,totalStayDuration,noOfGuest);
+          
       } else {
         console.error("Empty response data");
       }
@@ -199,16 +210,32 @@ const GuestAsignForm = (props) => {
     }
   };
  
+  function handleDataAssaignedWise(UnAssaignedGuest,assaignedGuest) {
+    const dublicateExtracted=[];
+    const mergedArray = [...new Set([...UnAssaignedGuest, ...assaignedGuest])];
+    const uniqueArray = mergedArray.filter((item, index) => {
+      if (UnAssaignedGuest.indexOf(item) != assaignedGuest.indexOf(item)) {
+        dublicateExtracted.push(item);
+        
+    }
+
+  });
+     if(dublicateExtracted.length === 0){
+     
+      setUnAssaignedGuestWise(['No Data Found'])
+    }else{
+        setUnAssaignedGuestWise(dublicateExtracted)
+      }
+  }
+    function calculateTotalPrice(GuestPerPrice,TotalStayduration,NoOfGuest){
+        const TotalPrices=parseFloat(GuestPerPrice*TotalStayduration*NoOfGuest);
+        
+       SetTotalPrice(TotalPrices.toFixed(2));
+   }
+  function calculateHostingPrice (TotalPrice){
+        SetHostingPrice((TotalPrice*80/100).toFixed(2));
+   }
   
-  const calculateTotalPrice =()=>{
-    
-       const totalPrices=guestPerPrice*totalStayDuration*noOfGuest;
-      SetTotalPrice(totalPrices);
-   }
-  const calculateHostingPrice =()=>{
-       const hostprice=totalPrice*80/100;
-      SetHostingPrice(hostprice);
-   }
   useEffect(() => {
     fetchHostDetail();
     fetchGuestDetail();
@@ -217,7 +244,7 @@ const GuestAsignForm = (props) => {
   
  }, []);
 
- 
+
 
 
 
@@ -229,24 +256,31 @@ const options = useMemo(
     })),
   [hostdetail]
 );
-
 const [personName, setPersonName] = React.useState([]);
  const handleChange = (event) => {
   setPersonName(event.target.value);
+  handleDataAssaignedWise(unAssaignedGuest,event.target.value)
+  SetNoOfGuest(event.target.value.length);
 };
-const changeCheckInDate=(selectedDate)=>{
-  
-     SetCheckInDate(selectedDate);
+const changeCheckInDate=(event)=>{
+
+     SetCheckInDate(event.target.value);
+      if(checkOutDate){
+      calculateTotalStayDuration(event.target.value,checkOutDate);
+    }
 }
-const changeCheckoutDate=(selectedDate)=>{
-  
-     SetCheckOutDate(selectedDate);
+const changeCheckoutDate=(event)=>{
+ 
+     SetCheckOutDate(event.target.value);
+      if(checkInDate ){
+        calculateTotalStayDuration(checkInDate,event.target.value);
+     }
 }
+
   return (
     <div className="my-10 w-full flex justify-center items-center m-auto">
       <div>
-        <h2 className="text-2xl font-bold mb-4">Guest Information</h2>
-        <Formik
+      <h2 class="heading-2xl font-bold mb-4">Guest Information <span class="small-text">(Per Guest: {guestPerPrice})</span></h2>        <Formik
           initialValues={{
             name: "",
             email: "",
@@ -260,30 +294,17 @@ const changeCheckoutDate=(selectedDate)=>{
           validationSchema={FormSchema}
           onSubmit={handleSubmit}
         >
-          {({ errors, touched }) => (
+          {({ errors, touched ,values}) => (
             <Form>
              
 
               <Grid container spacing={2}>
-              <Grid item xs={12} sm={5}>
-                  <TextField
-                    fullWidth
-                    margin="normal"
-                    name="noOfGuest"
-                    value={noOfGuest || ''}
-                    label="No Of Guests"
-                    error={errors.noOfGuest && touched.noOfGuest}
-                    helperText={touched.noOfGuest && errors.noOfGuest}
-                    InputLabelProps={{
-                      shrink: !!noOfGuest,
-                    }}
-                  />
-                </Grid>
+              
                 <Grid item xs={12} sm={7}>
                 <FormControl
                 fullWidth
                 
-                error={errors.hostName && touched.hostName}
+                error={errors.guestName && touched.guestName}
               >
                 <InputLabel id="demo-mutiple-name-label">Guest Name</InputLabel>
 
@@ -291,7 +312,7 @@ const changeCheckoutDate=(selectedDate)=>{
                           labelId="demo-mutiple-name-label"
                           id="demo-mutiple-name"
                           multiple
-                          name="guestNames"
+                          name="guestName"
                           value={personName}
                           onChange={handleChange}
                           input={<Input />}
@@ -317,9 +338,79 @@ const changeCheckoutDate=(selectedDate)=>{
                             </MenuItem>
                           ))}
                     </Select>
+                 
+           
              </FormControl>
+            
+                </Grid>
+                <Grid item xs={12} sm={5}>
+                  <TextField
+                    fullWidth
+                    margin="normal"
+                    name="noOfGuest"
+                    value={noOfGuest || 0}
+                    label="No Of Guests"
+                    // error={errors.noOfGuest && touched.noOfGuest}
+                    // helperText={touched.noOfGuest && errors.noOfGuest}
+                    InputLabelProps={{
+                      shrink: noOfGuest!=null,
+                    }}
+                    
+                  />
+                  <ErrorMessage
+                  name="noOfGuest"
+                  component="div"
+                  className="text-red-500"
+                />
                 </Grid>
                 </Grid>
+                <Grid container spacing={2}>
+              
+              <Grid item xs={12} sm={7}>
+              <FormControl
+              fullWidth
+              
+           
+            >
+              <InputLabel id="demo-mutiple-name-label">Un-Assaigned Guest Name</InputLabel>
+
+                 <Select
+                        labelId="demo-mutiple-name-label"
+                        id="demo-mutiple-name"
+                        multiple
+                        name="unAsaignedGuest"
+                        value={unAssaignedGuestWise}
+                        onChange={handleDataAssaignedWise}
+                        input={<Input />}
+                        disabled
+                        // MenuProps={MenuProps}
+                        sx={{
+                          width: '100%', // Set the width to 100% for full width
+                          '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                              borderColor: 'transparent', // Remove the border
+                            },
+                            '&:hover fieldset': {
+                              borderColor: 'transparent', // Remove the hover border
+                            },
+                            '&.Mui-focused fieldset': {
+                              borderColor: 'transparent', // Remove the focused border
+                            },
+                          },
+                        }}
+                      >
+                        {unAssaignedGuest.map((name) => (
+                          <MenuItem key={name} value={name}>
+                            {name}
+                          </MenuItem>
+                        ))}
+                          <MenuItem key="No Data Found" value="No Data Found">
+                            No Data Found
+                          </MenuItem>
+                  </Select>
+           </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={5}>
                 <FormControl
                 fullWidth
                 margin="normal"
@@ -331,6 +422,7 @@ const changeCheckoutDate=(selectedDate)=>{
                   as={Select}
                   labelId="hostName-label"
                   label="HostName"
+                  
                 >
                   {options.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
@@ -344,6 +436,8 @@ const changeCheckoutDate=(selectedDate)=>{
                   className="text-red-500"
                 />
               </FormControl>
+              </Grid>
+              </Grid>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                 <p className="text-gray-500">Check In Date</p>
@@ -366,21 +460,14 @@ const changeCheckoutDate=(selectedDate)=>{
                 value={checkInDate ||""}
                 onChange={changeCheckInDate}
                 type="date"
+                disabled
               />
               <ErrorMessage
                 name="checkOut"
                 component="div"
                 className="text-red-500 text-xs italic"
               />
-                {/* <LocalizationProvider  dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={['DatePicker']}>
-
-                      <DatePicker label="Check In Date"
-                      onChange={changeCheckInDate()}
-                        //  value={formattedCheckInDate} 
-                       />
-                    </DemoContainer>
-                 </LocalizationProvider> */}
+            
                 </Grid>
                 <Grid item xs={12} sm={6}>
               <p className="text-gray-500">Check Out Date</p>
@@ -391,6 +478,7 @@ const changeCheckoutDate=(selectedDate)=>{
                 value={checkOutDate ||""}
                 onChange={changeCheckoutDate}
                 type="date"
+                disabled
               />
               <ErrorMessage
                 name="checkOut"
@@ -410,12 +498,14 @@ const changeCheckoutDate=(selectedDate)=>{
                     name="totalStayDuration"
                     label="Total Stay Duration "
                     type="number"
-                    value={totalStayDuration || 0}
+                    value={totalStayDuration}
+                    onChange={calculateTotalPrice(guestPerPrice,totalStayDuration,noOfGuest)}
                     InputLabelProps={{
-                      shrink: !!totalStayDuration,
+                      shrink: totalStayDuration !=null,
                     }}
-                    error={errors.amount && touched.amount}
-                    helperText={touched.amount && errors.amount}
+                    disabled
+                    error={errors.totalStayDuration && touched.totalStayDuration}
+                    helperText={touched.totalStayDuration && errors.totalStayDuration}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -424,45 +514,32 @@ const changeCheckoutDate=(selectedDate)=>{
                     margin="normal"
                     name="totalPrice "
                     label="Total Price "
-                    type="number"
                     value={totalPrice}
+                    onchange={calculateHostingPrice (totalPrice)}
+                    type="number"
                     InputLabelProps={{
-                      shrink: !!totalPrice,
+                      shrink: totalPrice!=null,
                     }}
-                    error={errors.totalPrice && touched.totalPrice}
+                    disabled
+                     error={errors.totalPrice && touched.totalPrice}
                     helperText={touched.totalPrice && errors.totalPrice}
                   />
                 </Grid>
               </Grid>
               <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    margin="normal"
-                    name="hostIncome "
-                    label="Host Income "
-                    disabled
-                    value={hostingPrice}
-                    type="number"
-                    InputLabelProps={{
-                      shrink: !!hostingPrice,
-                    }}
-                    error={errors.hostIncome && touched.hostIncome}
-                    helperText={touched.hostIncome && errors.hostIncome}
-                  />
-                </Grid>
+             
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
                     margin="normal"
                     name="hostIncome "
                     label="Host Income "
-                    disabled
-                    value={hostingPrice||0}
-                    type="number"
+                    value={hostingPrice}
+                     type="number"
                     InputLabelProps={{
-                      shrink: !!hostingPrice,
+                      shrink: hostingPrice!=null,
                     }}
+                    disabled
                     error={errors.hostIncome && touched.hostIncome}
                     helperText={touched.hostIncome && errors.hostIncome}
                   />
@@ -474,7 +551,7 @@ const changeCheckoutDate=(selectedDate)=>{
 
               <Button
                 type="submit"
-                variant="contained"
+                 variant="contained"
                 color="primary"
                 className="mt-4"
               >

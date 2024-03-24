@@ -132,7 +132,8 @@ const App = () => {
       <LoginState>
         {isAdminPage || isHostPage ? "" : <Navbar />}
         <Routes>
-          <Route path="booking/guestAsignForm" element={<GuestAsignForm />} />
+
+          <Route path="/guestAsignForm" element={<GuestAsignForm />} />
           <Route exact path="/" element={<Home />} />
           <Route path="/contact" element={<ContactForm />} />
           <Route path="/about" element={<About />} />
