@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../../style";
 import { useFormik } from "formik";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { signupSchema } from "../../schemas";
 import webApi from "../../Config/config";
@@ -13,28 +13,26 @@ const initialValues = {
   conform_password: "",
 };
 const apiUrl = webApi.apiUrl + "/addNewUser";
-
-// const apiUrl = "https://moved-readily-chimp.ngrok-free.app/addNewUser";
-
+ 
 const Signup = () => {
+  const navigate = useNavigate();
   const { values, errors, handleBlur, touched, handleChange, handleSubmit } =
     useFormik({
       initialValues: initialValues,
       validationSchema: signupSchema,
       onSubmit: (values, action) => {
-        console.log(values);
-
+ 
         axios
           .post(apiUrl, values)
           .then((response) => {
-            console.log("Response:", response.data);
-            response.status === "success"
-              ? alert("Cannot signup")
-              : Navigate("/login");
+            console.log("Response:", response);
+           if (response.status  == 200){
+            navigate("/login")
+
+           }
+              
           })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
+         
         action.resetForm();
       },
     });

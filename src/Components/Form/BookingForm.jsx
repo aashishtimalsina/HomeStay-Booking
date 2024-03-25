@@ -18,20 +18,30 @@ const BookingForm = () => {
     e.preventDefault();
     checkout.show({ amount:totalPrice *100}); 
     setPaymentMethod("Khalti")
-    handleFormSubmit(e); 
-  };
+    setIsClicked(true)
+   };
 
 
-  const [paymentMethod, setPaymentMethod] = useState("No Payment method");
-  const [serverError, setServerError] = useState("");
+   const [serverError, setServerError] = useState("");
+   const [paymentMethod, setPaymentMethod] = useState(null);
   const [pricePerGuest, setPricePerGuest] = useState(0);
-  const [totalPrice, setTotalPrice] = useState(0);
   const [noOfGuest, setNoOfGuest] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);  
+   const [isClicked, setIsClicked] = useState(false);
+   const [checkInDate,SetCheckInDate]=useState(null);
+   const [checkOutDate,SetCheckOutDate]=useState(null);
+   const [totalStayDuration,SetTotalStayDuration]=useState(0);
+
  
-  const validationSchema = Yup.object({
+  const [validationSchema,setValidateSchema] = useState(Yup.object({
     name: Yup.string()
       .min(3, "Name must be at least 3 characters")
       .required("Name is required"),
+      
+      paymentMethods: paymentMethod
+      ? Yup.string()
+      : Yup.string().required('Payment should be done to continue booking')
+     ,
     country: Yup.string().required("Country is required"),
     contact: Yup.string()
       .matches(/^\d{10}$/, "Phone number must be 10 digits")
@@ -48,15 +58,15 @@ const BookingForm = () => {
       .min(1, "Minimum 1 room is required")
       .max(10, "Maximum 10 rooms are allowed")
       .required("Number of rooms is required"),
-    paymentMethod: Yup.string().required("Payment method is required"),
-    guestNames: Yup.array()
+     guestNames: Yup.array()
       .of(Yup.string().required("Guest name is required"))
       .min(1, "At least one guest name is required")
       .required("Guest names are required"),
       paymentStatus: 
-      Yup.string().nullable()
+      Yup.string().nullable(),
+    
      
-  });
+  }));
   const fetchDetail = async () => {
     try {
       const response = await axios.get(
@@ -83,13 +93,18 @@ const BookingForm = () => {
     fetchDetail();
     
     
-  }, []);
-  const calculatePrices = (noOfGuest) => {
-       setTotalPrice( pricePerGuest * noOfGuest );
+  });
+ const changeguest=(value)=>{
+  setNoOfGuest(value); 
+   calculatePrices(  totalStayDuration , value );
+}
+  function calculatePrices(duration,noOfGuest) {
+    console.log(duration);
+       setTotalPrice( pricePerGuest * duration * noOfGuest );
     
    
         
-  };
+  }
 
   const initialValues = {
     name: "",
@@ -102,14 +117,15 @@ const BookingForm = () => {
     email: "",
     specialRequest: "",
     guestNames: [""],
-    paymentMethod: "",
+    paymentMethods: "",
     paymentStatus: "",
   };
   const apiUrl = webApi.apiUrl ;
   const MySwal = withReactContent(Swal)
   const navigate =useNavigate()
 
-  const handleFormSubmit = async (values, { setSubmitting }) => {
+  const handleFormSubmit = async (values) => {
+
     try {
       const token = Cookies.get("token");
       if (token  =="undefined" ) {
@@ -121,7 +137,7 @@ const BookingForm = () => {
 
        const dataToSend = {
         name: values.name,
-        noOfGuest: values.noOfGuest,
+        noOfGuest: values.guestNames.length,
         country: values.country,
         email: values.email,
         checkIn: values.checkIn,
@@ -169,15 +185,75 @@ const BookingForm = () => {
      }
     }
 
-    // Set submitting to false
-    setSubmitting(false);
-  };
-  const submitForm   = useFormikContext();
-  const   PropertySubmit =()=>{
-    // console.log(submitForm);
+    };
+   const   PropertySubmit =()=>{
+    setIsClicked(true);
     setPaymentMethod("Property")
-    // submitForm();  
   }
+  function calculateTotalStayDuration  (checkInDate,checkOutDate)  {
+    const dt1 = new Date(checkInDate);
+  const dt2 = new Date(checkOutDate);
+  const diff= Math.floor(
+    (Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) -
+      Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) /
+      (1000 * 60 * 60 * 24)
+  );
+  calculatePrices(diff,noOfGuest)
+  
+SetTotalStayDuration(diff);
+
+
+}
+function changeCheckInDate(event) {
+   SetCheckInDate(event);
+   if(checkOutDate){
+   calculateTotalStayDuration(event,checkOutDate);
+ }
+}
+function changeCheckOutDate(event) {
+  SetCheckOutDate(event)
+    if(checkInDate ){
+     calculateTotalStayDuration(checkInDate,event);
+  }
+}
+ useEffect(() => {
+  setValidateSchema(
+    Yup.object({
+      name: Yup.string()
+        .min(3, "Name must be at least 3 characters")
+        .required("Name is required"),
+        
+        paymentMethods: paymentMethod
+        ? Yup.string()
+        : Yup.string().required('Payment should be done to continue booking.')
+       ,
+      country: Yup.string().required("Country is required"),
+      contact: Yup.string()
+        .matches(/^\d{10}$/, "Phone number must be 10 digits")
+        .required("Phone number is required"),
+      email: Yup.string().email("Invalid email").required("Email is required"),
+      checkIn: Yup.date()
+        .required("Check-in date is required")
+        .typeError("Check-in date is required"),
+      checkOut: Yup.date()
+        .required("Check-out date is required")
+        .typeError("Check-out date is required"),
+      specialRequest: Yup.string(),
+      noOfRooms: Yup.number()
+        .min(1, "Minimum 1 room is required")
+        .max(10, "Maximum 10 rooms are allowed")
+        .required("Number of rooms is required"),
+       guestNames: Yup.array()
+        .of(Yup.string().required("Guest name is required"))
+        .min(1, "At least one guest name is required")
+        .required("Guest names are required"),
+        paymentStatus: 
+        Yup.string().nullable(),
+      
+       
+    })
+  )
+ }, [paymentMethod])
     return (
     <div className="w-full flex justify-center">
       <Formik
@@ -218,8 +294,9 @@ const BookingForm = () => {
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
               id="noOfGuest"
               name="noOfGuest"
+              value={noOfGuest}
               type="number"
-              onchange={calculatePrices(values.noOfGuest)}
+              onchange={changeguest(values.noOfGuest)}
                placeholder="Number of Guests"
             />
             <ErrorMessage
@@ -233,6 +310,8 @@ const BookingForm = () => {
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
                 id="checkIn"
                 name="checkIn"
+                value={checkInDate}
+                onchange={changeCheckInDate(values.checkIn)}
                 type="date"
               />
               <ErrorMessage
@@ -247,6 +326,8 @@ const BookingForm = () => {
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
                 id="checkOut"
                 name="checkOut"
+                value={checkOutDate}
+                onchange={changeCheckOutDate(values.checkOut)}
                 type="date"
               />
               <ErrorMessage
@@ -324,6 +405,7 @@ const BookingForm = () => {
                     type="button"
                     onClick={() => {
                       push("");
+                      
                      
                     }}
                     className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -340,32 +422,43 @@ const BookingForm = () => {
               type="text"
               placeholder="Special request (optional)"
             />
+              <ErrorMessage
+              name="paymentMethods"
+              component="div"
+              className="text-red-500 text-xs italic"
+            />
             <Field
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white"
-              id="paymentMethod"
-              name="paymentMethod"
-              type="text"
-              placeholder="paymentMethod"
-            />
+              id="paymentMethods"
+              name="paymentMethods"
+              value={paymentMethod}
+              type="hidden"
+             />
+          
             <div className="flex justify-between">
-               <button
-                    onClick={handleClick}
-                    className=" bg-primary-7 hover:bg-white hover:text-primary-7 text-white transition-all duration-700  py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                  >
-                    Pay Via Khalti
-                  </button>
- 
-              <button
-                type="button"
-                onClick={() => {
-                  setPaymentMethod("Property");
-                  submitForm();
-                }}
-                // onClick={PropertySubmit}
-                className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              >
-                Pay on property
-              </button>
+            {isClicked ? (
+  <span>
+    {paymentMethod === "Property" ? "Paid with Property" :
+    paymentMethod === "Khalti" ? "Paid with Khalti" : ""}
+  </span>
+) : (
+  <>
+    <button
+      onClick={handleClick}
+      className="bg-primary-7 hover:bg-white hover:text-primary-7 text-white transition-all duration-700 py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+    >
+      Pay Via Khalti
+    </button>
+    <button
+      onClick={PropertySubmit}
+      className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+    >
+      Pay on Property
+    </button>
+  
+    </> 
+ )}
+
             </div>
             <div className="flex justify-center">
               <button

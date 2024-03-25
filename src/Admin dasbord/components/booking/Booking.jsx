@@ -83,7 +83,6 @@ const visibleGuests = React.useMemo(
         console.error("Error fetching data:", error);
       }
     };
-
     fetchData();
   }, []);
   
@@ -132,18 +131,18 @@ const visibleGuests = React.useMemo(
       label: "No Of Rooms",
     },
  
-    {
-      id: "country",
-      numeric: true,
-      disablePadding: false,
-      label: "Country",
-    },
-    {
-      id: "phoneNumber",
-      numeric: true,
-      disablePadding: false,
-      label: "Phone Number",
-    },
+    // {
+    //   id: "country",
+    //   numeric: true,
+    //   disablePadding: false,
+    //   label: "Country",
+    // },
+    // {
+    //   id: "phoneNumber",
+    //   numeric: true,
+    //   disablePadding: false,
+    //   label: "Phone Number",
+    // },
     {
       id: "specialRequest",
       numeric: true,
@@ -156,12 +155,12 @@ const visibleGuests = React.useMemo(
       disablePadding: false,
       label: "totalAmount",
     },
-    {
-      id: "paymentStatus",
-      numeric: true,
-      disablePadding: false,
-      label: "Payment Status",
-    },
+    // {
+    //   id: "paymentStatus",
+    //   numeric: true,
+    //   disablePadding: false,
+    //   label: "Payment Status",
+    // },
     {
       id: "paymentMethod",
       numeric: true,
@@ -186,6 +185,7 @@ const visibleGuests = React.useMemo(
       disablePadding: false,
       label: "Action",
     },
+  
   ];
   return (
     <Box sx={{ width: "100%", paddingTop: "50px" }}>
@@ -245,12 +245,13 @@ const visibleGuests = React.useMemo(
                   <TableCell align="center">{row.noOfGuest}</TableCell>
                   <TableCell align="center">{row.noOfRooms}</TableCell>
                   
-                  <TableCell align="center">{row.country}</TableCell>
-                  <TableCell align="center">{row.contact}</TableCell>
+                  {/* <TableCell align="center">{row.country}</TableCell>
+                  <TableCell align="center">{row.contact}</TableCell> */}
                   <TableCell align="center">{row.specialRequest}</TableCell>
                   <TableCell align="center">{row.totalAmount}</TableCell>
-                  <TableCell align="center">{row.paymentStatus}</TableCell>
+                  {/* <TableCell align="center">{row.paymentStatus}</TableCell> */}
                   <TableCell align="center">{row.paymentMethod}</TableCell>
+                 
                   <TableCell align="center">{row.checkIn}</TableCell>
                   <TableCell align="center">{row.checkOut}</TableCell>
                   <TableCell align="center">

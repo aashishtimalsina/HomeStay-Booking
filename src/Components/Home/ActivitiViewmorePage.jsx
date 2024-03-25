@@ -73,7 +73,11 @@ const ActivitiesViewmorePage = () => {
       {/* Booking Form */}
       {status.loginstate && (
         <div className="mt-8 p-8 md:p-12 bg-gray-100">
-          <ActivityBookingForm />
+          <ActivityBookingForm  
+           Ids={id}
+           perGuestPrice={activity ? activity.price : 0}
+        
+           />
         </div>
       )}
     </>
