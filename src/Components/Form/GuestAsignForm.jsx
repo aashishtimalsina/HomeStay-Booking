@@ -19,7 +19,7 @@ const FormSchema = Yup.object().shape({
   // hostName: Yup.string().required("HostName is required"),
 });
 
-const GuestAsignForm = (props) => {
+const GuestAsignForm = () => {
    const MySwal = withReactContent(Swal)
    const today = new Date();
   const defaultDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
@@ -102,8 +102,7 @@ const GuestAsignForm = (props) => {
     }
 
     // Set submitting to false
-    setSubmitting(false);
-  };
+   };
   function calculateTotalStayDuration  (checkInDate,checkOutDate)  {
      const dt1 = new Date(checkInDate);
    const dt2 = new Date(checkOutDate);
@@ -115,7 +114,7 @@ const GuestAsignForm = (props) => {
  
  SetTotalStayDuration(diff);
 
-};
+}
 
   const fetchHostDetail = async () => {
     try {
