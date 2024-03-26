@@ -5,7 +5,7 @@ import Button from "../reusuable/button";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../../style";
 import axios from "axios";
-import { TextField } from "@mui/material";
+import { Rating, TextField } from "@mui/material";
 import Cookies from "js-cookie";
 import webApi from "../../Config/config";
 import Swal from 'sweetalert2'
@@ -21,6 +21,8 @@ const Reviews = () => {
   const [error, setError] = useState(false);
   const navigate = useNavigate();
   const apiUrl = webApi.apiUrl + "/addReview";
+  const [ratingvalue, setRatingValue] = useState(0);
+
   const handleSubmit = async (e) => {
 
     e.preventDefault();
@@ -36,6 +38,7 @@ const Reviews = () => {
       const dataToSend={
         name:username,
         review: review, 
+        Rating: ratingvalue, 
       }
        const response = await axios.post(
         apiUrl,
@@ -100,7 +103,17 @@ const Reviews = () => {
     <TextField fullWidth  label="Your Review"   error={error}  onChange={(e) => setReview(e.target.value)}  helperText={error ? "Review is required" : ""}/>
     <br />
     <br />
-   
+    <div className="flex justify-center">
+   <Rating
+        name="simple-controlled"
+        value={ratingvalue}
+        onChange={(event, newValue) => {
+          setRatingValue(newValue);
+        }}
+      />
+      </div>
+      <br />
+    <br />
         <div className="flex justify-center">
                   <button
                     type="submit"
