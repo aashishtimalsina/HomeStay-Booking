@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { activities } from "./constant";
-import { image2 } from "../Constants";
-import Button from "../reusuable/button";
-import { Link, useNavigate } from "react-router-dom";
+import React, {  useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "../../style";
 import axios from "axios";
-import { TextField } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Rating, Select, TextField } from "@mui/material";
+ 
 import Cookies from "js-cookie";
 import webApi from "../../Config/config";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-
+import * as yup from 'yup';
 const Reviews = () => {
   const MySwal = withReactContent(Swal)
   const [review, setReview] = useState('');
+  const [activityData, setActivityData] = useState([]);
   const token = Cookies.get("token");
   const username = Cookies.get("username");
   const encodedToken = encodeURIComponent(token);
@@ -21,6 +20,16 @@ const Reviews = () => {
   const [error, setError] = useState(false);
   const navigate = useNavigate();
   const apiUrl = webApi.apiUrl + "/addReview";
+  const apiUrl_fetch = webApi.apiUrl + "/activitiesDetails";
+  const [ratingvalue, setRatingValue] = useState(0);
+  const [activities, setActivities] = useState("");
+  const schema = yup.object().shape({
+    name: yup.string().required(),
+    review: yup.string().required(),
+    age: yup.number().positive().integer().required(),
+    password: yup.string().required().min(6),
+    confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
+  });
   const handleSubmit = async (e) => {
 
     e.preventDefault();
@@ -28,7 +37,7 @@ const Reviews = () => {
     if(token === undefined || username == undefined){
         navigate('/login');
     }else{
-     if (review === "") {
+     if (review === ""||ratingvalue ==="" || activities ===  "") {
       setError(true); 
     } else {
       
@@ -36,7 +45,10 @@ const Reviews = () => {
       const dataToSend={
         name:username,
         review: review, 
+        rating: ratingvalue, 
       }
+    const error=  schema.validate(dataToSend);
+    if (error.length > 0) {}else{
        const response = await axios.post(
         apiUrl,
         dataToSend,
@@ -54,13 +66,34 @@ const Reviews = () => {
         icon: 'success',
         title: 'Review Successful',
        });
-            
+      }
     } catch (error) {
       console.error('Error submitting review:', error);
     }
   }
 }
   };
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(apiUrl_fetch, {
+        headers: {
+          "ngrok-skip-browser-warning": true,
+        },
+      });
+      if (response.data) {
+        setActivityData(response.data.list || []);
+        console.log("Response data:", response.data);
+      } else {
+        console.error("Empty response data");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+useEffect(() => {
+  fetchData()
+})
   // React.useEffect(() => {
   //   // const fetchData = async () => {
   //   //   try {
@@ -96,11 +129,44 @@ const Reviews = () => {
     <h1 style={{textAlign:'center'}}>Share Your Homestay Experience!</h1>
     <p style={{textAlign:'center'}}>Tell us about your stay. Your feedback helps us improve!</p>
     <br />
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}   >
+    <FormControl
+                    fullWidth
+                margin="normal"
+                
+              >
+                <InputLabel id="hostName-label">Activities</InputLabel>
+                <Select
+                fullWidth
+                 labelId="demo-simple-select-label"
+                 id="demo-simple-select"
+                 value={activities} 
+                 label="Age"
+                 onChange={(e)=>setActivities(e.target.value)}
+                  
+                >
+                  {activityData.map((option) => (
+                    <MenuItem key={option.id} value={option.name}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+                </FormControl>
     <TextField fullWidth  label="Your Review"   error={error}  onChange={(e) => setReview(e.target.value)}  helperText={error ? "Review is required" : ""}/>
     <br />
     <br />
-   
+    <div className="flex justify-center">
+  
+   <Rating
+        name="simple-controlled"
+        value={ratingvalue}
+        onChange={(event, newValue) => {
+          setRatingValue(newValue);
+        }}
+      />
+      </div>
+      <br />
+    <br />
         <div className="flex justify-center">
                   <button
                     type="submit"

@@ -32,7 +32,7 @@ const Activities = () => {
     };
 
     fetchData();
-  }, []);
+  });
 
   return (
     <div className=" p-20 pt-28  ">

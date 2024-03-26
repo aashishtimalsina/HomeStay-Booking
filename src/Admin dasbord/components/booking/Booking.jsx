@@ -245,15 +245,15 @@ const visibleGuests = React.useMemo(
                   <TableCell align="center">{row.noOfGuest}</TableCell>
                   <TableCell align="center">{row.noOfRooms}</TableCell>
                   
-                  {/* <TableCell align="center">{row.country}</TableCell>
-                  <TableCell align="center">{row.contact}</TableCell> */}
+                   <TableCell align="center">{row.country}</TableCell>
+                  <TableCell align="center">{row.contact}</TableCell> 
                   <TableCell align="center">{row.specialRequest}</TableCell>
                   <TableCell align="center">{row.totalAmount}</TableCell>
-                  {/* <TableCell align="center">{row.paymentStatus}</TableCell> */}
+                 <TableCell align="center">{row.paymentStatus}</TableCell> 
                   <TableCell align="center">{row.paymentMethod}</TableCell>
-                 
+               
                   <TableCell align="center">{row.checkIn}</TableCell>
-                  <TableCell align="center">{row.checkOut}</TableCell>
+                  <TableCell align="center">{row.checkOut}</TableCell> 
                   <TableCell align="center">
                     <Link
                     to ={`guestAsignForm/${row.id}`}

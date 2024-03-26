@@ -9,6 +9,7 @@ const config = {
     "productUrl": webApi.apiUrl,
     "eventHandler": {
         onSuccess (payload) {
+            
             console.log(payload);
         },
         // onError handler is optional
