@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import webApi from "../../../Config/config";
 import myKey from "./khaltiKey";
 
@@ -9,11 +10,12 @@ const config = {
     "productUrl": webApi.apiUrl,
     "eventHandler": {
         onSuccess (payload) {
-            
+            Cookies.set('paymentStatus','Success');
             console.log(payload);
         },
         // onError handler is optional
         onError (error) {
+            Cookies.set('paymentStatus','Error');
             console.log(payload);
         },
         onClose () {

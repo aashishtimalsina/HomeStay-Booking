@@ -32,8 +32,11 @@ const ActivityBookingForm = (props) => {
 const handleClick = (e) => {
   e.preventDefault();
   checkout.show({ amount:totalPrice *100}); 
-  setPaymentMethod("Khalti")
-  handleFormSubmit(e); 
+  if(Cookies.get('paymentStatus') == 'Success'){
+    setPaymentMethod("Khalti")
+    setIsClicked(true)
+  }
+
 };
 
   const apiUrl = webApi.apiUrl;
@@ -80,7 +83,10 @@ const handleClick = (e) => {
   }));
 
   const handleFormSubmit = async (values) => {
-
+    if(Cookies.get('paymentStatus') == 'Success'){
+      setPaymentMethod("Khalti")
+      setIsClicked(true)
+    }
     try {
       const token = Cookies.get("token");
       if (token  =="undefined" ) {
@@ -115,7 +121,7 @@ const handleClick = (e) => {
         }
       );
 
-       
+      Cookies.remove('paymentStatus'); 
         return MySwal.fire({
           icon: 'success',
           title: 'Booking  Successful',
@@ -162,6 +168,7 @@ const handleClick = (e) => {
   }
   
   useEffect(() => {
+    Cookies.remove('paymentStatus'); 
     const fetchData = async () => {
        const apiUrl = webApi.apiUrl + '/getActivityDetail/'+Ids;
 
