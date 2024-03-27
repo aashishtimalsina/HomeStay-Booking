@@ -5,6 +5,8 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { signupSchema } from "../../schemas";
 import webApi from "../../Config/config";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 const initialValues = {
   username: "",
@@ -13,9 +15,10 @@ const initialValues = {
   conform_password: "",
 };
 const apiUrl = webApi.apiUrl + "/addNewUser";
- 
 const Signup = () => {
   const navigate = useNavigate();
+  const MySwal = withReactContent(Swal)
+
   const { values, errors, handleBlur, touched, handleChange, handleSubmit } =
     useFormik({
       initialValues: initialValues,
@@ -25,9 +28,17 @@ const Signup = () => {
         axios
           .post(apiUrl, values)
           .then((response) => {
-            console.log("Response:", response);
+            
            if (response.status  == 200){
-            navigate("/login")
+          
+             MySwal.fire({
+              icon: 'success',
+              title: 'Signed Up  Successful',
+             });
+            
+            setTimeout(() => {
+              navigate('/login');
+            }, 1000);
 
            }
               

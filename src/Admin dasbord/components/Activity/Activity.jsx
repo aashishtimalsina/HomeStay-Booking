@@ -72,7 +72,7 @@ export default function Activity() {
       const token = Cookies.get("token");
       if (token) {
         const encodedToken = encodeURIComponent(token);
-          await axios.delete(apiUrl+"deleteActivity/"+id, {
+          await axios.delete(apiUrl+"/deleteActivity/"+id, {
           headers: {
             "ngrok-skip-browser-warning": true,
             "Authorization": `Bearer ${encodedToken}`,

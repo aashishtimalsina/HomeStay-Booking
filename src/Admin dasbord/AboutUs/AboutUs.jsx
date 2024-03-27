@@ -9,7 +9,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
 import axios from "axios";
 import { Addbutton } from "../components/Button/Addbutton";
@@ -18,6 +18,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import webApi from "../../Config/config";
+import Cookies from "js-cookie";
 
 function HostHead(props) {
   return (
@@ -37,12 +38,22 @@ const Api = webApi.apiUrl;
 export default function AboutUs() {
   const [homestayDetails, setHomestayDetails] = React.useState(null);
   const apiUrl = Api+"/getHomeStayInfo/1";
+  const navigate = useNavigate();
   React.useEffect(() => {
     const fetchData = async () => {
       try {
+        const token = Cookies.get("token");
+        if (token  =="undefined" ) {
+        navigate('/login')
+          return;
+        }
+  
+        const encodedToken = encodeURIComponent(token);
         const response = await axios.get(apiUrl, {
           headers: {
             "ngrok-skip-browser-warning": true,
+            Authorization: `Bearer ${encodedToken}`,
+            "Content-Type": "application/json",
           },
         });
         if (response.data && response.data.homestay_details) {

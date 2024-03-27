@@ -3,7 +3,7 @@ import axios from "axios";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useParams } from "react-router";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
@@ -11,8 +11,7 @@ import { imageDb } from "../components/Firebase/Config";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import webApi from "../../Config/config";
-
-const uploadImage = async (imageFile) => {
+ const uploadImage = async (imageFile) => {
   return new Promise(async (resolve, reject) => {
     const storage = getStorage();
     const imageRef = ref(storage, `images/${uuidv4()}`);
@@ -73,7 +72,7 @@ const EditDetailForm = () => {
         email: host.email || "",
         image: host.image || "",
         address: host.address || "",
-        phone: host.phoneNumber || "",
+        phone: host.phone || "",
       });
     }
   }, [host]);
@@ -117,7 +116,9 @@ const EditDetailForm = () => {
           }
         );
         console.log("Response:", response.data);
-        alert("Host updated successfully.");
+        // alert("Host updated successfully.");
+        navigate('/admin/host');
+
       } else {
         console.error("Error:", "Token not found in cookies.");
         alert(
@@ -200,8 +201,15 @@ const EditDetailForm = () => {
               onChange={(event) => {
                 setFormValues({ ...formValues, image: event.target.files[0] });
               }}
-              margin="normal"
+           
             />
+             <hr />
+        <hr />
+        {formValues.image && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+          <img src={formValues.image} alt="Existing Image" style={{ maxWidth: '50%' }} />
+        </Box>
+      )}
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
@@ -212,8 +220,13 @@ const EditDetailForm = () => {
               value={formValues.phone}
               onChange={handleChange}
             />
+           
           </Grid>
+          
         </Grid>
+  
+        
+        
         <Button
           type="submit"
           variant="contained"

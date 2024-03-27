@@ -59,7 +59,7 @@ const handleClick = (e) => {
       .min(3, "Name must be at least 3 characters")
       .required("Name is required"),
       
-      paymentMethods: paymentMethod
+      paymentMethods: paymentMethod || Cookies.get('paymentStatus') == 'Success'
       ? Yup.string()
       : Yup.string().required('Payment should be done to continue booking')
      ,
@@ -166,7 +166,21 @@ const handleClick = (e) => {
      SetCheckInDate(event);
   
   }
+  useEffect(() => {
+    const interval = setInterval(() => {
+       const paymentStatus = Cookies.get('paymentStatus');
+      if (paymentStatus === 'Success') {
+        setPaymentMethod("Khalti");
+        setIsClicked(true);
+        console.log('ok');
+      } else if (paymentStatus === 'Error') {
+        console.log('Error');
+      }
+    }, 2000); // 200 seconds
   
+    // Clear the interval when the component unmounts or when the dependencies change
+    return () => clearInterval(interval);
+  }, []); 
   useEffect(() => {
     Cookies.remove('paymentStatus'); 
     const fetchData = async () => {
@@ -199,7 +213,7 @@ const handleClick = (e) => {
           .min(3, "Name must be at least 3 characters")
           .required("Name is required"),
           
-          paymentMethods: paymentMethod
+          paymentMethods: paymentMethod || Cookies.get('paymentStatus') == 'Success'
           ? Yup.string()
           : Yup.string().required('Payment should be done to continue booking')
          ,
@@ -222,6 +236,7 @@ const handleClick = (e) => {
    }, [paymentMethod])
   return (
     <div className="w-full  p-10">
+    
    <div className="w-full flex justify-center">
       <Formik
         validationSchema={validationSchema}
@@ -230,6 +245,8 @@ const handleClick = (e) => {
       >
         {({ isSubmitting, values }) => (
           <Form className="flex flex-col space-y-4 w-96 justify-center m-auto my-20 bg-white p-10 rounded-md">
+                <h2 className="text-2xl font-bold mb-4 text-center">Activities Booking Form</h2>
+
             {serverError && (
               <div className="text-red-500 text-xs italic">{serverError}</div>
             )}
