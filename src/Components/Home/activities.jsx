@@ -12,8 +12,7 @@ const Activities = () => {
   const apiUrls = webApi.apiUrl+"/activitiesDetails" ;
 
  
-  React.useEffect(() => {
-    const fetchData = async () => {
+     const fetchData = async () => {
       try {
         const response = await axios.get(apiUrls, {
           headers: {
@@ -31,9 +30,12 @@ const Activities = () => {
       }
     };
 
-    fetchData();
-  });
-
+    
+ 
+useEffect(() => {
+   
+  fetchData();
+},[] )
   return (
     <div className=" p-20 pt-28  ">
       <div className="mb-9 ">

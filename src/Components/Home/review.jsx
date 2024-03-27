@@ -45,10 +45,10 @@ const Reviews = () => {
       const dataToSend={
         name:username,
         review: review, 
+        activity_id: activities, 
         rating: ratingvalue, 
       }
-    const error=  schema.validate(dataToSend);
-    if (error.length > 0) {}else{
+     
        const response = await axios.post(
         apiUrl,
         dataToSend,
@@ -66,7 +66,7 @@ const Reviews = () => {
         icon: 'success',
         title: 'Review Successful',
        });
-      }
+      
     } catch (error) {
       console.error('Error submitting review:', error);
     }
@@ -93,28 +93,10 @@ const Reviews = () => {
 
 useEffect(() => {
   fetchData()
-})
-  // React.useEffect(() => {
-  //   // const fetchData = async () => {
-  //   //   try {
-  //   //     const response = await axios.get(apiUrl, {
-  //   //       headers: {
-  //   //         "ngrok-skip-browser-warning": true,
-  //   //       },
-  //   //     });
-  //   //     if (response.data) {
-  //   //       console.log("Response data:", response.data);
-  //   //     } else {
-  //   //       setActivityData(response.data.list || []);
-  //   //       console.error("Empty response data");
-  //   //     }
-  //   //   } catch (error) {
-  //   //     console.error("Error fetching data:", error);
-  //   //   }
-  //   // };
-
-  //   // fetchData();
-  // }, []);
+  
+  
+},[])
+ 
 
   return (
     <section className="bg-gray-100">
@@ -146,8 +128,8 @@ useEffect(() => {
                   
                 >
                   {activityData.map((option) => (
-                    <MenuItem key={option.id} value={option.name}>
-                      {option.label}
+                    <MenuItem key={option.id} value={option.id}>
+                      {option.name}
                     </MenuItem>
                   ))}
                 </Select>
