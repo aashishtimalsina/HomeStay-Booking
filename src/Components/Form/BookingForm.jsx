@@ -18,6 +18,7 @@ const BookingForm = () => {
     e.preventDefault();
   //  checkout.show({ amount:totalPrice *100}); 
    checkout.show({ amount:20 *100}); 
+
    if(Cookies.get('paymentStatus') == 'Success'){
      setPaymentMethod("Khalti")
      setIsClicked(true)
@@ -37,12 +38,15 @@ const BookingForm = () => {
    const [totalStayDuration,SetTotalStayDuration]=useState(0);
 
  
-  const [validationSchema,setValidateSchema] = useState(Yup.object({
+  const [validationSchema,setValidateSchema] = useState(
+   
+    Yup.object({
+      
     name: Yup.string()
       .min(3, "Name must be at least 3 characters")
       .required("Name is required"),
       
-      paymentMethods: paymentMethod
+      paymentMethods: paymentMethod || Cookies.get('paymentStatus') == 'Success'
       ? Yup.string()
       : Yup.string().required('Payment should be done to continue booking')
      ,
@@ -95,10 +99,26 @@ const BookingForm = () => {
   useEffect(() => {
     Cookies.remove('paymentStatus'); 
         Cookies.remove("redirectTo");
+        
     fetchDetail();
     
     
-  });
+  },[]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+       const paymentStatus = Cookies.get('paymentStatus');
+      if (paymentStatus === 'Success') {
+        setPaymentMethod("Khalti");
+        setIsClicked(true);
+        console.log('ok');
+      } else if (paymentStatus === 'Error') {
+        console.log('Error');
+      }
+    }, 2000); // 200 seconds
+  
+    // Clear the interval when the component unmounts or when the dependencies change
+    return () => clearInterval(interval);
+  }, []); 
  const changeguest=(value)=>{
   setNoOfGuest(value); 
    calculatePrices(  totalStayDuration , value );
@@ -125,6 +145,7 @@ const BookingForm = () => {
     paymentMethods: "",
     paymentStatus: "",
   };
+ 
   const apiUrl = webApi.apiUrl ;
   const MySwal = withReactContent(Swal)
   const navigate =useNavigate()
@@ -134,7 +155,7 @@ const BookingForm = () => {
       setPaymentMethod("Khalti")
       setIsClicked(true)
     }
-
+   
     try {
       const token = Cookies.get("token");
       if (token  =="undefined" ) {
@@ -172,10 +193,16 @@ const BookingForm = () => {
       );
 
       Cookies.remove('paymentStatus'); 
-        return MySwal.fire({
+         MySwal.fire({
           icon: 'success',
           title: 'Booking  Successful',
          });
+       
+        
+        setTimeout(() => {
+          navigate('/');
+        }, 800);
+
         // setServerError("");
     
     } catch (error) {
@@ -232,7 +259,7 @@ function changeCheckOutDate(event) {
         .min(3, "Name must be at least 3 characters")
         .required("Name is required"),
         
-        paymentMethods: paymentMethod
+        paymentMethods: paymentMethod || Cookies.get('paymentStatus') == 'Success'
         ? Yup.string()
         : Yup.string().required('Payment should be done to continue booking.')
        ,
@@ -265,6 +292,7 @@ function changeCheckOutDate(event) {
  }, [paymentMethod])
     return (
     <div className="w-full flex justify-center">
+        
       <Formik
         validationSchema={validationSchema}
         initialValues={initialValues}
@@ -272,6 +300,8 @@ function changeCheckOutDate(event) {
       >
         {({ isSubmitting, values }) => (
           <Form className="flex flex-col space-y-4 w-96 justify-center m-auto my-20 bg-white p-10 rounded-md">
+                  <h2 className="text-2xl font-bold mb-4 text-center">Stay Booking Form</h2>
+
             {serverError && (
               <div className="text-red-500 text-xs italic">{serverError}</div>
             )}

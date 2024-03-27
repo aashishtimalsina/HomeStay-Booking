@@ -3,14 +3,18 @@ import axios from "axios";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useParams } from "react-router";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 import { imageDb } from "../components/Firebase/Config";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
+import webApi from "../../Config/config";
+
 
 const uploadImage = async (imageFile) => {
+  
   return new Promise(async (resolve, reject) => {
     const storage = getStorage();
     const imageRef = ref(storage, `images/${uuidv4()}`);
@@ -26,6 +30,8 @@ const uploadImage = async (imageFile) => {
 
 const EditAboutUs = () => {
   const { id } = useParams();
+
+  const navigate =useNavigate();
   const [homestayDetails, setHomestayDetails] = useState(null);
   const [formValues, setFormValues] = useState({
     title: "",
@@ -34,12 +40,13 @@ const EditAboutUs = () => {
     homeImage: "",
     galleryImages: [],
   });
+  const apiUrl = webApi.apiUrl;
 
   useEffect(() => {
     const fetchHomestayDetails = async () => {
       try {
         const response = await axios.get(
-          `https://moved-readily-chimp.ngrok-free.app/getHomeStayInfo/${id}`,
+          apiUrl+'/getHomeStayInfo/'+id,
           {
             headers: {
               "ngrok-skip-browser-warning": true,
@@ -101,7 +108,7 @@ const EditAboutUs = () => {
       if (token) {
         const encodedToken = encodeURIComponent(token);
         const response = await axios.put(
-          `https://moved-readily-chimp.ngrok-free.app/updateHomeStayInfo/${id}`,
+          apiUrl+"/updateHomeStayInfo/"+id,
           dataToSend,
           {
             headers: {
@@ -112,7 +119,7 @@ const EditAboutUs = () => {
           }
         );
         console.log("Response:", response.data);
-        alert("Homestay details updated successfully.");
+        navigate('/admin/aboutUs')
       } else {
         console.error("Error:", "Token not found in cookies.");
         alert(
@@ -134,7 +141,6 @@ const EditAboutUs = () => {
   if (!homestayDetails) {
     return <div>Loading...</div>;
   }
-
   return (
     <div className="p-10">
       <Typography variant="h5" sx={{ marginBottom: "20px" }}>
@@ -202,8 +208,15 @@ const EditAboutUs = () => {
           <Grid item xs={12}>
             <ul>
               {formValues.galleryImages.map((image, index) => (
-                <li key={index}>{image}</li>
+             <>
+                {image && (
+                  <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+                    <img src={image} alt="Existing Image" style={{ maxWidth: '50%' }} />
+                  </Box>
+                )}
+                </>
               ))}
+              
             </ul>
           </Grid>
         </Grid>

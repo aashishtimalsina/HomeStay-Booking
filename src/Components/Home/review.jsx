@@ -45,7 +45,7 @@ const Reviews = () => {
       const dataToSend={
         name:username,
         review: review, 
-        activity_id: activities, 
+        activities_id: activities, 
         rating: ratingvalue, 
       }
      
