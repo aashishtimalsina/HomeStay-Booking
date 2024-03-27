@@ -16,11 +16,15 @@ const BookingForm = () => {
 
   const handleClick = (e) => {
     e.preventDefault();
-    checkout.show({ amount:totalPrice *100}); 
-    setPaymentMethod("Khalti")
-    setIsClicked(true)
-   };
-
+  //  checkout.show({ amount:totalPrice *100}); 
+   checkout.show({ amount:20 *100}); 
+   if(Cookies.get('paymentStatus') == 'Success'){
+     setPaymentMethod("Khalti")
+     setIsClicked(true)
+    }else if(Cookies.get('paymentStatus') == 'Error'){
+        console.log('error');
+}
+  }
 
    const [serverError, setServerError] = useState("");
    const [paymentMethod, setPaymentMethod] = useState(null);
@@ -89,6 +93,7 @@ const BookingForm = () => {
     }
   };
   useEffect(() => {
+    Cookies.remove('paymentStatus'); 
         Cookies.remove("redirectTo");
     fetchDetail();
     
@@ -125,6 +130,10 @@ const BookingForm = () => {
   const navigate =useNavigate()
 
   const handleFormSubmit = async (values) => {
+    if(Cookies.get('paymentStatus') == 'Success'){
+      setPaymentMethod("Khalti")
+      setIsClicked(true)
+    }
 
     try {
       const token = Cookies.get("token");
@@ -134,7 +143,7 @@ const BookingForm = () => {
       }
 
       const encodedToken = encodeURIComponent(token);
-
+      const khalti =Cookies.get('paymentStatus') == 'Success';
        const dataToSend = {
         name: values.name,
         noOfGuest: values.guestNames.length,
@@ -143,7 +152,7 @@ const BookingForm = () => {
         checkIn: values.checkIn,
         checkOut: values.checkOut,
         noOfRooms: parseInt(values.noOfRooms),
-        paymentMethod: paymentMethod,
+        paymentMethod: khalti?'khalti':paymentMethod,
         totalAmount:totalPrice.toFixed(2),  
         specialRequest: values.specialRequest,
         contact: parseInt(values.contact),
@@ -162,13 +171,13 @@ const BookingForm = () => {
         }
       );
 
-       
+      Cookies.remove('paymentStatus'); 
         return MySwal.fire({
           icon: 'success',
           title: 'Booking  Successful',
          });
         // setServerError("");
-      
+    
     } catch (error) {
       // Handle errors
       
