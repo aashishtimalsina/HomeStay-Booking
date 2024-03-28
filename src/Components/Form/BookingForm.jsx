@@ -16,8 +16,8 @@ const BookingForm = () => {
 
   const handleClick = (e) => {
     e.preventDefault();
-  //  checkout.show({ amount:totalPrice *100}); 
-   checkout.show({ amount:20 *100}); 
+   checkout.show({ amount:totalPrice *100}); 
+ 
 
    if(Cookies.get('paymentStatus') == 'Success'){
      setPaymentMethod("Khalti")

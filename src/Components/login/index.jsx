@@ -8,6 +8,8 @@ import LoginContex from "../../context/logincontext/CreateLoginContex";
 import styles from "../../style";
 import { Loginschema } from "../../schemas";
 import webApi from "../../Config/config";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
 
 const initialValues = {
   username: "",
@@ -21,6 +23,7 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+  const MySwal = withReactContent(Swal)
 
   const { values, errors, handleBlur, touched, handleChange, handleSubmit } =
     useFormik({
@@ -62,6 +65,10 @@ const Login = () => {
             }
           })
           .catch((error) => {
+            MySwal.fire({
+              icon: 'error',
+              title: 'Invalid Credential !!',
+             });
             console.error("Error:", error);
           });
         action.resetForm();
