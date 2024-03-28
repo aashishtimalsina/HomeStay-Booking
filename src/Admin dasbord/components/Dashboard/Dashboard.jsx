@@ -30,7 +30,7 @@ const cardDatas = [
     icon: "RequestQuoteIcon",
   },
 ];
-const username = Cookies.get("username");
+
 
 const Dashboard = () => {
   const [open, setOpen] = React.useState(true);
@@ -53,7 +53,7 @@ const Dashboard = () => {
           }
           sx={{ mb: 2 }}
         >
-          Hello {username}! Welcome to your Dashboard.
+          Hello {Cookies.get("username")}! Welcome to your Dashboard.
         </Alert>
       </Collapse>
 
