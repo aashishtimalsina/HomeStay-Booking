@@ -77,7 +77,7 @@ const handleMouseDownPassword = (event) => {
             if (token) {
               const encodedToken = encodeURIComponent(token);
               const response = await axios.post(
-                apiUrl+"/addNewUser",
+                apiUrl+"/addNewHost",
            dataToSend,
                 {
                   headers: {
