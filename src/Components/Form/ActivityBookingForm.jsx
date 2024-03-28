@@ -81,10 +81,7 @@ const handleClick = (e) => {
   }));
 
   const handleFormSubmit = async (values) => {
-    if(Cookies.get('paymentStatus') == 'Success'){
-      setPaymentMethod("Khalti")
-      setIsClicked(true)
-    }
+  
     try {
       const token = Cookies.get("token");
       if (token  =="undefined" ) {
@@ -130,17 +127,12 @@ const handleClick = (e) => {
     } catch (error) {
       // Handle errors
       
-     if(error.status_code== 400){
-      return MySwal.fire({
-        icon: 'error',
-        title: 'Requested rooms are not available for the given dates.',
-       });
-     }else{
+   
       return MySwal.fire({
         icon: 'error',
         title: 'Please enter a valid date or phone number and verify the guest and number of guest .',
        });
-     }
+     
     }
 
     };
@@ -221,7 +213,7 @@ const handleClick = (e) => {
           .min(3, "Name must be at least 3 characters")
           .required("Name is required"),
           
-          paymentMethods: paymentMethod || Cookies.get('paymentStatus') == 'Success'
+          paymentMethods: paymentMethod 
           ? Yup.string()
           : Yup.string().required('Payment should be done to continue booking')
          ,

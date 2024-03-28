@@ -46,7 +46,7 @@ const BookingForm = () => {
       .min(3, "Name must be at least 3 characters")
       .required("Name is required"),
       
-      paymentMethods: paymentMethod || Cookies.get('paymentStatus') == 'Success'
+      paymentMethods: paymentMethod 
       ? Yup.string()
       : Yup.string().required('Payment should be done to continue booking')
      ,
@@ -110,11 +110,10 @@ const BookingForm = () => {
       if (paymentStatus === 'Success') {
         setPaymentMethod("Khalti");
         setIsClicked(true);
-        console.log('ok');
-      } else if (paymentStatus === 'Error') {
+       } else if (paymentStatus === 'Error') {
         console.log('Error');
       }
-    }, 2000); // 200 seconds
+    }, 1000); // 200 seconds  
   
     // Clear the interval when the component unmounts or when the dependencies change
     return () => clearInterval(interval);
@@ -151,10 +150,7 @@ const BookingForm = () => {
   const navigate =useNavigate()
 
   const handleFormSubmit = async (values) => {
-    if(Cookies.get('paymentStatus') == 'Success'){
-      setPaymentMethod("Khalti")
-      setIsClicked(true)
-    }
+    
    
     try {
       const token = Cookies.get("token");
