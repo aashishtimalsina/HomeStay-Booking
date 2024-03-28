@@ -147,6 +147,10 @@ const handleClick = (e) => {
     const   PropertySubmit =()=>{
       setIsClicked(true);
       setPaymentMethod("Property")
+      MySwal.fire({
+        icon: 'success',
+        title: 'Payment Set To  Property',
+       });
     }
  
   const changeguest=(value)=>{

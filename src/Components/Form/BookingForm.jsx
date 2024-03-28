@@ -225,6 +225,12 @@ const BookingForm = () => {
    const   PropertySubmit =()=>{
     setIsClicked(true);
     setPaymentMethod("Property")
+
+    Cookies.remove('paymentStatus'); 
+    MySwal.fire({
+     icon: 'success',
+     title: 'Payment Set To  Property',
+    });
   }
   function calculateTotalStayDuration  (checkInDate,checkOutDate)  {
     const dt1 = new Date(checkInDate);
