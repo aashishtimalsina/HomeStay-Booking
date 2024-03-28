@@ -1,4 +1,4 @@
-import home1 from "./homePagePhoto.jpeg";
+import home1 from "./homePagePhoto.jpeg";  
 import home2 from "./homepagephoto2.jpeg";
 import locationIcon from "./locationicon.svg";
 import logo from "./actuallogo.png";
