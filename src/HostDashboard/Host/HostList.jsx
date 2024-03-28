@@ -32,7 +32,8 @@ export default function HostList() {
         });
 
         const data = response.data;
-        if (data.status === "success") {
+        console.log(data);
+        if (data.status === "Success") {
           setRows(data.list);
         } else {
           console.error("Failed to fetch data");
@@ -75,9 +76,10 @@ export default function HostList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {rows.map((row,index) => (
             <TableRow key={row.id}>
               <TableCell>{row.numOfGuests}</TableCell>
+              <TableCell>{index+1}</TableCell>
               <TableCell>{row.guestName}</TableCell>
               <TableCell>{row.assignmentDate}</TableCell>
               <TableCell>{row.totalStayDuration}</TableCell>
