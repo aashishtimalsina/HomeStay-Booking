@@ -26,6 +26,7 @@ import EditActivity from "./Admin dasbord/components/Activity/EditActivity.jsx";
 import ActivityDetail from "./Admin dasbord/components/Activity/ActivityDetail.jsx";
 import LoginState from "./context/logincontext/loginstate.jsx";
 import BookingForm from "./Components/Form/BookingForm.jsx";
+import ActivityBookingForm from "./Components/Form/ActivityBookingForm.jsx";
 import Cookies from "js-cookie";
 import AboutUs from "./Admin dasbord/AboutUs/AboutUs.jsx";
 import EditAboutUs from "./Admin dasbord/AboutUs/EditAboutUs.jsx";
@@ -147,6 +148,8 @@ const App = () => {
           <Route path="/service" element={<Services />} />
           <Route path="/viewMore/:id" element={<ActivitesViewmorePage />} />
           <Route path="/bookingForm" element={<BookingForm />} />
+          <Route path="/activity/booking/:id" element={<ActivityBookingForm />} />
+
           {isAdminPage && token !== undefined && role === "admin" && (
             <Route path="/admin" element={<Admin />}>
               <Route path="dashboard" element={<Dashboard />} />
@@ -161,6 +164,7 @@ const App = () => {
               <Route path="activity/detail/:id" element={<ActivityDetail />} />
               <Route path="activity/edit/:id" element={<EditActivity />} />
               <Route path="Booking" element={<Booking />} />
+
               <Route path="activityBooking" element={<ActivityBooking />} />
               <Route path="review" element={<Reviews />} />
               <Route path="aboutUs" element={<AboutUs />} />
