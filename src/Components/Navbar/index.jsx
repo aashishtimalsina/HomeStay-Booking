@@ -35,8 +35,9 @@ const Navbar = () => {
     <nav className="flex flex-wrap items-center w-full justify-between p-2 z-10  ">
       <div className="flex flex-wrap items-center w-full justify-between">
         <div className="flex items-center flex-shrink-0 mr-6">
-          <img src={logo} alt="logo" className=" w-14 h-14" />
-        </div>
+          {/* <img src={logo} alt="logo" className=" w-15 h-14" /> */}
+          <img src={logo} alt="logo" className="w-24 h-22" />      
+            </div>
         <div className="flex bg-transparent items-center ">
           <div className="hidden lg:inline-block bg-transparent md:flex md:justify-center md:items-center ">
             {navbar.map((text) => (
