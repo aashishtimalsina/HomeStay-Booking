@@ -127,17 +127,12 @@ const handleClick = (e) => {
     } catch (error) {
       // Handle errors
       
-     if(error.status_code== 400){
-      return MySwal.fire({
-        icon: 'error',
-        title: 'Requested rooms are not available for the given dates.',
-       });
-     }else{
+   
       return MySwal.fire({
         icon: 'error',
         title: 'Please enter a valid date or phone number and verify the guest and number of guest .',
        });
-     }
+     
     }
 
     };
