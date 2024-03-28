@@ -12,8 +12,8 @@ import config from "../../Admin dasbord/components/Khalti/khaltiConfig";
 import Cookies from "js-cookie";
 import { useNavigate, useParams } from "react-router-dom";
 
-const ActivityBookingForm = (props) => {
-  const {Ids  }= props;
+const ActivityBookingForm = () => {
+  const { Ids } = useParams();
     const checkout = new KhaltiCheckout(config); // Initialize outside rendering
     const MySwal = withReactContent(Swal)
 
@@ -25,9 +25,7 @@ const ActivityBookingForm = (props) => {
   const [perGuest, setPerGuest] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);  
    const [checkInDate,SetCheckInDate]=useState(null);
-   const [checkOutDate,SetCheckOutDate]=useState(null);
-   const [totalStayDuration,SetTotalStayDuration]=useState(0);
-
+   
  
 const handleClick = (e) => {
   e.preventDefault();
@@ -97,6 +95,7 @@ const handleClick = (e) => {
       const encodedToken = encodeURIComponent(token);
 
        const dataToSend = {
+        activities_id: Ids,
         name: values.name,
         noOfGuest: values.noOfGuest,
         country: values.country,
@@ -167,6 +166,11 @@ const handleClick = (e) => {
   
   }
   useEffect(() => {
+    const token = Cookies.get("token");
+    if (token  =="undefined" ) {
+    navigate('/login')
+      return;
+    }
     const interval = setInterval(() => {
        const paymentStatus = Cookies.get('paymentStatus');
       if (paymentStatus === 'Success') {
