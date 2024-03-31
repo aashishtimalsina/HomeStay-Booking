@@ -117,12 +117,6 @@ export default function Review() {
       label: "Name",
     },
     {
-      id: "Activities_id",
-      numeric: true,
-      disablePadding: false,
-      label: "Activities Id",
-    },
-    {
       id: "Review",
       numeric: false,
       disablePadding: true,
@@ -178,8 +172,7 @@ export default function Review() {
                     {index+1}
                   </TableCell>
                   <TableCell align="center">{row.name}</TableCell>
-                  <TableCell align="center">{row.activities_id}</TableCell>
-                  <TableCell align="center">{row.review}</TableCell>
+                   <TableCell align="center">{row.review}</TableCell>
                   <TableCell align="center"><Rating name="read-only" value={row.rating||  0} readOnly /></TableCell>
                    <TableCell sx={{ width: "120px" }}>
                     <Box display="flex" justifyContent="space-between">
