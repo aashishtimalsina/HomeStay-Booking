@@ -56,6 +56,7 @@ const HeroSection = () => {
                   {Homestay.title}
                 </h1>
                 <p className="mb-5 text-gray-600">{Homestay.address}</p>
+                <p className="mb-5 text-gray-600">Per Guest:{Homestay.price}</p>
                 <div className="">
                   <Link to={status ? "/bookingForm" : "/login"}>
                     <button
