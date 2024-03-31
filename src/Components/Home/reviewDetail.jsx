@@ -86,10 +86,10 @@ const ImageUrl = "../../../public/review_avatar.png"
             </div>
             <p className="text-xl mb-4">{reviewIndex[currentIndex]?.name}</p>
             {/* <p className="text-xl mb-4">{reviewIndex[currentIndex]?.activities_id}</p> */}
-            <p>{reviewIndex[currentIndex]?.review}</p>
+            <p>{reviewIndex[currentIndex]?.review} </p>
             <div className="flex justify-center mt-4">
               
-            <Rating name="read-only" value={reviewIndex[currentIndex]?.rating} readOnly />
+            <Rating name="read-only" value={reviewIndex[currentIndex]?.rating ||  0} readOnly />
                         </div>
           </div>
         </div>

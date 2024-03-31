@@ -1,4 +1,4 @@
 const webApi = {
-    apiUrl : "https://b43b-2400-1a00-b060-23bb-8564-6c42-459f-4d59.ngrok-free.app"
+    apiUrl : "https://715b-2400-1a00-b060-940-39ab-f83a-5a1d-7600.ngrok-free.app"
 }
 export default webApi;

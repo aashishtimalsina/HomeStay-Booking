@@ -10,7 +10,7 @@ import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
 import { Link, useNavigate } from "react-router-dom";
-import { Typography } from "@mui/material";
+import { Rating, Typography } from "@mui/material";
 import axios from "axios";
 
 import { Addbutton } from "../components/Button/Addbutton";
@@ -122,6 +122,12 @@ export default function Review() {
       disablePadding: true,
       label: "Review",
     },
+    {
+      id: "Rating",
+      numeric: false,
+      disablePadding: true,
+      label: "Rating",
+    },
   
     {
       id: "Action",
@@ -166,7 +172,8 @@ export default function Review() {
                     {index+1}
                   </TableCell>
                   <TableCell align="center">{row.name}</TableCell>
-                  <TableCell align="center">{row.review}</TableCell>
+                   <TableCell align="center">{row.review}</TableCell>
+                  <TableCell align="center"><Rating name="read-only" value={row.rating||  0} readOnly /></TableCell>
                    <TableCell sx={{ width: "120px" }}>
                     <Box display="flex" justifyContent="space-between">
                       {/* <Link to={`detail/${row.phone}`}>
