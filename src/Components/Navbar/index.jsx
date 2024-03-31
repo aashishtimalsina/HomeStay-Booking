@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { navbar } from "./constants";
-import { logo } from "../Constants";
+import { logoHeader } from "../Constants";
 import LoginContex from "../../context/logincontext/CreateLoginContex";
 import { Avatar } from "@mui/material";
 import { LogoutOutlined } from "@mui/icons-material";
@@ -36,7 +36,7 @@ const Navbar = () => {
       <div className="flex flex-wrap items-center w-full justify-between">
         <div className="flex items-center flex-shrink-0 mr-6">
           {/* <img src={logo} alt="logo" className=" w-15 h-14" /> */}
-          <img src={logo} alt="logo" className="w-24 h-22" />      
+          <img src={logoHeader} alt="logo" className="w-24 h-22" />      
             </div>
         <div className="flex bg-transparent items-center ">
           <div className="hidden lg:inline-block bg-transparent md:flex md:justify-center md:items-center ">
