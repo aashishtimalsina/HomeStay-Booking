@@ -49,7 +49,7 @@ const ImageUrl = "../../../public/review_avatar.png"
     }, 2000); // Change the interval time as needed (e.g., every 5 seconds)
 
     return () => clearInterval(interval); // Clear the interval on component unmount
-  }, []);
+  }, [currentIndex]);
 
   return (
     <section className="p-5 mt-16 bg-primary-2 text-center">
