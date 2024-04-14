@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import styles from "../../style";
 import axios from "axios";
 import webApi from "../../Config/config";
+import { Rating } from "@mui/material";
 
 const Activities = () => {
   const [activityData, setActivityData] = useState([]);
@@ -61,7 +62,22 @@ useEffect(() => {
                   className=" absolute w-full h-full group-hover:animate-rotate rounded-md "
                 />
                 <div className="absolute z-10  w-full h-full bg-black group-hover:animate-rotate bg-opacity-5 ">
-                  <p className=" font-sans text-xs m-2  text-white bg-primary-6 bg-opacity-50 border-2 border-gray-300 w-32 p-2 text-center ">
+                <p className="text-white font-sans text-xs m-2 overflow-hidden h-5 font-normal">
+                        Rating Count: {activity.ratingCount}
+                      </p>
+                      <div className="flex items-center">
+            <Rating
+              name={`average-rating-${activity.id}`}
+              value={activity.averageRating}
+              precision={0.1} // Adjust this precision based on your requirements
+              readOnly
+              m-2
+            />
+            {/* <p className="text-white font-sans text-xs overflow-hidden h-5 font-normal ml-2">
+              Average Rating: {activity.averageRating}
+            </p> */}
+          </div>
+                  <p className="absolute bottom-0.5 left-0.5 font-sans text-xs m-2  text-white bg-primary-6 bg-opacity-50 border-2 border-gray-300 w-32 p-2 text-center ">
                     Rs{activity.price} / PERSON
                   </p>
                 </div>

@@ -50,7 +50,7 @@ const HeroSection = () => {
             <div className="lg:w-1/2 w-full lg:order-1 order-2">
               <div className="p-6">
                 <p className="mb-2 text-sm lg:text-md text-gray-500">
-                  {Homestay.title}
+                  {/* {Homestay.title} */}Welcome everyone
                 </p>
                 <h1 className="mb-5 text-3xl lg:text-5xl font-bold text-gray-800">
                   {Homestay.title}
