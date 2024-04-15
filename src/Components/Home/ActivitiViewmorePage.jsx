@@ -12,6 +12,7 @@ const ActivitiesViewmorePage = () => {
    const [status,SetStatus]=useState(false);
 
   const { id } = useParams();
+  
   const [activity, setActivity] = useState(null);
 
   useEffect(() => {

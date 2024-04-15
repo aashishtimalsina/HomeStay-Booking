@@ -13,10 +13,9 @@ import Cookies from "js-cookie";
 import { useNavigate, useParams } from "react-router-dom";
 
 const ActivityBookingForm = () => {
-  const { Ids } = useParams();
-    const checkout = new KhaltiCheckout(config); // Initialize outside rendering
+      const checkout = new KhaltiCheckout(config); // Initialize outside rendering
     const MySwal = withReactContent(Swal)
-
+    const { id } = useParams();
   const [serverError, setServerError] = useState("");
   const [noOfGuest, setNoOfGuest] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState(null);
@@ -92,7 +91,7 @@ const handleClick = (e) => {
       const encodedToken = encodeURIComponent(token);
 
        const dataToSend = {
-        activities_id: Ids,
+        activities_id: id,
         name: values.name,
         noOfGuest: values.noOfGuest,
         country: values.country,
@@ -182,9 +181,10 @@ const handleClick = (e) => {
     return () => clearInterval(interval);
   }, []); 
   useEffect(() => {
+    console.log(id);
     Cookies.remove('paymentStatus'); 
     const fetchData = async () => {
-       const apiUrl = webApi.apiUrl + '/getActivityDetail/'+Ids;
+       const apiUrl = webApi.apiUrl + '/getActivityDetail/'+id;
 
 
     
@@ -205,7 +205,7 @@ const handleClick = (e) => {
       }
     };
     fetchData();
-  }, [Ids]);
+  }, [id]);
    useEffect(() => {
     setValidateSchema(
       Yup.object({
