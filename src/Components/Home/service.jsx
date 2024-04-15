@@ -17,11 +17,11 @@ const Service = () => {
           </div>
         </div>
 
-        <div className="flex justify-center flex-wrap ">
+        <div className="flex justify-center flex-wrap  ">
           {services.map((service) => (
             <div
               key={service.id}
-              className="w-full sm:w-1/2   flex justify-center items-center mb-4"
+              className="w-full sm:w-1/2   flex justify-start items-center mb-4"
             >
               <div className="w-16 h-16 m-2 flex items-center justify-center">
                 <img

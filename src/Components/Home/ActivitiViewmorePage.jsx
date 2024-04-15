@@ -61,6 +61,7 @@ const ActivitiesViewmorePage = () => {
               <p className=" text-primary-6 text-xl md:text-2xl font-semibold">
                 {`Rs ${activity.price} per guest`}
               </p>
+              
             </>
           )}
           <br />

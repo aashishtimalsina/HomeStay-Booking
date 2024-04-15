@@ -82,7 +82,7 @@ export const services = [
     id: 2,
     name: "Hot shower",
     description:
-      "There is good facility of hot shower in every house",
+      "There is good facility of hot shower in every house There is good facility of hot shower in every house There is good facility of hot shower in every house",
     icon: housekeeping,
   },
   {
