@@ -26,7 +26,7 @@ To run this project locally, follow these steps:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/aashishtimalsina/HomeStay-.git
+   git clone https://github.com/aashishtimalsina/HomeStay-Booking.git
    cd HomeStay-
    ```
 
