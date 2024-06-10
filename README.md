@@ -1,7 +1,3 @@
-Certainly! Here's a revised README for your GitHub project that describes your homestay reservation system:
-
----
-
 # Homestay Reservation System
 
 Welcome to the Homestay Reservation System! This project is a web-based application designed to streamline the process of booking homestay accommodations. Developed using ReactJS and Vite, this system provides an intuitive and responsive user interface, ensuring a seamless experience for both hosts and guests.
