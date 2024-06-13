@@ -56,5 +56,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 For any inquiries or feedback, please contact us at [tm.aashish1@gmail.com](mailto:tm.aashish1@gmail.com).
 
 ---
-
-Feel free to replace `[tm.aashish1@gmail.com]` with your actual contact email. This README now reflects the specifics of your homestay reservation system and provides clear instructions for potential contributors and users.
